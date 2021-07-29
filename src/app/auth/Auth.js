@@ -5,9 +5,11 @@ import jwtService from 'app/services/jwtService';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
+import history from '@history';
 import { hideMessage, showMessage } from 'app/store/fuse/messageSlice';
 
 import { setUserDataFirebase, setUserDataAuth0, setUserData, logoutUser } from './store/userSlice';
+import { LS_USER } from './AuthConsts';
 
 class Auth extends Component {
 	state = {
@@ -15,15 +17,27 @@ class Auth extends Component {
 	};
 
 	componentDidMount() {
-		return Promise.all([
-			// Comment the lines which you do not use
-			this.firebaseCheck(),
-			this.auth0Check(),
-			this.jwtCheck()
-		]).then(() => {
-			this.setState({ waitAuthCheck: false });
-		});
+		const validated = this.validateAuth();
+
+		this.setState({ waitAuthCheck: false });
+
+		return validated;
 	}
+
+	/**
+	 * Valida si el usuario tiene la sesión iniciada
+	 */
+	validateAuth = () => {
+		const user = localStorage.getItem(LS_USER);
+		// + Usuario logueado | - Usuario no logueado
+		if (user) {
+			this.props.setUserData(JSON.parse(user));
+		} else {
+			history.push('/');
+		}
+
+		return !!user;
+	};
 
 	jwtCheck = () =>
 		new Promise(resolve => {

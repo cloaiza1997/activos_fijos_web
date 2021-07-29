@@ -1,15 +1,27 @@
-/* eslint-disable import/prefer-default-export */
-import { URL_API } from '@core/consts/consts';
+import Axios from 'axios';
 import { showNotifyError, showNotifySuccess } from '@core/utils/notify';
-import _axios from 'axios';
+import { URL_API } from '@core/consts/consts';
+import { LS_TOKEN } from 'app/auth/AuthConsts';
 
-export function axios({ url = '', method = '', params = {}, success = () => undefined, error = () => undefined }) {
-	return _axios({
+/**
+ * Función para realizar llamados al api
+ * @param {string} url Url de la petición
+ * @param {string} method POST, GET, PUT, DELETE
+ * @param {object} params Body de la petición
+ * @param {function} success
+ * @param {function} error
+ * @returns {promise}
+ */
+export const axios = ({ url = '', method = '', params = {}, success = () => undefined, error = () => undefined }) => {
+	const token = localStorage.getItem(LS_TOKEN);
+
+	return Axios({
 		url: URL_API + url,
 		method,
 		params,
 		headers: {
-			client: 'WEB'
+			client: 'WEB',
+			Authorization: token ? `Bearer ${token}` : undefined
 		}
 	})
 		.then(response => {
@@ -32,4 +44,8 @@ export function axios({ url = '', method = '', params = {}, success = () => unde
 
 			error(e);
 		});
+};
+
+export function setToken() {
+	return null;
 }

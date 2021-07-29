@@ -8,6 +8,8 @@ import { showMessage } from 'app/store/fuse/messageSlice';
 import auth0Service from 'app/services/auth0Service';
 import firebaseService from 'app/services/firebaseService';
 import jwtService from 'app/services/jwtService';
+import { axios } from '@core/services/Api';
+import { LS_TOKEN, LS_USER, URL_LOGOUT } from '../AuthConsts';
 
 export const setUserDataAuth0 = tokenData => async dispatch => {
 	const user = {
@@ -75,13 +77,14 @@ export const setUserData = user => async (dispatch, getState) => {
          */
 
 	history.location.state = {
-		redirectUrl: user.redirectUrl // for example 'apps/academy'
+		// redirectUrl: user.redirectUrl // for example 'apps/academy'
+		redirectUrl: '/apps/dashboards/project' // for example 'apps/academy'
 	};
 
 	/*
     Set User Settings
      */
-	dispatch(setDefaultSettings(user.data.settings));
+	// dispatch(setDefaultSettings(user.data.settings));
 
 	dispatch(setUser(user));
 };
@@ -118,25 +121,31 @@ export const logoutUser = () => async (dispatch, getState) => {
 		return null;
 	}
 
-	history.push({
-		pathname: '/'
+	axios({
+		url: URL_LOGOUT,
+		method: 'POST'
 	});
 
-	switch (user.from) {
-		case 'firebase': {
-			firebaseService.signOut();
-			break;
-		}
-		case 'auth0': {
-			auth0Service.logout();
-			break;
-		}
-		default: {
-			jwtService.logout();
-		}
-	}
+	history.push('/');
+
+	// switch (user.from) {
+	// 	case 'firebase': {
+	// 		firebaseService.signOut();
+	// 		break;
+	// 	}
+	// 	case 'auth0': {
+	// 		auth0Service.logout();
+	// 		break;
+	// 	}
+	// 	default: {
+	// 		jwtService.logout();
+	// 	}
+	// }
 
 	dispatch(setInitialSettings());
+
+	localStorage.removeItem(LS_TOKEN);
+	localStorage.removeItem(LS_USER);
 
 	return dispatch(userLoggedOut());
 };
@@ -187,13 +196,14 @@ export const updateUserData = user => async (dispatch, getState) => {
 };
 
 const initialState = {
-	role: [], // guest
-	data: {
-		displayName: 'John Doe',
-		photoURL: 'assets/images/avatars/Velazquez.jpg',
-		email: 'johndoe@withinpixels.com',
-		shortcuts: ['calendar', 'mail', 'contacts', 'todo']
-	}
+	...(JSON.parse(localStorage.getItem('user')) || {})
+	// role: [], // guest
+	// data: {
+	// 	displayName: 'John Doe',
+	// 	photoURL: 'assets/images/avatars/Velazquez.jpg',
+	// 	email: 'johndoe@withinpixels.com',
+	// 	shortcuts: ['calendar', 'mail', 'contacts', 'todo']
+	// }
 };
 
 const userSlice = createSlice({

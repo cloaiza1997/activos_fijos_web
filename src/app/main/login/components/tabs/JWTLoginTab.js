@@ -1,24 +1,25 @@
+import { submitLogin } from 'app/auth/store/loginSlice';
 import { TextFieldFormsy } from '@fuse/core/formsy';
-import Button from '@material-ui/core/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import Button from '@core/components/Button';
+import Formsy from 'formsy-react';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Formsy from 'formsy-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { submitLoginWithFireBase } from 'app/auth/store/loginSlice';
 
-function FirebaseLoginTab(props) {
+function JWTLoginTab(props) {
 	const dispatch = useDispatch();
 	const login = useSelector(({ auth }) => auth.login);
 
 	const [isFormValid, setIsFormValid] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const formRef = useRef(null);
 
 	useEffect(() => {
-		if (login.error && (login.error.username || login.error.password)) {
+		if (login.error && (login.error.email || login.error.password)) {
 			formRef.current.updateInputsWithError({
 				...login.error
 			});
@@ -34,8 +35,11 @@ function FirebaseLoginTab(props) {
 		setIsFormValid(true);
 	}
 
-	function handleSubmit(model) {
-		dispatch(submitLoginWithFireBase(model));
+	function handleSubmit(form) {
+		setLoading(true);
+		const error = () => setLoading(false);
+
+		dispatch(submitLogin({ form, error }));
 	}
 
 	return (
@@ -50,8 +54,8 @@ function FirebaseLoginTab(props) {
 				<TextFieldFormsy
 					className="mb-16"
 					type="text"
-					name="username"
-					label="Email"
+					name="email"
+					label="Usuario"
 					validations={{
 						minLength: 4
 					}}
@@ -75,13 +79,7 @@ function FirebaseLoginTab(props) {
 					className="mb-16"
 					type="password"
 					name="password"
-					label="Password"
-					validations={{
-						minLength: 4
-					}}
-					validationErrors={{
-						minLength: 'Min character length is 4'
-					}}
+					label="Contraseña"
 					InputProps={{
 						className: 'pr-2',
 						type: showPassword ? 'text' : 'password',
@@ -106,13 +104,14 @@ function FirebaseLoginTab(props) {
 					className="w-full mx-auto mt-16"
 					aria-label="LOG IN"
 					disabled={!isFormValid}
-					value="firebase"
+					value="legacy"
+					loading={loading}
 				>
-					Log in with Firebase
+					Login
 				</Button>
 			</Formsy>
 		</div>
 	);
 }
 
-export default FirebaseLoginTab;
+export default JWTLoginTab;

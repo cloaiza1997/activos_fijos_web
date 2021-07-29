@@ -5,9 +5,9 @@ import React from 'react';
 function LeftSideLayout3() {
 	return (
 		<>
-			<FuseSidePanel>
+			{/* <FuseSidePanel>
 				<FuseShortcuts className="py-16 px-8" variant="vertical" />
-			</FuseSidePanel>
+			</FuseSidePanel> */}
 		</>
 	);
 }

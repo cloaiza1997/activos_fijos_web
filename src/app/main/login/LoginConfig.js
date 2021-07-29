@@ -1,5 +1,7 @@
 import { authRoles } from 'app/auth';
-import Login from './Login';
+import Login from './components/Login';
+import RecoveryPassword from './components/RecoveryPassword';
+import { LOGIN_INDEX, LOGIN_RECOVERY_PASSWORD } from './LoginConsts';
 
 const LoginConfig = {
 	settings: {
@@ -26,8 +28,12 @@ const LoginConfig = {
 	auth: authRoles.onlyGuest,
 	routes: [
 		{
-			path: '/login',
+			path: LOGIN_INDEX,
 			component: Login
+		},
+		{
+			path: LOGIN_RECOVERY_PASSWORD,
+			component: RecoveryPassword
 		}
 	]
 };

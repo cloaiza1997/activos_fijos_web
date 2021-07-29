@@ -1,14 +1,15 @@
+import { makeStyles } from '@material-ui/core/styles';
+import { renderRoutes } from 'react-router-config';
+import { useSelector } from 'react-redux';
+import AppContext from 'app/AppContext';
+import clsx from 'clsx';
 import FuseDialog from '@fuse/core/FuseDialog';
 import FuseMessage from '@fuse/core/FuseMessage';
 import FuseScrollbars from '@fuse/core/FuseScrollbars';
 import FuseSuspense from '@fuse/core/FuseSuspense';
-import { makeStyles } from '@material-ui/core/styles';
-import AppContext from 'app/AppContext';
-import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
-import clsx from 'clsx';
 import React, { useContext } from 'react';
-import { useSelector } from 'react-redux';
-import { renderRoutes } from 'react-router-config';
+import SettingsPanel from 'app/fuse-layouts/shared-components/SettingsPanel';
+
 import FooterLayout1 from './components/FooterLayout1';
 import LeftSideLayout1 from './components/LeftSideLayout1';
 import NavbarWrapperLayout1 from './components/NavbarWrapperLayout1';
@@ -175,25 +176,25 @@ function Layout1(props) {
 
 									{props.children}
 
-									{config.footer.display &&
+									{/* {config.footer.display &&
 										config.footer.position === 'below' &&
-										config.footer.style !== 'fixed' && <FooterLayout1 />}
+										config.footer.style !== 'fixed' && <FooterLayout1 />} */}
 								</FuseScrollbars>
 
-								{config.footer.display &&
+								{/* {config.footer.display &&
 									config.footer.position === 'below' &&
-									config.footer.style === 'fixed' && <FooterLayout1 />}
+									config.footer.style === 'fixed' && <FooterLayout1 />} */}
 
-								<SettingsPanel />
+								{/* <SettingsPanel /> */}
 							</div>
 
 							{config.navbar.display && config.navbar.position === 'right' && <NavbarWrapperLayout1 />}
 						</div>
 
-						{config.footer.display && config.footer.position === 'above' && <FooterLayout1 />}
+						{/* {config.footer.display && config.footer.position === 'above' && <FooterLayout1 />} */}
 					</div>
 
-					{config.rightSidePanel.display && <RightSideLayout1 />}
+					{/* {config.rightSidePanel.display && <RightSideLayout1 />} */}
 
 					<FuseMessage />
 				</div>
