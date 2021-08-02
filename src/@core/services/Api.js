@@ -36,10 +36,22 @@ export const axios = ({ url = '', method = '', params = {}, success = () => unde
 		.catch(e => {
 			console.error(e);
 
-			const { message } = e.response.data;
+			const { message, error: _error } = e.response.data;
 
-			if (message) {
-				showNotifyError(message);
+			if (message || _error) {
+				let text = _error ? 'Error de validación de datos: ' : message;
+
+				Object.values(_error).forEach(value => {
+					value.forEach(v => {
+						text += `• ${v}, `;
+					});
+				});
+
+				if (_error) {
+					text = `${text.slice(0, -2)}.`;
+				}
+
+				showNotifyError(text);
 			}
 
 			error(e);
