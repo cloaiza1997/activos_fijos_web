@@ -1,15 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import history from '@history';
+// import { setInitialSettings, setDefaultSettings } from 'app/store/fuse/settingsSlice';
 import _ from '@lodash';
-import { setInitialSettings, setDefaultSettings } from 'app/store/fuse/settingsSlice';
+import 'firebase/auth';
+import { axios } from '@core/services/Api';
+import { createSlice } from '@reduxjs/toolkit';
+import { setInitialSettings } from 'app/store/fuse/settingsSlice';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import auth0Service from 'app/services/auth0Service';
+import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
+import history from '@history';
 import jwtService from 'app/services/jwtService';
-import { axios } from '@core/services/Api';
-import { LS_TOKEN, LS_USER, URL_LOGOUT } from '../AuthConsts';
+import { LS_TOKEN, LS_USER, URL_LOGIN, URL_LOGOUT } from '../AuthConsts';
 
 export const setUserDataAuth0 = tokenData => async dispatch => {
 	const user = {
@@ -126,7 +127,7 @@ export const logoutUser = () => async (dispatch, getState) => {
 		method: 'POST'
 	});
 
-	history.push('/');
+	history.push(`/${URL_LOGIN}`);
 
 	// switch (user.from) {
 	// 	case 'firebase': {

@@ -1,6 +1,154 @@
 import { authRoles } from 'app/auth';
 
-const navigationConfig = [];
+const navigationConfig = [
+	{
+		id: 'compras',
+		title: 'COMPRAS',
+		type: 'group',
+		children: [
+			{
+				id: 'crear-orden',
+				title: 'Crear orden',
+				type: 'item',
+				icon: 'shopping_cart',
+				url: ''
+			},
+			{
+				id: 'listar-ordenes',
+				title: 'Órdenes de compra',
+				type: 'item',
+				icon: 'shopping_bag',
+				url: ''
+			},
+			{
+				id: 'aprobar-compra',
+				title: 'Aprobaciones',
+				type: 'item',
+				icon: 'add_task',
+				url: ''
+			}
+		]
+	},
+	{
+		id: 'activos',
+		title: 'ACTIVOS',
+		type: 'group',
+		children: [
+			{
+				id: 'crear-activo',
+				title: 'Ingresar activo',
+				type: 'item',
+				icon: 'add_circle_outline',
+				url: ''
+			},
+			{
+				id: 'listar-activos',
+				title: 'Listado de activos',
+				type: 'item',
+				icon: 'fact_check',
+				url: ''
+			},
+			{
+				id: 'mis-activos',
+				title: 'Mis activos',
+				type: 'item',
+				icon: 'devices',
+				url: ''
+			},
+			{
+				id: 'actas',
+				title: 'Actas',
+				type: 'item',
+				icon: 'assignment',
+				url: ''
+			},
+			{
+				id: 'revaluaciones',
+				title: 'Revaluaciones',
+				type: 'item',
+				icon: 'published_with_changes',
+				url: ''
+			},
+			{
+				id: 'devaluaciones',
+				title: 'Devaluaciones',
+				type: 'item',
+				icon: 'trending_down',
+				url: ''
+			},
+			{
+				id: 'bajas',
+				title: 'Bajas',
+				type: 'item',
+				icon: 'remove_circle_outline',
+				url: ''
+			},
+			{
+				id: 'mantenimientos',
+				title: 'Mantenimientos',
+				type: 'item',
+				icon: 'build',
+				url: ''
+			},
+			{
+				id: 'inventarios',
+				title: 'Inventarios',
+				type: 'item',
+				icon: 'widgets',
+				url: ''
+			}
+		]
+	},
+	{
+		id: 'reportes',
+		title: 'REPORTES',
+		type: 'group',
+		children: [
+			{
+				id: 'reportes',
+				title: 'Generar reportes',
+				type: 'item',
+				icon: 'grading',
+				url: ''
+			}
+		]
+	},
+	{
+		id: 'sistema',
+		title: 'SISTEMA',
+		type: 'group',
+		children: [
+			{
+				id: 'usuarios',
+				title: 'Usuarios',
+				type: 'item',
+				icon: 'people',
+				url: ''
+			},
+			{
+				id: 'proveedores',
+				title: 'Proveedores',
+				type: 'item',
+				icon: 'engineering',
+				url: ''
+			},
+			{
+				id: 'parametros',
+				title: 'Parámetros',
+				type: 'item',
+				icon: 'settings',
+				url: ''
+			},
+			{
+				id: 'logs',
+				title: 'Logs',
+				type: 'item',
+				icon: 'subject',
+				url: ''
+			}
+		]
+	}
+];
 
 // const navigationConfig = [
 // 	{

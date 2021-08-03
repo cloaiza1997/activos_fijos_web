@@ -1,8 +1,16 @@
+import { axios } from '@core/services/Api';
 import { Link } from 'react-router-dom';
-import { logoutUser } from 'app/auth/store/userSlice';
+import { logoutUser, setUser } from 'app/auth/store/userSlice';
+import { TextField } from '@material-ui/core';
+import { LS_USER, URL_UPDATE_PASSWORD } from 'app/auth/AuthConsts';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from '@fuse/hooks';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
+import Button from '@core/components/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Icon from '@material-ui/core/Icon';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -15,7 +23,10 @@ function UserMenu(props) {
 	const dispatch = useDispatch();
 	const user = useSelector(({ auth }) => auth.user);
 
+	console.log(user);
+
 	const [userMenu, setUserMenu] = useState(null);
+	const [open, setOpen] = useState(!!user?.must_change_password);
 
 	const userMenuClick = event => {
 		setUserMenu(event.currentTarget);
@@ -57,6 +68,19 @@ function UserMenu(props) {
 					paper: 'py-8'
 				}}
 			>
+				<MenuItem
+					onClick={() => {
+						userMenuClose();
+						setOpen(true);
+					}}
+				>
+					<ListItemIcon className="min-w-40">
+						<Icon>vpn_key</Icon>
+					</ListItemIcon>
+
+					<ListItemText primary="Actualizar contraseña" />
+				</MenuItem>
+
 				<MenuItem component={Link} to="/pages/profile" onClick={userMenuClose} role="button">
 					<ListItemIcon className="min-w-40">
 						<Icon>account_circle</Icon>
@@ -78,8 +102,83 @@ function UserMenu(props) {
 					<ListItemText primary="Cerrar sesión" />
 				</MenuItem>
 			</Popover>
+
+			<UpdatePassword open={open} onClose={() => setOpen(false)} />
 		</>
 	);
 }
 
 export default UserMenu;
+
+function UpdatePassword({ open, onClose }) {
+	const dispatch = useDispatch();
+
+	const { form, handleChange, resetForm } = useForm({ password: '', password_confirm: '' });
+
+	const [loading, setLoading] = useState(false);
+
+	const onUpdatePassword = () => {
+		setLoading(true);
+
+		axios({
+			url: URL_UPDATE_PASSWORD,
+			method: 'POST',
+			params: form,
+			success: () => {
+				const user = JSON.parse(localStorage.getItem(LS_USER));
+				user.must_change_password = 0;
+
+				localStorage.setItem(LS_USER, JSON.stringify(user));
+				dispatch(setUser(user));
+
+				onClose();
+				resetForm();
+				setLoading(false);
+			},
+			error: () => setLoading(false)
+		});
+	};
+
+	return (
+		<Dialog open={open}>
+			<DialogTitle>Actualizar contraseña</DialogTitle>
+
+			<DialogContent className="flex flex-col">
+				<p className="mb-10">
+					La contraseña debe de tener mínimo 8 caracteres que incluyan por lo menos una letra mayúscula y
+					minúscula, un número y un carácter especial.
+				</p>
+
+				<TextField
+					type="password"
+					name="password"
+					label="Contraseña"
+					value={form.password}
+					onChange={handleChange}
+					className="mb-10"
+					autoFocus
+					required
+				/>
+
+				<TextField
+					type="password"
+					name="password_confirm"
+					label="Confirmar contraseña"
+					value={form.password_confirm}
+					onChange={handleChange}
+					required
+				/>
+			</DialogContent>
+
+			<DialogActions>
+				<Button variant="contained" color="secondary" onClick={onClose}>
+					Cancelar
+				</Button>
+
+				<Button variant="contained" color="primary" loading={loading} onClick={onUpdatePassword}>
+					Actualizar
+				</Button>
+			</DialogActions>
+		</Dialog>
+	);
+}

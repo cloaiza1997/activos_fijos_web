@@ -1,20 +1,20 @@
+// import ChatPanelToggleButton from 'app/fuse-layouts/shared-components/chatPanel/ChatPanelToggleButton';
+// import FullScreenToggle from '../../shared-components/FullScreenToggle';
+// import FuseSearch from '@fuse/core/FuseSearch';
+// import FuseShortcuts from '@fuse/core/FuseShortcuts';
+// import LanguageSwitcher from '../../shared-components/LanguageSwitcher';
+// import QuickPanelToggleButton from 'app/fuse-layouts/shared-components/quickPanel/QuickPanelToggleButton';
+import { Icon, IconButton } from '@material-ui/core';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { selectToolbarTheme } from 'app/store/fuse/settingsSlice';
 import { useSelector } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
-import ChatPanelToggleButton from 'app/fuse-layouts/shared-components/chatPanel/ChatPanelToggleButton';
 import clsx from 'clsx';
-import FuseSearch from '@fuse/core/FuseSearch';
-import FuseShortcuts from '@fuse/core/FuseShortcuts';
 import Hidden from '@material-ui/core/Hidden';
 import NavbarMobileToggleButton from 'app/fuse-layouts/shared-components/NavbarMobileToggleButton';
-import QuickPanelToggleButton from 'app/fuse-layouts/shared-components/quickPanel/QuickPanelToggleButton';
 import React from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import UserMenu from 'app/fuse-layouts/shared-components/UserMenu';
-
-import FullScreenToggle from '../../shared-components/FullScreenToggle';
-import LanguageSwitcher from '../../shared-components/LanguageSwitcher';
 
 const useStyles = makeStyles(theme => ({
 	root: {}
@@ -56,9 +56,12 @@ function ToolbarLayout1(props) {
 
 						<Hidden lgUp>
 							<ChatPanelToggleButton />
-						</Hidden>
+						</Hidden> */}
 
-						<QuickPanelToggleButton /> */}
+						{/* <QuickPanelToggleButton /> */}
+						<IconButton className="w-40 h-40" onClick={() => undefined}>
+							<Icon>notifications_none</Icon>
+						</IconButton>
 
 						<UserMenu />
 					</div>
