@@ -37,7 +37,7 @@ function MultiLanguageDoc() {
 			</Typography>
 
 			<FuseHighlight component="pre" className="language-jsx mb-24">
-				{require('!raw-loader!app/main/apps/mail/i18n/en.js')}
+				{/* {require('!raw-loader!app/main/apps/mail/i18n/en.js')} */}
 			</FuseHighlight>
 
 			<Typography className="mb-16" component="p">
@@ -46,7 +46,7 @@ function MultiLanguageDoc() {
 			</Typography>
 
 			<FuseHighlight component="pre" className="language-jsx mb-24">
-				{require('!raw-loader!app/main/apps/mail/MailAppConfig.js')}
+				{/* {require('!raw-loader!app/main/apps/mail/MailAppConfig.js')} */}
 			</FuseHighlight>
 
 			<Typography className="mb-16" component="p">

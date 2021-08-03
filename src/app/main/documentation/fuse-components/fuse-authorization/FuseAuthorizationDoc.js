@@ -35,7 +35,7 @@ function FuseAuthorizationDoc() {
 			</Typography>
 
 			<FuseHighlight component="pre" className="language-jsx">
-				{require('!raw-loader!app/App.js')}
+				{/* {require('!raw-loader!app/App.js')} */}
 			</FuseHighlight>
 
 			<Typography className="mt-32 mb-8" variant="h5">
@@ -60,7 +60,7 @@ function FuseAuthorizationDoc() {
 			</Typography>
 
 			<FuseHighlight component="pre" className="language-jsx">
-				{require('!raw-loader!app/main/auth/admin-role-example/AdminRoleExampleConfig.js')}
+				{/* {require('!raw-loader!app/main/auth/admin-role-example/AdminRoleExampleConfig.js')} */}
 			</FuseHighlight>
 
 			<Typography className="my-16" component="p">
