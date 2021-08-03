@@ -23,8 +23,6 @@ function UserMenu(props) {
 	const dispatch = useDispatch();
 	const user = useSelector(({ auth }) => auth.user);
 
-	console.log(user);
-
 	const [userMenu, setUserMenu] = useState(null);
 	const [open, setOpen] = useState(!!user?.must_change_password);
 

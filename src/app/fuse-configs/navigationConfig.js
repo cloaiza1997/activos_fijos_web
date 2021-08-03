@@ -1,4 +1,5 @@
 import { authRoles } from 'app/auth';
+import { PURCHASE_PAGE_CREATE } from 'app/main/apps/purchase/PurchaseConst';
 
 const navigationConfig = [
 	{
@@ -7,11 +8,12 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				auth: authRoles.admin,
 				id: 'crear-orden',
 				title: 'Crear orden',
 				type: 'item',
 				icon: 'shopping_cart',
-				url: ''
+				url: PURCHASE_PAGE_CREATE
 			},
 			{
 				id: 'listar-ordenes',

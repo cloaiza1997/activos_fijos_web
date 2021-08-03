@@ -41,11 +41,13 @@ export const axios = ({ url = '', method = '', params = {}, success = () => unde
 			if (message || _error) {
 				let text = _error ? 'Error de validación de datos: ' : message;
 
-				Object.values(_error).forEach(value => {
-					value.forEach(v => {
-						text += ` • ${v}`;
+				if (_error) {
+					Object.values(_error).forEach(value => {
+						value.forEach(v => {
+							text += ` • ${v}`;
+						});
 					});
-				});
+				}
 
 				showNotifyError(text);
 			}
