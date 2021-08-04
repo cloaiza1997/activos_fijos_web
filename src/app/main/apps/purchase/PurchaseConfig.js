@@ -10,7 +10,7 @@ const PurchaseConfig = {
 		{
 			auth: authRoles.admin,
 			path: PURCHASE_PAGE_CREATE,
-			component: React.lazy(() => import('./pages/PurchaseCreate'))
+			component: React.lazy(() => import('./page/PurchaseCreate'))
 		}
 	]
 };
