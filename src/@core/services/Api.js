@@ -12,12 +12,20 @@ import { LS_TOKEN } from 'app/auth/AuthConsts';
  * @param {function} error
  * @returns {promise}
  */
-export const axios = ({ url = '', method = '', params = {}, success = () => undefined, error = () => undefined }) => {
+export const axios = ({
+	url = '',
+	method = '',
+	data = {},
+	params = {},
+	success = () => undefined,
+	error = () => undefined
+}) => {
 	const token = localStorage.getItem(LS_TOKEN);
 
 	return Axios({
 		url: URL_API + url,
 		method,
+		data,
 		params,
 		headers: {
 			client: 'WEB',

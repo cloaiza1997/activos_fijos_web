@@ -11,25 +11,28 @@ import {
 	Typography
 } from '@material-ui/core';
 import { axios } from '@core/services/Api';
-import { formatDate, getHandleChange, roundNumber } from '@core/utils/utils';
+import { formatDate, getHandleChange, getPathByParams, redirect, roundNumber } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { PAYMENT_METHODS, PURCHASE_URL_CREATE, PURCHASE_URL_STORE } from '../PurchaseConst';
+import { PAYMENT_METHODS, PURCHASE_STATUS, PURCHASE_URL_EDIT, PURCHASE_URL_UPDATE } from '../PurchaseConst';
 import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
 
-export default function PurchaseCreate() {
+export default function PurchaseCreate(props) {
+	const { id } = props?.match?.params;
+
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState({});
 	const [disabledItem, setDisabledItem] = useState(true);
 	const [skeleton, setSkeleton] = useState(true);
 
-	const { form, handleChange } = useForm(new PurchaseModel());
+	const { form, handleChange, setForm } = useForm(new PurchaseModel());
+
 	const {
 		form: formItem,
 		handleChange: handleChangeItem,
@@ -41,7 +44,7 @@ export default function PurchaseCreate() {
 		let _subtotal = 0;
 
 		form.items.forEach(item => {
-			_subtotal += item.total_value;
+			_subtotal += parseInt(item.total_value, 10);
 		});
 
 		return _subtotal;
@@ -83,8 +86,8 @@ export default function PurchaseCreate() {
 		setLoading(true);
 
 		axios({
-			url: PURCHASE_URL_STORE,
-			method: 'POST',
+			url: getPathByParams(PURCHASE_URL_UPDATE, { id }),
+			method: 'PUT',
 			data: {
 				...form,
 				delivery_date: formatDate(form.delivery_date),
@@ -92,18 +95,27 @@ export default function PurchaseCreate() {
 				iva,
 				total
 			},
-			success: () => undefined,
+			success: () => setLoading(false),
 			error: () => setLoading(false)
 		});
 	};
 
 	useEffect(() => {
 		const success = response => {
-			setData(response);
-			setSkeleton(false);
+			const { purchase } = response;
+
+			if (purchase) {
+				setData(response);
+				setForm(new PurchaseModel(purchase));
+				setSkeleton(false);
+			} else {
+				error();
+			}
 		};
 
-		axios({ url: PURCHASE_URL_CREATE, method: 'GET', success });
+		const error = () => redirect('/home');
+
+		axios({ url: getPathByParams(PURCHASE_URL_EDIT, { id }), method: 'GET', success, error });
 	}, []);
 
 	useEffect(() => {
@@ -136,7 +148,8 @@ export default function PurchaseCreate() {
 	) : (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Crear orden de compra
+				Actualizar orden de compra <span className="underline">{`${form.id}`.padStart(8, '0')}</span> (
+				{data.purchase.get_status.str_val})
 			</Typography>
 
 			<div className="flex mb-10 w-full">
@@ -393,14 +406,46 @@ export default function PurchaseCreate() {
 			/>
 
 			<div className="text-center m-20">
+				{data.purchase.get_status.parameter_key === PURCHASE_STATUS.PURCHASE_STATUS_IN_PROCESS && (
+					<Button
+						variant="contained"
+						color="primary"
+						loading={loading}
+						onClick={onStorePurchase}
+						className="bg-green-400 hover:bg-green-600 mx-5"
+					>
+						Enviar a revisión
+					</Button>
+				)}
+
+				<Button
+					variant="contained"
+					color="secondary"
+					loading={loading}
+					onClick={onStorePurchase}
+					className="mx-5"
+				>
+					Visualizar
+				</Button>
+
+				<Button
+					variant="contained"
+					loading={loading}
+					onClick={onStorePurchase}
+					className="bg-red-400 hover:bg-red-600 mx-5"
+				>
+					Cancelar
+				</Button>
+
 				<Button
 					variant="contained"
 					color="primary"
 					disabled={disabled}
 					loading={loading}
 					onClick={onStorePurchase}
+					className="mx-5"
 				>
-					Guardar
+					Actualizar
 				</Button>
 			</div>
 		</div>

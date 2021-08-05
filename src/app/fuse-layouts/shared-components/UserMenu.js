@@ -121,7 +121,7 @@ function UpdatePassword({ open, onClose }) {
 		axios({
 			url: URL_UPDATE_PASSWORD,
 			method: 'POST',
-			params: form,
+			data: form,
 			success: () => {
 				const user = JSON.parse(localStorage.getItem(LS_USER));
 				user.must_change_password = 0;

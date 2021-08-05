@@ -15,7 +15,7 @@ export const submitLogin =
 		axios({
 			url: URL_LOGIN,
 			method: 'POST',
-			params: {
+			data: {
 				email,
 				password
 			},
@@ -39,7 +39,7 @@ export const recoveryPassword = ({ form, success, error }) => {
 	axios({
 		url: URL_RECOVERY_PASSWORD,
 		method: 'POST',
-		params: form,
+		data: form,
 		success,
 		error
 	});
