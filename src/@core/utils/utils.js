@@ -36,13 +36,18 @@ export function getPathByParams(url, params) {
 	return toPath(params);
 }
 
+export const DATE_FORMATS = {
+	YYYY_MM_DD: 'YYYY-MM-DD',
+	YYYY_MM_DD_hh_mm_ss: 'YYYY-MM-DD hh:mm:ss'
+};
+
 /**
  * Formatea una fecha
  * @param {object|string} date Fecha a formatear
  * @param {string} format Formato a aplicar
  * @returns {string} Fecha formateada
  */
-export const formatDate = (date, format = 'YYYY-MM-DD') => moment(date).format(format);
+export const formatDate = (date, format = DATE_FORMATS.YYYY_MM_DD) => moment(date).format(format);
 
 /**
  * Redirecciona a una url

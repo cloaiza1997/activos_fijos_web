@@ -1,4 +1,8 @@
 import {
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
 	FormControl,
 	Icon,
 	IconButton,
@@ -11,25 +15,59 @@ import {
 	Typography
 } from '@material-ui/core';
 import { axios } from '@core/services/Api';
-import { formatDate, getHandleChange, getPathByParams, redirect, roundNumber } from '@core/utils/utils';
+import { DATE_FORMATS, formatDate, getHandleChange, getPathByParams, redirect, roundNumber } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useForm } from '@fuse/hooks';
+import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
+import FileUpload from '@core/components/FileUpload';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { PAYMENT_METHODS, PURCHASE_STATUS, PURCHASE_URL_EDIT, PURCHASE_URL_UPDATE } from '../PurchaseConst';
+import {
+	PAYMENT_METHODS,
+	PURCHASE_APP_KEY,
+	PURCHASE_STATUS,
+	PURCHASE_URL_EDIT,
+	PURCHASE_URL_UPDATE,
+	PURCHASE_URL_UPDATE_STATUS
+} from '../PurchaseConst';
 import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
 
-export default function PurchaseCreate(props) {
+const {
+	PURCHASE_STATUS_APPROVED,
+	PURCHASE_STATUS_CANCELLED,
+	PURCHASE_STATUS_CHECKING,
+	PURCHASE_STATUS_CLOSED,
+	PURCHASE_STATUS_FINISHED,
+	PURCHASE_STATUS_IN_PROCESS,
+	PURCHASE_STATUS_REJECTED
+} = PURCHASE_STATUS;
+
+/**
+ * @function PurchaseEdit
+ * @brief Formulario de edición de orden compra
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
+export default function PurchaseEdit(props) {
 	const { id } = props?.match?.params;
 
-	const [disabled, setDisabled] = useState(true);
-	const [loading, setLoading] = useState(false);
+	const { user } = useSelector(({ auth }) => auth);
+
 	const [data, setData] = useState({});
+	const [disabled, setDisabled] = useState(true);
 	const [disabledItem, setDisabledItem] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [skeleton, setSkeleton] = useState(true);
+
+	const [openApprove, setOpenApprove] = useState(false);
+	const [openCancel, setOpenCancel] = useState(false);
+	const [openChecking, setOpenChekcing] = useState(false);
+	const [openClose, setOpenClose] = useState(false);
+	const [openFinish, setOpenFinish] = useState(false);
+	const [openReject, setOpenReject] = useState(false);
 
 	const { form, handleChange, setForm } = useForm(new PurchaseModel());
 
@@ -39,6 +77,18 @@ export default function PurchaseCreate(props) {
 		setForm: setFormItem,
 		resetForm: resetFormItem
 	} = useForm(new PurchaseItemModel());
+
+	const status = data?.purchase?.get_status?.parameter_key;
+
+	const formDisabled = status !== PURCHASE_STATUS_IN_PROCESS && status !== PURCHASE_STATUS_APPROVED;
+
+	const inProcess = status === PURCHASE_STATUS_IN_PROCESS;
+
+	const canChecking = status === PURCHASE_STATUS_CHECKING;
+	const canClose = status === PURCHASE_STATUS_APPROVED;
+	const canFinish = status === PURCHASE_STATUS_CLOSED;
+	const canView = canFinish || status === PURCHASE_STATUS_FINISHED;
+	const canCancel = inProcess || canClose || canFinish;
 
 	const subtotal = (() => {
 		let _subtotal = 0;
@@ -82,7 +132,7 @@ export default function PurchaseCreate(props) {
 		handleChange(getHandleChange('items', items));
 	};
 
-	const onStorePurchase = () => {
+	const onUpdatePurchase = () => {
 		setLoading(true);
 
 		axios({
@@ -95,7 +145,27 @@ export default function PurchaseCreate(props) {
 				iva,
 				total
 			},
-			success: () => setLoading(false),
+			success: ({ purchase }) => {
+				setLoading(false);
+				setData({ ...data, purchase });
+			},
+			error: () => setLoading(false)
+		});
+	};
+
+	const onUpdateStatus = _status => {
+		setLoading(true);
+
+		axios({
+			url: getPathByParams(PURCHASE_URL_UPDATE_STATUS, { id }),
+			method: 'PUT',
+			data: {
+				status: _status
+			},
+			success: ({ purchase }) => {
+				setLoading(false);
+				setData({ ...data, purchase });
+			},
 			error: () => setLoading(false)
 		});
 	};
@@ -142,15 +212,34 @@ export default function PurchaseCreate(props) {
 
 		setDisabledItem(_disabled);
 	}, [formItem]);
-
+	console.log(form);
 	return skeleton ? (
 		<Loading />
 	) : (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Actualizar orden de compra <span className="underline">{`${form.id}`.padStart(8, '0')}</span> (
+				Orden de compra <span className="underline">{`${form.id}`.padStart(8, '0')}</span> (
 				{data.purchase.get_status.str_val})
 			</Typography>
+
+			<div className="flex flex-col text-11 leading-none p-10 border-1 rounded-8 mb-10 w-full">
+				<span className="mb-6">
+					Creada por: <span className="font-bold">{data.purchase.get_creator_user.display_name}</span> -{' '}
+					{formatDate(data.purchase.created_at, DATE_FORMATS.YYYY_MM_DD_hh_mm_ss)}
+				</span>
+
+				<span className="mb-6">
+					Actualizada por: <span className="font-bold">{data.purchase.get_updater_user.display_name}</span> -{' '}
+					{formatDate(data.purchase.updated_at, DATE_FORMATS.YYYY_MM_DD_hh_mm_ss)}
+				</span>
+
+				{data.purchase.approved_at && (
+					<span>
+						Aprobada por: <span className="font-bold">{data.purchase.get_approver_user.display_name}</span>{' '}
+						- {formatDate(data.purchase.approved_at, DATE_FORMATS.YYYY_MM_DD_hh_mm_ss)}
+					</span>
+				)}
+			</div>
 
 			<div className="flex mb-10 w-full">
 				<div className="w-3/5">
@@ -158,10 +247,15 @@ export default function PurchaseCreate(props) {
 						<FormControl className="mr-2 w-1/2" required>
 							<InputLabel>Solicitado por</InputLabel>
 
-							<Select name="id_requesting_user" value={form.id_requesting_user} onChange={handleChange}>
-								{data.users?.map(user => (
-									<MenuItem key={user.id} value={user.id}>
-										{user.display_name}
+							<Select
+								name="id_requesting_user"
+								value={form.id_requesting_user}
+								onChange={handleChange}
+								disabled={formDisabled}
+							>
+								{data.users?.map(_user => (
+									<MenuItem key={_user.id} value={_user.id}>
+										{_user.display_name}
 									</MenuItem>
 								))}
 							</Select>
@@ -170,7 +264,12 @@ export default function PurchaseCreate(props) {
 						<FormControl className="ml-2 w-1/2" required>
 							<InputLabel>Proveedor</InputLabel>
 
-							<Select name="id_provider" value={form.id_provider} onChange={handleChange}>
+							<Select
+								name="id_provider"
+								value={form.id_provider}
+								onChange={handleChange}
+								disabled={formDisabled}
+							>
 								{data.providers?.map(provider => (
 									<MenuItem key={provider.id} value={provider.id}>
 										{provider.name}
@@ -194,6 +293,7 @@ export default function PurchaseCreate(props) {
 								value={form.delivery_date || null}
 								onChange={date => handleChange(getHandleChange('delivery_date', date))}
 								className="w-1/3"
+								disabled={formDisabled}
 								disablePast
 								required
 							/>
@@ -204,13 +304,19 @@ export default function PurchaseCreate(props) {
 								value={form.delivery_address}
 								onChange={handleChange}
 								className="mx-4 w-1/3"
+								disabled={formDisabled}
 								required
 							/>
 
 							<FormControl className="w-1/3" required>
 								<InputLabel>Ciudad de entrega</InputLabel>
 
-								<Select name="id_city" value={form.id_city} onChange={handleChange}>
+								<Select
+									name="id_city"
+									value={form.id_city}
+									onChange={handleChange}
+									disabled={formDisabled}
+								>
 									{data.cities?.map(city =>
 										city.is_department ? (
 											<ListSubheader key={city.id} className="font-bold" value="">
@@ -258,7 +364,12 @@ export default function PurchaseCreate(props) {
 						<FormControl className="mb-10 w-full" required>
 							<InputLabel>Forma de pago</InputLabel>
 
-							<Select name="id_payment_method" value={form.id_payment_method} onChange={handleChange}>
+							<Select
+								name="id_payment_method"
+								value={form.id_payment_method}
+								onChange={handleChange}
+								disabled={formDisabled}
+							>
 								{data.payment_methods?.map(method => (
 									<MenuItem key={method.id} value={method.id}>
 										{method.name}
@@ -275,6 +386,7 @@ export default function PurchaseCreate(props) {
 								value={form.payment_days}
 								onChange={handleChange}
 								className="w-full"
+								disabled={formDisabled}
 								required
 							/>
 						)}
@@ -294,6 +406,7 @@ export default function PurchaseCreate(props) {
 						value={formItem.product}
 						onChange={handleChangeItem}
 						className="mb-10 w-full"
+						disabled={formDisabled}
 						required
 					/>
 
@@ -305,6 +418,7 @@ export default function PurchaseCreate(props) {
 							value={formItem.quantity}
 							onChange={handleChangeItem}
 							className="mr-2 w-2/5"
+							disabled={formDisabled}
 							required
 						/>
 
@@ -316,6 +430,7 @@ export default function PurchaseCreate(props) {
 							onChange={handleChangeItem}
 							className="ml-2 w-3/5"
 							InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+							disabled={formDisabled}
 							required
 						/>
 					</div>
@@ -335,7 +450,7 @@ export default function PurchaseCreate(props) {
 							variant="contained"
 							color="secondary"
 							className="ml-2 w-1/2"
-							disabled={disabledItem}
+							disabled={formDisabled || disabledItem}
 							onClick={onAddItem}
 						>
 							{formItem.index === undefined ? 'Agregar' : 'Actualizar'}
@@ -374,17 +489,27 @@ export default function PurchaseCreate(props) {
 										</td>
 
 										<td className="text-center">
-											<IconButton size="small" onClick={() => onEditPurchaseItem(item, index)}>
-												<Icon fontSize="small" className="text-blue">
-													edit
-												</Icon>
-											</IconButton>
+											{!formDisabled && (
+												<>
+													<IconButton
+														size="small"
+														onClick={() => onEditPurchaseItem(item, index)}
+													>
+														<Icon fontSize="small" className="text-blue">
+															edit
+														</Icon>
+													</IconButton>
 
-											<IconButton size="small" onClick={() => onRemovePurchaseItem(index)}>
-												<Icon fontSize="small" className="text-red">
-													delete
-												</Icon>
-											</IconButton>
+													<IconButton
+														size="small"
+														onClick={() => onRemovePurchaseItem(index)}
+													>
+														<Icon fontSize="small" className="text-red">
+															delete
+														</Icon>
+													</IconButton>
+												</>
+											)}
 										</td>
 									</tr>
 								))}
@@ -399,55 +524,189 @@ export default function PurchaseCreate(props) {
 				name="observations"
 				value={form.observations}
 				onChange={handleChange}
-				className="w-full"
+				className="mb-10 w-full"
 				multiline
 				rows={4}
 				rowsMax={4}
+				disabled={formDisabled}
 			/>
 
+			<FileUpload files={form.files} appKey={PURCHASE_APP_KEY} registerId={form.id} disabled={!canCancel} />
+
 			<div className="text-center m-20">
-				{data.purchase.get_status.parameter_key === PURCHASE_STATUS.PURCHASE_STATUS_IN_PROCESS && (
+				{canCancel && (
 					<Button
 						variant="contained"
 						color="primary"
 						loading={loading}
-						onClick={onStorePurchase}
+						onClick={() => setOpenCancel(true)}
+						className="bg-red-400 hover:bg-red-600 mx-5"
+					>
+						Cancelar
+					</Button>
+				)}
+
+				{inProcess && (
+					<Button
+						variant="contained"
+						color="primary"
+						loading={loading}
+						onClick={() => setOpenChekcing(true)}
 						className="bg-green-400 hover:bg-green-600 mx-5"
 					>
 						Enviar a revisión
 					</Button>
 				)}
 
-				<Button
-					variant="contained"
-					color="secondary"
-					loading={loading}
-					onClick={onStorePurchase}
-					className="mx-5"
-				>
-					Visualizar
-				</Button>
+				{canView && (
+					<Button
+						variant="contained"
+						color="secondary"
+						loading={loading}
+						onClick={onUpdatePurchase}
+						className="mx-5"
+					>
+						Visualizar
+					</Button>
+				)}
 
-				<Button
-					variant="contained"
-					loading={loading}
-					onClick={onStorePurchase}
-					className="bg-red-400 hover:bg-red-600 mx-5"
-				>
+				{!formDisabled && (
+					<Button
+						variant="contained"
+						color="primary"
+						disabled={disabled}
+						loading={loading}
+						onClick={onUpdatePurchase}
+						className="mx-5"
+					>
+						Actualizar
+					</Button>
+				)}
+
+				{canClose && (
+					<Button
+						variant="contained"
+						color="secondary"
+						loading={loading}
+						onClick={() => setOpenClose(true)}
+						className="mx-5"
+					>
+						Cerrar
+					</Button>
+				)}
+
+				{canFinish && (
+					<Button
+						variant="contained"
+						color="primary"
+						loading={loading}
+						onClick={() => setOpenFinish(true)}
+						className="bg-green-400 hover:bg-green-600 mx-5"
+					>
+						Finalizar
+					</Button>
+				)}
+
+				{canChecking && user.is_approver && (
+					<>
+						<Button
+							variant="contained"
+							color="primary"
+							loading={loading}
+							onClick={() => setOpenReject(true)}
+							className="bg-red-400 hover:bg-red-600 mx-5"
+						>
+							Rechazar
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							loading={loading}
+							onClick={() => setOpenApprove(true)}
+							className="bg-green-400 hover:bg-green-600 mx-5"
+						>
+							Aprobar
+						</Button>
+					</>
+				)}
+			</div>
+
+			<DialogConfirmUpdateStatus
+				title="Enviar a revisión"
+				message="¿Confirma enviar a revisión la orden de compra?"
+				open={openChecking}
+				onClose={() => setOpenChekcing(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_CHECKING)}
+			/>
+
+			<DialogConfirmUpdateStatus
+				title="Cancelar"
+				message="¿Confirma anular la orden de compra?"
+				open={openCancel}
+				onClose={() => setOpenCancel(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_CANCELLED)}
+			/>
+
+			<DialogConfirmUpdateStatus
+				title="Rechazar"
+				message="¿Confirma rechazar la orden de compra?"
+				open={openReject}
+				onClose={() => setOpenReject(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_REJECTED)}
+			/>
+
+			<DialogConfirmUpdateStatus
+				title="Aprobar"
+				message="¿Confirma aprobar la orden de compra?"
+				open={openApprove}
+				onClose={() => setOpenApprove(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_APPROVED)}
+			/>
+
+			<DialogConfirmUpdateStatus
+				title="Cerrar"
+				message="¿Confirma cerrar la orden de compra?"
+				open={openClose}
+				onClose={() => setOpenClose(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_CLOSED)}
+			/>
+
+			<DialogConfirmUpdateStatus
+				title="Finalizar"
+				message="¿Confirma finalizar la orden de compra?"
+				open={openFinish}
+				onClose={() => setOpenFinish(false)}
+				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_FINISHED)}
+			/>
+		</div>
+	);
+}
+
+function DialogConfirmUpdateStatus({ title, message, open, onClose, onConfirm }) {
+	return (
+		<Dialog open={open}>
+			<DialogTitle>{title}</DialogTitle>
+
+			<DialogContent className="flex flex-col">{message}</DialogContent>
+
+			<DialogActions>
+				<Button variant="contained" color="primary" onClick={onClose} className="bg-red-400 hover:bg-red-600">
 					Cancelar
 				</Button>
 
 				<Button
 					variant="contained"
 					color="primary"
-					disabled={disabled}
-					loading={loading}
-					onClick={onStorePurchase}
-					className="mx-5"
+					onClick={() => {
+						onConfirm();
+						onClose();
+					}}
+					className="bg-green-400 hover:bg-green-600"
 				>
-					Actualizar
+					Aceptar
 				</Button>
-			</div>
-		</div>
+			</DialogActions>
+		</Dialog>
 	);
 }

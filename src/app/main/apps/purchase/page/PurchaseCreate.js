@@ -11,17 +11,23 @@ import {
 	Typography
 } from '@material-ui/core';
 import { axios } from '@core/services/Api';
-import { formatDate, getHandleChange, roundNumber } from '@core/utils/utils';
+import { formatDate, getHandleChange, redirect, roundNumber } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { PAYMENT_METHODS, PURCHASE_URL_CREATE, PURCHASE_URL_STORE } from '../PurchaseConst';
+import { PAYMENT_METHODS, PURCHASE_PAGE_EDIT, PURCHASE_URL_CREATE, PURCHASE_URL_STORE } from '../PurchaseConst';
 import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
 
+/**
+ * @function PurchaseCreate
+ * @brief Formulario de creación de orden compra
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 export default function PurchaseCreate() {
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
@@ -92,7 +98,9 @@ export default function PurchaseCreate() {
 				iva,
 				total
 			},
-			success: () => undefined,
+			success: ({ purchase }) => {
+				redirect(`${PURCHASE_PAGE_EDIT}/${purchase.id}`);
+			},
 			error: () => setLoading(false)
 		});
 	};

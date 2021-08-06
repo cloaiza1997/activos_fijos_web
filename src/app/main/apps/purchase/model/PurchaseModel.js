@@ -15,6 +15,7 @@ export default function PurchaseModel(data) {
 		id_payment_method: item.id_payment_method || '',
 		payment_days: item.payment_days || '',
 		observations: item.observations || '',
-		items: item.items || []
+		items: item.items || [],
+		files: item.files || []
 	};
 }

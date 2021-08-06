@@ -1,3 +1,5 @@
+export const PURCHASE_APP_KEY = 'PURCHASES';
+
 // Páginas
 export const PURCHASE_PAGE_CREATE = '/purchase/create';
 export const PURCHASE_PAGE_EDIT = '/purchase/edit';
@@ -6,6 +8,7 @@ export const PURCHASE_URL_CREATE = 'purchase/create';
 export const PURCHASE_URL_EDIT = 'purchase/:id/edit';
 export const PURCHASE_URL_STORE = 'purchase';
 export const PURCHASE_URL_UPDATE = 'purchase/:id';
+export const PURCHASE_URL_UPDATE_STATUS = 'purchase/update_status/:id';
 
 export const PAYMENT_METHODS = {
 	EFFECTIVE: 'EFFECTIVE_PAYMENT',

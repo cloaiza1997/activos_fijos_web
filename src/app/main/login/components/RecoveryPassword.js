@@ -33,6 +33,12 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+/**
+ * @function RecoveryPassword
+ * @brief Formulario de recuperación de contraseña
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function RecoveryPassword() {
 	const classes = useStyles();
 

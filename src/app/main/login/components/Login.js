@@ -29,6 +29,12 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
+/**
+ * @function Login
+ * @brief Contenedor del formulario de login
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function Login() {
 	const classes = useStyles();
 

@@ -8,6 +8,12 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import React, { useEffect, useRef, useState } from 'react';
 
+/**
+ * @function JWTLoginTab
+ * @brief Formulario de login
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function JWTLoginTab(props) {
 	const dispatch = useDispatch();
 	const login = useSelector(({ auth }) => auth.login);
