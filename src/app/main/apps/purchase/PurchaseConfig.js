@@ -13,7 +13,7 @@ const PurchaseConfig = {
 			component: React.lazy(() => import('./page/PurchaseCreate'))
 		},
 		{
-			auth: authRoles.admin,
+			auth: authRoles.user,
 			path: `${PURCHASE_PAGE_EDIT}/:id`,
 			component: React.lazy(() => import('./page/PurchaseEdit'))
 		}

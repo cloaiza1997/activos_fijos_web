@@ -84,15 +84,16 @@ export default function PurchaseEdit(props) {
 
 	const status = data?.purchase?.get_status?.parameter_key;
 
-	const formDisabled = status !== PURCHASE_STATUS_IN_PROCESS && status !== PURCHASE_STATUS_APPROVED;
+	const formDisabled =
+		!user.is_admin || (status !== PURCHASE_STATUS_IN_PROCESS && status !== PURCHASE_STATUS_APPROVED);
 
-	const inProcess = status === PURCHASE_STATUS_IN_PROCESS;
+	const inProcess = user.is_admin && status === PURCHASE_STATUS_IN_PROCESS;
 
-	const canChecking = status === PURCHASE_STATUS_CHECKING;
-	const canClose = status === PURCHASE_STATUS_APPROVED;
-	const canFinish = status === PURCHASE_STATUS_CLOSED;
-	const canView = canFinish || status === PURCHASE_STATUS_FINISHED;
-	const canCancel = inProcess || canClose || canFinish;
+	const canChecking = user.is_approver && status === PURCHASE_STATUS_CHECKING;
+	const canClose = user.is_admin && status === PURCHASE_STATUS_APPROVED;
+	const canFinish = user.is_admin && status === PURCHASE_STATUS_CLOSED;
+	const canView = user.is_admin && (canFinish || status === PURCHASE_STATUS_FINISHED);
+	const canCancel = user.is_admin && (inProcess || canClose || canFinish);
 
 	const subtotal = (() => {
 		let _subtotal = 0;
@@ -620,7 +621,7 @@ export default function PurchaseEdit(props) {
 					</Button>
 				)}
 
-				{canChecking && user.is_approver && (
+				{canChecking && (
 					<>
 						<Button
 							variant="contained"
