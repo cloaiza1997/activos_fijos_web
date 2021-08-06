@@ -22,7 +22,8 @@ import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import FileUpload from '@core/components/FileUpload';
 import Loading from '@core/components/Loading';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactToPrint from 'react-to-print';
 // Components
 import {
 	PAYMENT_METHODS,
@@ -34,6 +35,7 @@ import {
 } from '../PurchaseConst';
 import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
+import PurchasePrint from '../components/PurchasePrint';
 
 const {
 	PURCHASE_STATUS_APPROVED,
@@ -68,6 +70,8 @@ export default function PurchaseEdit(props) {
 	const [openClose, setOpenClose] = useState(false);
 	const [openFinish, setOpenFinish] = useState(false);
 	const [openReject, setOpenReject] = useState(false);
+
+	const componentPrintRef = useRef();
 
 	const { form, handleChange, setForm } = useForm(new PurchaseModel());
 
@@ -212,7 +216,7 @@ export default function PurchaseEdit(props) {
 
 		setDisabledItem(_disabled);
 	}, [formItem]);
-	console.log(form);
+
 	return skeleton ? (
 		<Loading />
 	) : (
@@ -221,7 +225,6 @@ export default function PurchaseEdit(props) {
 				Orden de compra <span className="underline">{`${form.id}`.padStart(8, '0')}</span> (
 				{data.purchase.get_status.str_val})
 			</Typography>
-
 			<div className="flex flex-col text-11 leading-none p-10 border-1 rounded-8 mb-10 w-full">
 				<span className="mb-6">
 					Creada por: <span className="font-bold">{data.purchase.get_creator_user.display_name}</span> -{' '}
@@ -240,7 +243,6 @@ export default function PurchaseEdit(props) {
 					</span>
 				)}
 			</div>
-
 			<div className="flex mb-10 w-full">
 				<div className="w-3/5">
 					<div className="flex mb-10">
@@ -393,72 +395,78 @@ export default function PurchaseEdit(props) {
 					</div>
 				</div>
 			</div>
+			<div id="div_test" className="flex p-10 border-1 rounded-8 mb-10 w-full">
+				{!formDisabled && (
+					<div className="w-2/5">
+						<Typography color="primary" className="font-bold mb-10">
+							Ítems
+						</Typography>
 
-			<div className="flex p-10 border-1 rounded-8 mb-10 w-full">
-				<div className="w-2/5">
-					<Typography color="primary" className="font-bold mb-10">
-						Ítems
-					</Typography>
-
-					<TextField
-						label="Producto"
-						name="product"
-						value={formItem.product}
-						onChange={handleChangeItem}
-						className="mb-10 w-full"
-						disabled={formDisabled}
-						required
-					/>
-
-					<div className="flex mb-10">
 						<TextField
-							type="number"
-							label="Cantidad"
-							name="quantity"
-							value={formItem.quantity}
+							label="Producto"
+							name="product"
+							value={formItem.product}
 							onChange={handleChangeItem}
-							className="mr-2 w-2/5"
+							className="mb-10 w-full"
 							disabled={formDisabled}
 							required
 						/>
 
-						<TextField
-							type="number"
-							label="Valor unitario"
-							name="unit_value"
-							value={formItem.unit_value}
-							onChange={handleChangeItem}
-							className="ml-2 w-3/5"
-							InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-							disabled={formDisabled}
-							required
-						/>
+						<div className="flex mb-10">
+							<TextField
+								type="number"
+								label="Cantidad"
+								name="quantity"
+								value={formItem.quantity}
+								onChange={handleChangeItem}
+								className="mr-2 w-2/5"
+								disabled={formDisabled}
+								required
+							/>
+
+							<TextField
+								type="number"
+								label="Valor unitario"
+								name="unit_value"
+								value={formItem.unit_value}
+								onChange={handleChangeItem}
+								className="ml-2 w-3/5"
+								InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+								disabled={formDisabled}
+								required
+							/>
+						</div>
+
+						<div className="flex">
+							<TextField
+								type="number"
+								label="Valor total"
+								name="total_value"
+								value={formItem.quantity * formItem.unit_value}
+								className="mr-2 w-1/2"
+								InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+								disabled
+							/>
+
+							<Button
+								variant="contained"
+								color="secondary"
+								className="ml-2 w-1/2"
+								disabled={formDisabled || disabledItem}
+								onClick={onAddItem}
+							>
+								{formItem.index === undefined ? 'Agregar' : 'Actualizar'}
+							</Button>
+						</div>
 					</div>
+				)}
 
-					<div className="flex">
-						<TextField
-							type="number"
-							label="Valor total"
-							name="total_value"
-							value={formItem.quantity * formItem.unit_value}
-							className="mr-2 w-1/2"
-							InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-							disabled
-						/>
-
-						<Button
-							variant="contained"
-							color="secondary"
-							className="ml-2 w-1/2"
-							disabled={formDisabled || disabledItem}
-							onClick={onAddItem}
-						>
-							{formItem.index === undefined ? 'Agregar' : 'Actualizar'}
-						</Button>
-					</div>
-				</div>
-
-				<div className="ml-20 w-3/5">
+				<div className={formDisabled ? 'w-full' : 'ml-20 w-3/5'}>
+					{formDisabled && (
+						<Typography color="primary" className="font-bold mb-10">
+							Ítems
+						</Typography>
+					)}
 					{form.items.length === 0 ? (
 						<div className="flex justify-center items-center w-full h-full">
 							<Typography color="secondary">No se han agregado ítems a la compra</Typography>
@@ -472,7 +480,7 @@ export default function PurchaseEdit(props) {
 									<th>Valor unitario</th>
 									<th>Valor total</th>
 									<th>Activo fijo</th>
-									<th>Acciones</th>
+									{!formDisabled && <th>Acciones</th>}
 								</tr>
 							</thead>
 
@@ -488,29 +496,24 @@ export default function PurchaseEdit(props) {
 											{item.unit_value >= data.asset_amount ? 'Si' : 'No'}
 										</td>
 
-										<td className="text-center">
-											{!formDisabled && (
-												<>
-													<IconButton
-														size="small"
-														onClick={() => onEditPurchaseItem(item, index)}
-													>
-														<Icon fontSize="small" className="text-blue">
-															edit
-														</Icon>
-													</IconButton>
+										{!formDisabled && (
+											<td className="text-center">
+												<IconButton
+													size="small"
+													onClick={() => onEditPurchaseItem(item, index)}
+												>
+													<Icon fontSize="small" className="text-blue">
+														edit
+													</Icon>
+												</IconButton>
 
-													<IconButton
-														size="small"
-														onClick={() => onRemovePurchaseItem(index)}
-													>
-														<Icon fontSize="small" className="text-red">
-															delete
-														</Icon>
-													</IconButton>
-												</>
-											)}
-										</td>
+												<IconButton size="small" onClick={() => onRemovePurchaseItem(index)}>
+													<Icon fontSize="small" className="text-red">
+														delete
+													</Icon>
+												</IconButton>
+											</td>
+										)}
 									</tr>
 								))}
 							</tbody>
@@ -559,15 +562,25 @@ export default function PurchaseEdit(props) {
 				)}
 
 				{canView && (
-					<Button
-						variant="contained"
-						color="secondary"
-						loading={loading}
-						onClick={onUpdatePurchase}
-						className="mx-5"
-					>
-						Visualizar
-					</Button>
+					<>
+						<ReactToPrint
+							trigger={() => (
+								<Button variant="contained" color="secondary" loading={loading} className="mx-5">
+									Visualizar
+								</Button>
+							)}
+							content={() => componentPrintRef.current}
+							documentTitle={`Orden_de_Compra_${`${data.purchase.id}`.padStart(8, '0')}`}
+						/>
+
+						<div className="hidden">
+							<PurchasePrint
+								ref={componentPrintRef}
+								purchase={data.purchase}
+								companyInfo={data.company_info}
+							/>
+						</div>
+					</>
 				)}
 
 				{!formDisabled && (
