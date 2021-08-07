@@ -1,5 +1,9 @@
 import { authRoles } from 'app/auth';
-import { PURCHASE_PAGE_CREATE } from 'app/main/apps/purchase/PurchaseConst';
+import {
+	PURCHASE_PAGE_CREATE,
+	PURCHASE_PAGE_LIST,
+	PURCHASE_PAGE_LIST_APPROVE
+} from 'app/main/apps/purchase/PurchaseConst';
 
 const navigationConfig = [
 	{
@@ -16,18 +20,20 @@ const navigationConfig = [
 				url: PURCHASE_PAGE_CREATE
 			},
 			{
+				auth: authRoles.admin,
 				id: 'listar-ordenes',
 				title: 'Órdenes de compra',
 				type: 'item',
 				icon: 'shopping_bag',
-				url: ''
+				url: PURCHASE_PAGE_LIST
 			},
 			{
+				auth: authRoles.approver,
 				id: 'aprobar-compra',
 				title: 'Aprobaciones',
 				type: 'item',
 				icon: 'add_task',
-				url: ''
+				url: PURCHASE_PAGE_LIST_APPROVE
 			}
 		]
 	},

@@ -18,7 +18,7 @@ import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { PAYMENT_METHODS, PURCHASE_PAGE_EDIT, PURCHASE_URL_CREATE, PURCHASE_URL_STORE } from '../PurchaseConst';
+import { PAYMENT_METHODS, PURCHASE_PAGE_VIEW, PURCHASE_URL_CREATE, PURCHASE_URL_STORE } from '../PurchaseConst';
 import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
 
@@ -99,7 +99,7 @@ export default function PurchaseCreate() {
 				total
 			},
 			success: ({ purchase }) => {
-				redirect(`${PURCHASE_PAGE_EDIT}/${purchase.id}`);
+				redirect(`${PURCHASE_PAGE_VIEW}/${purchase.id}`);
 			},
 			error: () => setLoading(false)
 		});
