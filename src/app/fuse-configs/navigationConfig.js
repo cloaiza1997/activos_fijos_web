@@ -1,4 +1,5 @@
 import { authRoles } from 'app/auth';
+import { ASSET_PAGE_CREATE } from 'app/main/apps/asset/AssetConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -43,11 +44,12 @@ const navigationConfig = [
 		type: 'group',
 		children: [
 			{
+				auth: authRoles.admin,
 				id: 'crear-activo',
 				title: 'Ingresar activo',
 				type: 'item',
 				icon: 'add_circle_outline',
-				url: ''
+				url: ASSET_PAGE_CREATE
 			},
 			{
 				id: 'listar-activos',

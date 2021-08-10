@@ -11,6 +11,7 @@ import pagesConfigs from 'app/main/pages/pagesConfigs';
 import React from 'react';
 import RegisterConfig from 'app/main/register/RegisterConfig';
 import UserInterfaceConfig from 'app/main/user-interface/UserInterfaceConfig';
+import { LS_USER } from 'app/auth/AuthConsts';
 
 const routeConfigs = [
 	...appsConfigs,
@@ -38,11 +39,11 @@ const routes = [
 	{
 		path: '/',
 		exact: true,
-		component: () => <Redirect to={LOGIN_INDEX} />
-	},
-	{
-		component: () => <Redirect to="/pages/errors/error-404" />
+		component: () => <Redirect to={localStorage.getItem(LS_USER) ? '/home' : LOGIN_INDEX} />
 	}
+	// {
+	// 	component: () => <Redirect to="/pages/errors/error-404" />
+	// }
 ];
 
 export default routes;

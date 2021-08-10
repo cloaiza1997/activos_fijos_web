@@ -127,7 +127,7 @@ export const logoutUser = () => async (dispatch, getState) => {
 		method: 'POST'
 	});
 
-	history.push(`/${URL_LOGIN}`);
+	// history.push(`/${URL_LOGIN}`);
 
 	// switch (user.from) {
 	// 	case 'firebase': {
