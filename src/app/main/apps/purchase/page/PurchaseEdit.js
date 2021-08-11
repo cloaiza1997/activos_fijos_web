@@ -22,8 +22,8 @@ import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import FileUpload from '@core/components/FileUpload';
 import Loading from '@core/components/Loading';
-import React, { useEffect, useRef, useState } from 'react';
-import ReactToPrint from 'react-to-print';
+import Print from '@core/components/Print';
+import React, { useEffect, useState } from 'react';
 // Components
 import {
 	PAYMENT_METHODS,
@@ -71,8 +71,6 @@ export default function PurchaseEdit(props) {
 	const [openClose, setOpenClose] = useState(false);
 	const [openFinish, setOpenFinish] = useState(false);
 	const [openReject, setOpenReject] = useState(false);
-
-	const componentPrintRef = useRef();
 
 	const { form, handleChange, setForm } = useForm(new PurchaseModel());
 
@@ -571,25 +569,16 @@ export default function PurchaseEdit(props) {
 				)}
 
 				{canView && (
-					<>
-						<ReactToPrint
-							trigger={() => (
-								<Button variant="contained" color="secondary" loading={loading} className="mx-5">
-									Visualizar
-								</Button>
-							)}
-							content={() => componentPrintRef.current}
-							documentTitle={`Orden_de_Compra_${`${data.purchase.id}`.padStart(8, '0')}`}
-						/>
-
-						<div className="hidden">
-							<PurchasePrint
-								ref={componentPrintRef}
-								purchase={data.purchase}
-								companyInfo={data.company_info}
-							/>
-						</div>
-					</>
+					<Print
+						trigger={
+							<Button variant="contained" color="secondary" loading={loading} className="mx-5">
+								Visualizar
+							</Button>
+						}
+						title={`Orden_de_Compra_${`${data.purchase.id}`.padStart(8, '0')}`}
+						Component={PurchasePrint}
+						componentProps={{ purchase: data.purchase, companyInfo: data.company_info }}
+					/>
 				)}
 
 				{!formDisabled && (

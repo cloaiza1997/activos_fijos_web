@@ -1,9 +1,25 @@
+/* eslint-disable react/prefer-stateless-function */
+/* eslint-disable no-undef */
+import {
+	FormControl,
+	InputLabel,
+	Select,
+	TextField,
+	Typography,
+	MenuItem,
+	InputAdornment,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions
+} from '@material-ui/core';
 import { axios } from '@core/services/Api';
-import { FormControl, InputLabel, Select, TextField, Typography, MenuItem, InputAdornment } from '@material-ui/core';
 import { getPathByParams, roundNumber } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { URL_BACK } from '@core/consts/consts';
 import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
+import Print from '@core/components/Print';
 import React, { useEffect, useState } from 'react';
 // Components
 import { ASSET_URL_UPDATE } from '../AssetConst';
@@ -15,6 +31,7 @@ function AssetEdit(props) {
 
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
+	const [open, setOpen] = useState(false);
 
 	const { form, handleChange } = useForm(new AssetModel(data.asset));
 
@@ -201,18 +218,72 @@ function AssetEdit(props) {
 			</div>
 
 			<div className="text-center m-20">
+				<Button variant="contained" color="secondary" onClick={() => setOpen(true)} className="mx-4">
+					Placa
+				</Button>
+
 				<Button
 					variant="contained"
 					color="primary"
 					disabled={disabled}
 					loading={loading}
 					onClick={onUpdateAsset}
+					className="mx-4"
 				>
 					Actualizar
 				</Button>
 			</div>
+
+			<DialogAssetQrCode open={open} onClose={() => setOpen(false)} asset={data.asset} />
 		</div>
 	);
 }
 
 export default AssetEdit;
+
+function DialogAssetQrCode({ open, onClose, asset }) {
+	return (
+		<Dialog open={open}>
+			<DialogTitle>Generación de placa de activo fijo</DialogTitle>
+
+			<DialogContent>
+				<AssetPlate asset={asset} />
+			</DialogContent>
+
+			<DialogActions className="flex items-center justify-center">
+				<Button variant="contained" color="primary" onClick={onClose} className="bg-red-400 hover:bg-red-600">
+					Cancelar
+				</Button>
+
+				<Print
+					trigger={
+						<Button variant="contained" color="primary">
+							Generar
+						</Button>
+					}
+					title={`Placa_Activo_${asset.asset_number}`}
+					Component={AssetPlate}
+					componentProps={{ asset }}
+				/>
+			</DialogActions>
+		</Dialog>
+	);
+}
+
+class AssetPlate extends React.Component {
+	render() {
+		return (
+			<div className="flex flex-col items-center justify-center">
+				<div className="flex flex-col items-center justify-center m-10 px-20 pt-20 pb-10 border-1 rounded-8">
+					<img
+						src={`${URL_BACK}assets-qrcodes/${this.props.asset.asset_number}.svg`}
+						alt=""
+						className="mb-10"
+					/>
+
+					<span>{this.props.asset.asset_number}</span>
+				</div>
+			</div>
+		);
+	}
+}
