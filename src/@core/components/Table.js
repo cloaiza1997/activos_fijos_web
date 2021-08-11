@@ -102,7 +102,7 @@ function Table(props) {
 				)}
 			</div>
 		);
-	}, [filterText, resetPaginationToggle]);
+	}, [filterText, resetPaginationToggle, button]);
 
 	return (
 		<div className={clsx('bg-white', classes.table)}>

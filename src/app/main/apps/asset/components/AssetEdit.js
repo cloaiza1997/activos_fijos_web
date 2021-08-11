@@ -16,7 +16,7 @@ function AssetEdit(props) {
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 
-	const { form, handleChange, setForm } = useForm(new AssetModel(data.asset));
+	const { form, handleChange } = useForm(new AssetModel(data.asset));
 
 	const onUpdateAsset = () => {
 		setLoading(true);

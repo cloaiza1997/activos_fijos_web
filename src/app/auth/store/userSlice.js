@@ -10,7 +10,7 @@ import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
 import history from '@history';
 import jwtService from 'app/services/jwtService';
-import { LS_TOKEN, LS_USER, URL_LOGIN, URL_LOGOUT } from '../AuthConsts';
+import { LS_TOKEN, LS_USER, URL_LOGOUT } from '../AuthConsts';
 
 export const setUserDataAuth0 = tokenData => async dispatch => {
 	const user = {

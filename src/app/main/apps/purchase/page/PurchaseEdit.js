@@ -192,6 +192,7 @@ export default function PurchaseEdit(props) {
 		const error = () => redirect(PURCHASE_PAGE_LIST);
 
 		axios({ url: getPathByParams(PURCHASE_URL_EDIT, { id }), method: 'GET', success, error });
+		// eslint-disable-next-line
 	}, []);
 
 	useEffect(() => {
@@ -206,7 +207,7 @@ export default function PurchaseEdit(props) {
 			!form.items.length;
 
 		setDisabled(_disabled);
-	}, [form]);
+	}, [form, isCredit]);
 
 	useEffect(() => {
 		const _disabled =

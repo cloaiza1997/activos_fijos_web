@@ -41,6 +41,7 @@ function AssetView(props) {
 		const error = () => redirect(ASSET_PAGE_LIST);
 
 		axios({ url: getPathByParams(ASSET_URL_EDIT, { id }), method: 'GET', success });
+		// eslint-disable-next-line
 	}, []);
 
 	return skeleton ? (

@@ -1,30 +1,12 @@
-import { Redirect } from 'react-router-dom';
 import { LOGIN_INDEX } from 'app/main/login/LoginConsts';
+import { LS_USER } from 'app/auth/AuthConsts';
+import { Redirect } from 'react-router-dom';
 import appsConfigs from 'app/main/apps/appsConfigs';
-import authRoleExamplesConfigs from 'app/main/auth/authRoleExamplesConfigs';
-import CallbackConfig from 'app/main/callback/CallbackConfig';
-import DocumentationConfig from 'app/main/documentation/DocumentationConfig';
 import FuseUtils from '@fuse/utils';
 import LoginConfig from 'app/main/login/LoginConfig';
-import LogoutConfig from 'app/main/logout/LogoutConfig';
-import pagesConfigs from 'app/main/pages/pagesConfigs';
 import React from 'react';
-import RegisterConfig from 'app/main/register/RegisterConfig';
-import UserInterfaceConfig from 'app/main/user-interface/UserInterfaceConfig';
-import { LS_USER } from 'app/auth/AuthConsts';
 
-const routeConfigs = [
-	...appsConfigs,
-	// ...pagesConfigs,
-	// ...authRoleExamplesConfigs,
-	// UserInterfaceConfig,
-	// DocumentationConfig,
-	// LogoutConfig,
-	LoginConfig
-	// RegisterConfig,
-	// LogoutConfig,
-	// CallbackConfig
-];
+const routeConfigs = [...appsConfigs, LoginConfig];
 
 const routes = [
 	// if you want to make whole app auth protected by default change defaultAuth for example:

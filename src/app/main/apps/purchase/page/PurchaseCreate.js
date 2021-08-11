@@ -126,7 +126,7 @@ export default function PurchaseCreate() {
 			!form.items.length;
 
 		setDisabled(_disabled);
-	}, [form]);
+	}, [form, isCredit]);
 
 	useEffect(() => {
 		const _disabled =

@@ -1,5 +1,5 @@
-import FuseShortcuts from '@fuse/core/FuseShortcuts';
-import FuseSidePanel from '@fuse/core/FuseSidePanel';
+// import FuseShortcuts from '@fuse/core/FuseShortcuts';
+// import FuseSidePanel from '@fuse/core/FuseSidePanel';
 import React from 'react';
 
 function LeftSideLayout3() {
