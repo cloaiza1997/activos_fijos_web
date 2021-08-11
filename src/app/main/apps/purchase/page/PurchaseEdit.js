@@ -28,13 +28,14 @@ import ReactToPrint from 'react-to-print';
 import {
 	PAYMENT_METHODS,
 	PURCHASE_APP_KEY,
+	PURCHASE_PAGE_LIST,
 	PURCHASE_STATUS,
 	PURCHASE_URL_EDIT,
 	PURCHASE_URL_UPDATE,
 	PURCHASE_URL_UPDATE_STATUS
 } from '../PurchaseConst';
-import PurchaseModel from '../model/PurchaseModel';
 import PurchaseItemModel from '../model/PurchaseItemModel';
+import PurchaseModel from '../model/PurchaseModel';
 import PurchasePrint from '../components/PurchasePrint';
 
 const {
@@ -188,7 +189,7 @@ export default function PurchaseEdit(props) {
 			}
 		};
 
-		const error = () => redirect('/home');
+		const error = () => redirect(PURCHASE_PAGE_LIST);
 
 		axios({ url: getPathByParams(PURCHASE_URL_EDIT, { id }), method: 'GET', success, error });
 	}, []);

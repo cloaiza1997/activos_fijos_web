@@ -1,5 +1,5 @@
 import { authRoles } from 'app/auth';
-import { ASSET_PAGE_CREATE } from 'app/main/apps/asset/AssetConst';
+import { ASSET_PAGE_CREATE, ASSET_PAGE_LIST } from 'app/main/apps/asset/AssetConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -52,11 +52,12 @@ const navigationConfig = [
 				url: ASSET_PAGE_CREATE
 			},
 			{
+				auth: authRoles.admin,
 				id: 'listar-activos',
 				title: 'Listado de activos',
 				type: 'item',
 				icon: 'fact_check',
-				url: ''
+				url: ASSET_PAGE_LIST
 			},
 			{
 				id: 'mis-activos',

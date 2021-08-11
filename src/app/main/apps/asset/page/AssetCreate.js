@@ -97,7 +97,7 @@ function AssetCreate() {
 						<a
 							href={`${PURCHASE_PAGE_VIEW}/${purchase.id}`}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 							className="font-bold"
 						>
 							Ir a la orden de compra {purchase.consecutive}
@@ -331,7 +331,7 @@ function DialogAssetPurchase({ open, onClose, name, value, handleChange, purchas
 									<a
 										href={`${PURCHASE_PAGE_VIEW}/${purchaseSelected.id}`}
 										target="_blank"
-										rel="noreferrer"
+										rel="noopener noreferrer"
 										className="font-bold"
 									>
 										Ir a la orden de compra {purchaseSelected.consecutive}

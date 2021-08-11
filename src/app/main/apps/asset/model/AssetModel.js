@@ -16,6 +16,7 @@ export default function AssetModel(data) {
 		use_life: item.use_life || '',
 		id_maintenance_frequence: item.id_maintenance_frequence || '',
 		id_purchase_item: item.id_purchase_item || '',
-		id_status: item.id_status || ''
+		id_status: item.id_status || '',
+		files: item.files || []
 	};
 }
