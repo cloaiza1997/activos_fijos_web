@@ -8,6 +8,7 @@ export const PURCHASE_PAGE_LIST_APPROVE = '/purchase/list_approve';
 // Endpoint
 export const PURCHASE_URL_CREATE = 'purchase/create';
 export const PURCHASE_URL_EDIT = 'purchase/:id/edit';
+export const PURCHASE_URL_GET_BY_STATUS = 'purchase_by_status/:status';
 export const PURCHASE_URL_LIST = 'purchase';
 export const PURCHASE_URL_LIST_APPROVE = 'purchase_to_approve';
 export const PURCHASE_URL_STORE = 'purchase';

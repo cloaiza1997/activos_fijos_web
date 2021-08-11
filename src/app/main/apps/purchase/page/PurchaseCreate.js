@@ -295,22 +295,29 @@ export default function PurchaseCreate() {
 					<div className="flex mb-10">
 						<TextField
 							type="number"
-							label="Cantidad"
-							name="quantity"
-							value={formItem.quantity}
-							onChange={handleChangeItem}
-							className="mr-2 w-2/5"
+							label="Valor unitario"
+							name="unit_value"
+							value={formItem.unit_value}
+							onChange={e => {
+								handleChangeItem(e);
+
+								if (e.target.value > data.asset_amount) {
+									handleChangeItem(getHandleChange('quantity', 1));
+								}
+							}}
+							className="mr-2 w-3/5"
+							InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
 							required
 						/>
 
 						<TextField
 							type="number"
-							label="Valor unitario"
-							name="unit_value"
-							value={formItem.unit_value}
+							label="Cantidad"
+							name="quantity"
+							value={formItem.quantity}
 							onChange={handleChangeItem}
-							className="ml-2 w-3/5"
-							InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
+							className="ml-2 w-2/5"
+							disabled={formItem.unit_value > data.asset_amount}
 							required
 						/>
 					</div>

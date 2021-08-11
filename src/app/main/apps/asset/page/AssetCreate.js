@@ -1,19 +1,36 @@
+import {
+	Checkbox,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	FormControl,
+	InputAdornment,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
+	Typography
+} from '@material-ui/core';
 import { axios } from '@core/services/Api';
-import { formatDate, getHandleChange, redirect, roundNumber } from '@core/utils/utils';
-import { FormControl, InputLabel, Select, TextField, Typography, MenuItem, InputAdornment } from '@material-ui/core';
+import { formatDate, getHandleChange, getPathByParams, redirect, roundNumber } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useForm } from '@fuse/hooks';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { ASSET_PAGE_VIEW, ASSET_URL_CREATE, ASSET_URL_STORE } from '../AssetConst';
+import { ASSET_PAGE_VIEW, ASSET_URL_CREATE, ASSET_URL_PURCHASE_ITEMS, ASSET_URL_STORE } from '../AssetConst';
+import { PURCHASE_PAGE_VIEW, PURCHASE_STATUS } from '../../purchase/PurchaseConst';
 import AssetModel from '../model/AssetModel';
 
 function AssetCreate() {
+	const [data, setData] = useState({});
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
-	const [data, setData] = useState({});
+	const [open, setOpen] = useState(false);
+	const [purchase, setPurchase] = useState({});
 	const [skeleton, setSkeleton] = useState(true);
 
 	const { form, handleChange, setForm } = useForm(new AssetModel());
@@ -64,13 +81,46 @@ function AssetCreate() {
 		<Loading />
 	) : (
 		<div className="p-20">
-			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Crear orden de compra
+			<Typography component="h1" color="primary" className="text-xl font-bold mb-16">
+				Ingresar activo
 			</Typography>
+
+			<div className="flex flex-col mb-16">
+				<div>
+					<Button variant="contained" color="secondary" onClick={() => setOpen(true)}>
+						Relacionar con orden de compra
+					</Button>
+				</div>
+
+				{purchase.id && (
+					<p className="mt-16">
+						<a
+							href={`${PURCHASE_PAGE_VIEW}/${purchase.id}`}
+							target="_blank"
+							rel="noreferrer"
+							className="font-bold"
+						>
+							Ir a la orden de compra {purchase.consecutive}
+						</a>
+					</p>
+				)}
+
+				{open && (
+					<DialogAssetPurchase
+						name="id_purchase_item"
+						value={form.id_purchase_item}
+						handleChange={handleChange}
+						purchase={purchase}
+						setPurchase={setPurchase}
+						open={open}
+						onClose={() => setOpen(false)}
+					/>
+				)}
+			</div>
 
 			<div className="flex mb-10">
 				<TextField
-					label="Npmbre del activo"
+					label="Nombre del activo"
 					name="name"
 					value={form.name}
 					onChange={handleChange}
@@ -204,7 +254,7 @@ function AssetCreate() {
 						onChange={handleChange}
 						className="ml-2 w-1/2"
 						InputProps={{ startAdornment: <InputAdornment position="start">$</InputAdornment> }}
-						// disabled
+						disabled={!!purchase?.id}
 						required
 					/>
 				</div>
@@ -226,3 +276,123 @@ function AssetCreate() {
 }
 
 export default AssetCreate;
+
+function DialogAssetPurchase({ open, onClose, name, value, handleChange, purchase, setPurchase }) {
+	const [purchases, setPurchases] = useState([]);
+	const [selected, setSelected] = useState({ id: value });
+	const [purchaseSelected, setPurchaseSelected] = useState(purchase);
+	const [skeleton, setLoading] = useState(true);
+
+	useEffect(() => {
+		axios({
+			method: 'GET',
+			url: getPathByParams(ASSET_URL_PURCHASE_ITEMS, { status: PURCHASE_STATUS.PURCHASE_STATUS_FINISHED }),
+			success: response => {
+				const _purchases = response.purchases?.filter(_purchase => !!_purchase.items.length);
+
+				setPurchases(_purchases);
+				setLoading(false);
+			}
+		});
+	}, []);
+
+	return (
+		<Dialog open={open}>
+			{skeleton ? (
+				<div className="h-128 w-128">
+					<Loading />
+				</div>
+			) : (
+				<>
+					<DialogTitle>Ingerso de activo - Buscar orden de compra</DialogTitle>
+
+					<DialogContent className="flex flex-col">
+						<Autocomplete
+							id="combo-box-demo"
+							options={purchases}
+							getOptionLabel={option => option.consecutive}
+							value={purchaseSelected.id ? purchaseSelected : null}
+							onChange={(event, _value) => setPurchaseSelected(_value)}
+							renderInput={params => <TextField {...params} label="Número de orden de compra" />}
+							noOptionsText="No hay resultados"
+							className="mb-16"
+						/>
+
+						{purchaseSelected.id && (
+							<div>
+								<p className="text-justify font-bold mb-16">
+									Debe de seleccionar algún ítem relacionado con la compra, para proceder con el
+									ingreso del activo. Tenga en cuenta que solo puede realizar esta operación durante
+									el ingreso de un activo, por lo cual si después de ingresado desea realacionarlo con
+									una orden de compra, ya no podrá hacerlo.
+								</p>
+
+								<p className="mb-16">
+									<a
+										href={`${PURCHASE_PAGE_VIEW}/${purchaseSelected.id}`}
+										target="_blank"
+										rel="noreferrer"
+										className="font-bold"
+									>
+										Ir a la orden de compra {purchaseSelected.consecutive}
+									</a>
+								</p>
+
+								<table className="print w-full">
+									<thead>
+										<tr>
+											<th className="w-0">Seleccionar</th>
+											<th>Producto</th>
+											<th>Valor unitario</th>
+										</tr>
+									</thead>
+
+									<tbody>
+										{purchaseSelected?.items?.map(item => (
+											<tr key={item.id}>
+												<td className="text-center">
+													<Checkbox
+														checked={selected?.id === item.id}
+														onChange={e => setSelected(e.target.checked ? item : null)}
+														inputProps={{ 'aria-label': 'primary checkbox' }}
+													/>
+												</td>
+												<td>{item.product}</td>
+												<td className="text-right">$ {item.unit_value}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+					</DialogContent>
+
+					<DialogActions>
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={onClose}
+							className="bg-red-400 hover:bg-red-600"
+						>
+							Cancelar
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={() => {
+								handleChange(getHandleChange(name, selected?.id || ''));
+								handleChange(getHandleChange('current_value', selected?.unit_value || ''));
+								setPurchase(selected ? purchaseSelected : {});
+								onClose();
+							}}
+							className="bg-green-400 hover:bg-green-600"
+						>
+							Seleccionar
+						</Button>
+					</DialogActions>
+				</>
+			)}
+		</Dialog>
+	);
+}
