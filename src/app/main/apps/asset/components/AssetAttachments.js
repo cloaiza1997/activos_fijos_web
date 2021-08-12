@@ -12,7 +12,7 @@ function AssetAttachments(props) {
 				files={data.asset.files}
 				appKey={ASSET_APP_KEY}
 				registerId={data.asset.id}
-				// disabled={!canCancel}
+				disabled={!data.user_is_admin}
 			/>
 		</div>
 	);

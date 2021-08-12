@@ -4,7 +4,7 @@ import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
 // Components
-import { ASSET_PAGE_CREATE, ASSET_PAGE_VIEW, ASSET_URL_STORE } from '../AssetConst';
+import { ASSET_PAGE_CREATE, ASSET_PAGE_VIEW, ASSET_URL_LIST } from '../AssetConst';
 
 function AssetList() {
 	const [skeleton, setSkeleton] = useState(true);
@@ -16,7 +16,7 @@ function AssetList() {
 			setSkeleton(false);
 		};
 
-		axios({ url: ASSET_URL_STORE, method: 'GET', success });
+		axios({ url: ASSET_URL_LIST, method: 'GET', success });
 	}, []);
 
 	const columns = [

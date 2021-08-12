@@ -35,6 +35,8 @@ function AssetEdit(props) {
 
 	const { form, handleChange } = useForm(new AssetModel(data.asset));
 
+	const canEdit = data.user_is_admin;
+
 	const onUpdateAsset = () => {
 		setLoading(true);
 
@@ -72,7 +74,7 @@ function AssetEdit(props) {
 				Activo fijo Nº {data.asset.asset_number} - Estado: {data.asset.get_status.str_val}
 			</Typography>
 
-			{data.asset.get_purchase_item && (
+			{data.asset.get_purchase_item && data.user_is_admin && (
 				<p className="mb-16">
 					<a
 						href={`${PURCHASE_PAGE_VIEW}/${data.asset.get_purchase_item.id_purchase}`}
@@ -93,6 +95,7 @@ function AssetEdit(props) {
 					value={form.name}
 					onChange={handleChange}
 					className="w-1/3"
+					disabled={!canEdit}
 					required
 				/>
 
@@ -132,13 +135,14 @@ function AssetEdit(props) {
 				multiline
 				rows={4}
 				rowsMax={4}
+				disabled={!canEdit}
 			/>
 
 			<div className="flex mb-10">
 				<FormControl className="w-1/3" required>
 					<InputLabel>Marca</InputLabel>
 
-					<Select name="id_brand" value={form.id_brand} onChange={handleChange} required>
+					<Select name="id_brand" value={form.id_brand} onChange={handleChange} disabled={!canEdit} required>
 						{data.asset_brands?.map(brand => (
 							<MenuItem key={brand.id} value={brand.id}>
 								{brand.name}
@@ -153,6 +157,7 @@ function AssetEdit(props) {
 					value={form.model}
 					onChange={handleChange}
 					className="mx-4 w-1/3"
+					disabled={!canEdit}
 					required
 				/>
 
@@ -162,6 +167,7 @@ function AssetEdit(props) {
 					value={form.serial_number}
 					onChange={handleChange}
 					className="w-1/3"
+					disabled={!canEdit}
 					required
 				/>
 			</div>
@@ -184,6 +190,7 @@ function AssetEdit(props) {
 						name="id_maintenance_frequence"
 						value={form.id_maintenance_frequence}
 						onChange={handleChange}
+						disabled={!canEdit}
 						required
 					>
 						{data.asset_main_freq?.map(freq => (
@@ -202,6 +209,7 @@ function AssetEdit(props) {
 						value={form.use_life}
 						onChange={handleChange}
 						className="mr-2 w-1/2"
+						disabled={!canEdit}
 						required
 					/>
 
@@ -217,24 +225,26 @@ function AssetEdit(props) {
 				</div>
 			</div>
 
-			<div className="text-center m-20">
-				<Button variant="contained" color="secondary" onClick={() => setOpen(true)} className="mx-4">
-					Placa
-				</Button>
+			{canEdit && (
+				<div className="text-center m-20">
+					<Button variant="contained" color="secondary" onClick={() => setOpen(true)} className="mx-4">
+						Placa
+					</Button>
 
-				<Button
-					variant="contained"
-					color="primary"
-					disabled={disabled}
-					loading={loading}
-					onClick={onUpdateAsset}
-					className="mx-4"
-				>
-					Actualizar
-				</Button>
-			</div>
+					<Button
+						variant="contained"
+						color="primary"
+						disabled={disabled}
+						loading={loading}
+						onClick={onUpdateAsset}
+						className="mx-4"
+					>
+						Actualizar
+					</Button>
 
-			<DialogAssetQrCode open={open} onClose={() => setOpen(false)} asset={data.asset} />
+					<DialogAssetQrCode open={open} onClose={() => setOpen(false)} asset={data.asset} />
+				</div>
+			)}
 		</div>
 	);
 }
@@ -258,7 +268,7 @@ function DialogAssetQrCode({ open, onClose, asset }) {
 				<Print
 					trigger={
 						<Button variant="contained" color="primary">
-							Generar
+							Imprimir
 						</Button>
 					}
 					title={`Placa_Activo_${asset.asset_number}`}

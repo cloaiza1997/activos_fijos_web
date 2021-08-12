@@ -1,5 +1,5 @@
 import { authRoles } from 'app/auth';
-import { ASSET_PAGE_CREATE, ASSET_PAGE_LIST } from 'app/main/apps/asset/AssetConst';
+import { ASSET_PAGE_CREATE, ASSET_PAGE_LIST, ASSET_PAGE_LIST_OWN } from 'app/main/apps/asset/AssetConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -8,6 +8,7 @@ import {
 
 const navigationConfig = [
 	{
+		auth: authRoles.staff,
 		id: 'compras',
 		title: 'COMPRAS',
 		type: 'group',
@@ -64,7 +65,7 @@ const navigationConfig = [
 				title: 'Mis activos',
 				type: 'item',
 				icon: 'devices',
-				url: ''
+				url: ASSET_PAGE_LIST_OWN
 			},
 			{
 				id: 'actas',
