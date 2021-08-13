@@ -308,7 +308,6 @@ function DialogAssetPurchase({ open, onClose, name, value, handleChange, purchas
 
 					<DialogContent className="flex flex-col">
 						<Autocomplete
-							id="combo-box-demo"
 							options={purchases}
 							getOptionLabel={option => option.consecutive}
 							value={purchaseSelected.id ? purchaseSelected : null}

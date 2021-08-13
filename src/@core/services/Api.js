@@ -18,7 +18,8 @@ export const axios = ({
 	data = {},
 	params = {},
 	success = () => undefined,
-	error = () => undefined
+	error = () => undefined,
+	...rest
 }) => {
 	const token = localStorage.getItem(LS_TOKEN);
 
@@ -30,7 +31,8 @@ export const axios = ({
 		headers: {
 			client: 'WEB',
 			Authorization: token ? `Bearer ${token}` : undefined
-		}
+		},
+		...rest
 	})
 		.then(response => {
 			const { message } = response.data;
@@ -40,6 +42,8 @@ export const axios = ({
 			}
 
 			success(response.data);
+
+			return response.data;
 		})
 		.catch(e => {
 			console.error(e);
@@ -61,6 +65,8 @@ export const axios = ({
 			}
 
 			error(e);
+
+			return e;
 		});
 };
 

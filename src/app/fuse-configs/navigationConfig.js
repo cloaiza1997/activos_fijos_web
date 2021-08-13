@@ -1,5 +1,6 @@
 import { authRoles } from 'app/auth';
 import { ASSET_PAGE_CREATE, ASSET_PAGE_LIST, ASSET_PAGE_LIST_OWN } from 'app/main/apps/asset/AssetConst';
+import { CERTIFICATE_PAGE_LIST } from 'app/main/apps/certificate/CertificateConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -72,7 +73,7 @@ const navigationConfig = [
 				title: 'Actas',
 				type: 'item',
 				icon: 'assignment',
-				url: ''
+				url: CERTIFICATE_PAGE_LIST
 			},
 			{
 				id: 'revaluaciones',
