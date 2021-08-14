@@ -48,15 +48,17 @@ export default function FileUpload(props) {
 	};
 
 	const onUploadFiles = () => {
-		const form = new FormData();
-
-		files.forEach(file => (file.file_name ? form.append('oldFiles[]', file.id) : form.append('files[]', file)));
-
 		if (onExternalChange) {
-			onExternalChange(form);
+			const _files = files.map(file => (file.file_name ? { ...file, oldFile: true } : file));
+
+			onExternalChange(_files);
 			setApplyChanges(false);
 		} else {
 			setLoading(true);
+
+			const form = new FormData();
+
+			files.forEach(file => (file.file_name ? form.append('oldFiles[]', file.id) : form.append('files[]', file)));
 
 			const success = response => {
 				setFiles(response.files);

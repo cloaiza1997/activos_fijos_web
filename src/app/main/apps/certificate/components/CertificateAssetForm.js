@@ -37,7 +37,6 @@ function CertificateAssetForm(props) {
 
 		const item = {
 			...formItem,
-			id_certificate: asset.id_certificate,
 			asset_number: asset.asset_number,
 			name: asset.name,
 			brand: asset.get_brand.str_val,
@@ -101,7 +100,7 @@ function CertificateAssetForm(props) {
 					className="mb-16"
 					files={formItem.files}
 					onExternalChange={files => {
-						handleChangeItem(getHandleChange('files', files.getAll('files[]')));
+						handleChangeItem(getHandleChange('files', files));
 					}}
 				/>
 
