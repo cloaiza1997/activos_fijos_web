@@ -1,6 +1,11 @@
 import { authRoles } from 'app/auth';
 import { ASSET_PAGE_CREATE, ASSET_PAGE_LIST, ASSET_PAGE_LIST_OWN } from 'app/main/apps/asset/AssetConst';
-import { CERTIFICATE_PAGE_LIST } from 'app/main/apps/certificate/CertificateConst';
+import {
+	CERTIFICATE_PAGE_CREATE,
+	CERTIFICATE_PAGE_LIST,
+	CERTIFICATE_PAGE_LIST_APPROVE,
+	CERTIFICATE_PAGE_LIST_OWN
+} from 'app/main/apps/certificate/CertificateConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -12,7 +17,7 @@ const navigationConfig = [
 		auth: authRoles.staff,
 		id: 'compras',
 		title: 'COMPRAS',
-		type: 'group',
+		type: 'collapse',
 		children: [
 			{
 				auth: authRoles.admin,
@@ -43,7 +48,7 @@ const navigationConfig = [
 	{
 		id: 'activos',
 		title: 'ACTIVOS',
-		type: 'group',
+		type: 'collapse',
 		children: [
 			{
 				auth: authRoles.admin,
@@ -67,14 +72,53 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'devices',
 				url: ASSET_PAGE_LIST_OWN
+			}
+		]
+	},
+	{
+		id: 'actas',
+		title: 'ACTAS',
+		type: 'collapse',
+		children: [
+			{
+				auth: authRoles.admin,
+				id: 'generar-acta',
+				title: 'Generar acta',
+				type: 'item',
+				icon: 'post_add',
+				url: CERTIFICATE_PAGE_CREATE
 			},
 			{
+				auth: authRoles.admin,
 				id: 'actas',
-				title: 'Actas',
+				title: 'Listado de actas',
 				type: 'item',
 				icon: 'assignment',
 				url: CERTIFICATE_PAGE_LIST
 			},
+			{
+				// auth: authRoles.approver,
+				id: 'aprovaciones',
+				title: 'Aprobaciones',
+				type: 'item',
+				icon: 'grading',
+				url: CERTIFICATE_PAGE_LIST_APPROVE
+			},
+			{
+				auth: authRoles.user,
+				id: 'mis-actas',
+				title: 'Mis actas',
+				type: 'item',
+				icon: 'content_copy',
+				url: CERTIFICATE_PAGE_LIST_OWN
+			}
+		]
+	},
+	{
+		id: '',
+		title: '',
+		type: 'collapse',
+		children: [
 			{
 				id: 'revaluaciones',
 				title: 'Revaluaciones',
@@ -115,7 +159,7 @@ const navigationConfig = [
 	{
 		id: 'reportes',
 		title: 'REPORTES',
-		type: 'group',
+		type: 'collapse',
 		children: [
 			{
 				id: 'reportes',
@@ -129,7 +173,7 @@ const navigationConfig = [
 	{
 		id: 'sistema',
 		title: 'SISTEMA',
-		type: 'group',
+		type: 'collapse',
 		children: [
 			{
 				id: 'usuarios',

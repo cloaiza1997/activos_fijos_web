@@ -4,9 +4,9 @@ import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
 // Components
-import { CERTIFICATE_PAGE_CREATE, CERTIFICATE_PAGE_VIEW, CERTIFICATE_URL_LIST } from '../CertificateConst';
+import { CERTIFICATE_PAGE_VIEW, CERTIFICATE_URL_LIST_APPROVE } from '../CertificateConst';
 
-function CertificateList() {
+function CertificateListApprove() {
 	const [skeleton, setSkeleton] = useState(true);
 	const [certificates, setCertificates] = useState([]);
 
@@ -16,7 +16,7 @@ function CertificateList() {
 			setSkeleton(false);
 		};
 
-		axios({ url: CERTIFICATE_URL_LIST, method: 'GET', success });
+		axios({ url: CERTIFICATE_URL_LIST_APPROVE, method: 'GET', success });
 	}, []);
 
 	const columns = [
@@ -35,12 +35,6 @@ function CertificateList() {
 			sortable: true
 		},
 		{
-			name: 'Fecha firma',
-			accesor: 'approved_at',
-			selector: row => row.approved_at,
-			sortable: true
-		},
-		{
 			name: 'Entregado por',
 			accesor: 'get_deliver_user.display_name',
 			selector: row => row.get_deliver_user.display_name,
@@ -51,13 +45,6 @@ function CertificateList() {
 			accesor: 'get_receiver_user.display_name',
 			selector: row => row.get_receiver_user.display_name,
 			sortable: true
-		},
-		{
-			name: 'Estado',
-			accesor: 'get_status.status',
-			selector: row => row.get_status.status,
-			sortable: true,
-			center: true
 		},
 		{
 			name: '',
@@ -73,13 +60,8 @@ function CertificateList() {
 	return skeleton ? (
 		<Loading />
 	) : (
-		<Table
-			title="Actas de movimiento"
-			columns={columns}
-			data={certificates}
-			button={{ text: 'Generar acta', href: CERTIFICATE_PAGE_CREATE }}
-		/>
+		<Table title="Actas de movimiento por aprobación" columns={columns} data={certificates} />
 	);
 }
 
-export default CertificateList;
+export default CertificateListApprove;

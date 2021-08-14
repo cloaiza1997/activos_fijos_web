@@ -4,9 +4,9 @@ import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
 // Components
-import { CERTIFICATE_PAGE_CREATE, CERTIFICATE_PAGE_VIEW, CERTIFICATE_URL_LIST } from '../CertificateConst';
+import { CERTIFICATE_PAGE_VIEW, CERTIFICATE_URL_LIST_OWN } from '../CertificateConst';
 
-function CertificateList() {
+function CertificateListOwn() {
 	const [skeleton, setSkeleton] = useState(true);
 	const [certificates, setCertificates] = useState([]);
 
@@ -16,7 +16,7 @@ function CertificateList() {
 			setSkeleton(false);
 		};
 
-		axios({ url: CERTIFICATE_URL_LIST, method: 'GET', success });
+		axios({ url: CERTIFICATE_URL_LIST_OWN, method: 'GET', success });
 	}, []);
 
 	const columns = [
@@ -70,16 +70,7 @@ function CertificateList() {
 		}
 	];
 
-	return skeleton ? (
-		<Loading />
-	) : (
-		<Table
-			title="Actas de movimiento"
-			columns={columns}
-			data={certificates}
-			button={{ text: 'Generar acta', href: CERTIFICATE_PAGE_CREATE }}
-		/>
-	);
+	return skeleton ? <Loading /> : <Table title="Mis actas" columns={columns} data={certificates} />;
 }
 
-export default CertificateList;
+export default CertificateListOwn;
