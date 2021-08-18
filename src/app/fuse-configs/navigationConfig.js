@@ -97,7 +97,7 @@ const navigationConfig = [
 				url: CERTIFICATE_PAGE_LIST
 			},
 			{
-				// auth: authRoles.approver,
+				auth: authRoles.approver,
 				id: 'aprovaciones',
 				title: 'Aprobaciones',
 				type: 'item',

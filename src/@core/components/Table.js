@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
 function Table(props) {
 	const classes = useStyles();
 
-	const { title, columns = [], data = [], button } = props;
+	const { title, columns = [], data = [], button, keyField } = props;
 
 	const [filterText, setFilterText] = useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -107,6 +107,7 @@ function Table(props) {
 	return (
 		<div className={clsx('bg-white', classes.table)}>
 			<DataTable
+				keyField={keyField}
 				title={title}
 				columns={columns}
 				data={filteredItems}

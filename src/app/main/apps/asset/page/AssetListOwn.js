@@ -12,7 +12,7 @@ function AssetListOwn() {
 
 	useEffect(() => {
 		const success = data => {
-			setAssets(data.assets);
+			setAssets(data.assets.map(asset => ({ ...asset, id_table: `${asset.id}${asset.certificate_number}` })));
 			setSkeleton(false);
 		};
 
@@ -97,7 +97,11 @@ function AssetListOwn() {
 		}
 	];
 
-	return skeleton ? <Loading /> : <Table title="Listado de activos asignados" columns={columns} data={assets} />;
+	return skeleton ? (
+		<Loading />
+	) : (
+		<Table title="Listado de activos asignados" columns={columns} data={assets} keyField="id_table" />
+	);
 }
 
 export default AssetListOwn;

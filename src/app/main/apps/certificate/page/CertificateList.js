@@ -36,8 +36,8 @@ function CertificateList() {
 		},
 		{
 			name: 'Fecha firma',
-			accesor: 'approved_at',
-			selector: row => row.approved_at,
+			accesor: 'received_at',
+			selector: row => row.received_at,
 			sortable: true
 		},
 		{
@@ -54,8 +54,8 @@ function CertificateList() {
 		},
 		{
 			name: 'Estado',
-			accesor: 'get_status.status',
-			selector: row => row.get_status.status,
+			accesor: 'get_status.str_val',
+			selector: row => row.get_status.str_val,
 			sortable: true,
 			center: true
 		},

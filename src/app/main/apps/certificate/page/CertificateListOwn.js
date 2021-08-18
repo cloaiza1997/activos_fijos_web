@@ -54,8 +54,8 @@ function CertificateListOwn() {
 		},
 		{
 			name: 'Estado',
-			accesor: 'get_status.status',
-			selector: row => row.get_status.status,
+			accesor: 'get_status.str_val',
+			selector: row => row.get_status.str_val,
 			sortable: true,
 			center: true
 		},

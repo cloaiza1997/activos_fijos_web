@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 // Components
 import { ASSET_PAGE_LIST, ASSET_URL_EDIT } from '../AssetConst';
 import AssetAttachments from '../components/AssetAttachments';
+import AssetCertificates from '../components/AssetCertificates';
 import AssetEdit from '../components/AssetEdit';
 
 function AssetView(props) {
@@ -18,7 +19,7 @@ function AssetView(props) {
 	const tabs = [
 		{ label: 'Información', component: <AssetEdit data={data} setData={setData} /> },
 		{ label: 'Adjuntos', component: <AssetAttachments data={data} setData={setData} /> },
-		{ label: 'Actas', component: null },
+		{ label: 'Actas', component: <AssetCertificates certificates={data?.asset?.certificates} /> },
 		{ label: 'Revaluaciones', component: null },
 		{ label: 'Depreciaciones', component: null },
 		{ label: 'Mantenimientos', component: null },
