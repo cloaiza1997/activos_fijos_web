@@ -13,3 +13,7 @@ export const ASSET_URL_LIST_OWN = 'asset/list_own';
 export const ASSET_URL_PURCHASE_ITEMS = 'asset/purchase_finished_available';
 export const ASSET_URL_STORE = 'asset';
 export const ASSET_URL_UPDATE = 'asset/:id';
+
+export const ASSET_ASSIGNED = 'ASSET_ASSIGNED';
+export const ASSET_DECOMMISSIONED = 'ASSET_DECOMMISSIONED';
+export const ASSET_UNASSIGNED = 'ASSET_UNASSIGNED';

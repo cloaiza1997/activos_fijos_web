@@ -1,5 +1,6 @@
 import { axios } from '@core/services/Api';
 import { Icon, IconButton } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
@@ -90,9 +91,11 @@ function AssetListOwn() {
 			minWidth: '60px',
 			maxWidth: '60px',
 			cell: row => (
-				<IconButton size="small" href={`${ASSET_PAGE_VIEW}/${row.id}`}>
-					<Icon color="primary">launch</Icon>
-				</IconButton>
+				<Link to={`${ASSET_PAGE_VIEW}/${row.id}`} role="button">
+					<IconButton size="small">
+						<Icon color="primary">launch</Icon>
+					</IconButton>
+				</Link>
 			)
 		}
 	];

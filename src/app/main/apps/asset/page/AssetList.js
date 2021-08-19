@@ -1,10 +1,11 @@
 import { axios } from '@core/services/Api';
 import { Icon, IconButton } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
 // Components
-import { ASSET_PAGE_CREATE, ASSET_PAGE_VIEW, ASSET_URL_LIST } from '../AssetConst';
+import { ASSET_ASSIGNED, ASSET_PAGE_CREATE, ASSET_PAGE_VIEW, ASSET_URL_LIST } from '../AssetConst';
 
 function AssetList() {
 	const [skeleton, setSkeleton] = useState(true);
@@ -61,16 +62,18 @@ function AssetList() {
 		{
 			name: 'Responsable',
 			accesor: 'user',
-			selector: row => row.user,
+			selector: row => (row.status_key === ASSET_ASSIGNED ? row.user : ''),
 			sortable: true
 		},
 		{
 			name: '',
 			center: true,
 			cell: row => (
-				<IconButton size="small" href={`${ASSET_PAGE_VIEW}/${row.id}`}>
-					<Icon color="primary">launch</Icon>
-				</IconButton>
+				<Link to={`${ASSET_PAGE_VIEW}/${row.id}`} role="button">
+					<IconButton size="small">
+						<Icon color="primary">launch</Icon>
+					</IconButton>
+				</Link>
 			)
 		}
 	];

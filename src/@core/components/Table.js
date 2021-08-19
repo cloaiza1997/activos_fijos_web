@@ -1,4 +1,5 @@
 import { Icon, IconButton, makeStyles, TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -89,16 +90,16 @@ function Table(props) {
 				/>
 
 				{button && (
-					<Button
-						variant="contained"
-						color="secondary"
-						className="no-link mx-20"
-						onClick={button?.onClick}
-						href={button?.href}
-						role="button"
-					>
-						{button?.text}
-					</Button>
+					<Link to={button?.href} role="button">
+						<Button
+							variant="contained"
+							color="secondary"
+							className="no-link mx-20"
+							onClick={button?.onClick}
+						>
+							{button?.text}
+						</Button>
+					</Link>
 				)}
 			</div>
 		);
