@@ -29,8 +29,8 @@ function AssetCertificates(props) {
 		},
 		{
 			name: 'Entregado por',
-			accesor: 'received_at',
-			selector: row => row.received_at,
+			accesor: 'deliver_user',
+			selector: row => row.deliver_user,
 			sortable: true
 		},
 		{

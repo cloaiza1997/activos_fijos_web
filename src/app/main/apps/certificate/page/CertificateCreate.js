@@ -15,6 +15,7 @@ import {
 } from '../CertificateConst';
 import CertificateModel from '../model/CertificateModel';
 import CertificateAssetForm from '../components/CertificateAssetForm';
+import { ASSET_PAGE_VIEW } from '../../asset/AssetConst';
 
 function CertificateCreate() {
 	const [currentAsset, setCurrentAsset] = useState({});
@@ -159,6 +160,7 @@ function CertificateCreate() {
 								<th>Marca</th>
 								<th>Modelo</th>
 								<th>Serial</th>
+								<th>Estado Físico</th>
 								<th>Estado</th>
 								<th>Adjuntos</th>
 								<th>Observaciones</th>
@@ -169,7 +171,15 @@ function CertificateCreate() {
 						<tbody>
 							{form.items.map((item, index) => (
 								<tr key={index}>
-									<td className="text-center">{item.asset_number}</td>
+									<td className="text-center">
+										<a
+											href={`${ASSET_PAGE_VIEW}/${item.id_asset}`}
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											{item.asset_number}
+										</a>
+									</td>
 									<td>{item.name}</td>
 									<td className="text-center">{item.brand}</td>
 									<td>{item.model}</td>
@@ -180,6 +190,7 @@ function CertificateCreate() {
 												.name
 										}
 									</td>
+									<td className="text-center">{item.status}</td>
 									<td className="text-center">{item.files.length}</td>
 									<td>{item.observations}</td>
 									<td className="text-center">

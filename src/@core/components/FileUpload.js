@@ -22,7 +22,8 @@ export default function FileUpload(props) {
 		disabled,
 		files: initialFiles = [],
 		registerId,
-		onExternalChange
+		onExternalChange,
+		onSuccess = () => undefined
 	} = props;
 
 	const [files, setFiles] = useState(initialFiles);
@@ -62,6 +63,7 @@ export default function FileUpload(props) {
 
 			const success = response => {
 				setFiles(response.files);
+				onSuccess(response.files);
 				setLoading(false);
 				setApplyChanges(false);
 			};

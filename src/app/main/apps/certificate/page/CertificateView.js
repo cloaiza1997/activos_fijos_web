@@ -264,10 +264,11 @@ function CertificateView(props) {
 								<th>Marca</th>
 								<th>Modelo</th>
 								<th>Serial</th>
+								<th>Estado Físico</th>
 								<th>Estado</th>
 								<th>Adjuntos</th>
 								<th>Observaciones</th>
-								{canEdit && <th>Acciones</th>}
+								<th>Acciones</th>
 							</tr>
 						</thead>
 
@@ -293,23 +294,24 @@ function CertificateView(props) {
 												.name
 										}
 									</td>
+									<td className="text-center">{item.status}</td>
 									<td className="text-center">{item.files.length}</td>
 									<td>{item.observations}</td>
-									{canEdit && (
-										<td className="text-center">
-											<IconButton
-												size="small"
-												onClick={() => {
-													setCurrentAsset({ ...item, index });
-													setOpen(true);
-												}}
-												className="mx-4"
-											>
-												<Icon fontSize="small" color="primary">
-													edit
-												</Icon>
-											</IconButton>
+									<td className="text-center">
+										<IconButton
+											size="small"
+											onClick={() => {
+												setCurrentAsset({ ...item, index });
+												setOpen(true);
+											}}
+											className="mx-4"
+										>
+											<Icon fontSize="small" color="primary">
+												edit
+											</Icon>
+										</IconButton>
 
+										{canEdit && (
 											<IconButton
 												size="small"
 												onClick={() => {
@@ -324,8 +326,8 @@ function CertificateView(props) {
 													delete
 												</Icon>
 											</IconButton>
-										</td>
-									)}
+										)}
+									</td>
 								</tr>
 							))}
 						</tbody>
@@ -341,6 +343,7 @@ function CertificateView(props) {
 						data={data}
 						currentAsset={currentAsset}
 						setCurrentAsset={setCurrentAsset}
+						disabledForm={!canEdit}
 					/>
 				)}
 			</div>
@@ -454,6 +457,10 @@ function CertificateView(props) {
 							color="primary"
 							disabled={disabled}
 							loading={loading}
+							confirm={{
+								title: 'Actualizar',
+								message: '¿Confirma actualizar el acta?'
+							}}
 							className="mx-4"
 							onClick={onUpdateCertificate}
 						>

@@ -4,7 +4,7 @@ import React from 'react';
 import { ASSET_APP_KEY } from '../AssetConst';
 
 function AssetAttachments(props) {
-	const { data } = props;
+	const { data, setData } = props;
 
 	return (
 		<div>
@@ -13,6 +13,7 @@ function AssetAttachments(props) {
 				appKey={ASSET_APP_KEY}
 				registerId={data.asset.id}
 				disabled={!data.user_is_admin}
+				onSuccess={files => setData({ ...data, asset: { ...data.asset, files } })}
 			/>
 		</div>
 	);

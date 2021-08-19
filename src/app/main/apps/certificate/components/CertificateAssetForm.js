@@ -19,7 +19,7 @@ import React, { useState, useEffect } from 'react';
 import CertificateItemModel from '../model/CertificateItemModel';
 
 function CertificateAssetForm(props) {
-	const { open, setOpen, form, handleChange, data, currentAsset, setCurrentAsset } = props;
+	const { open, setOpen, form, handleChange, data, currentAsset, setCurrentAsset, disabledForm } = props;
 
 	const edit = currentAsset.index !== undefined;
 
@@ -41,6 +41,7 @@ function CertificateAssetForm(props) {
 			name: asset.name,
 			brand: asset.get_brand.str_val,
 			model: asset.model,
+			status: asset.get_status.str_val,
 			serial_number: asset.serial_number
 		};
 
@@ -68,7 +69,9 @@ function CertificateAssetForm(props) {
 			<DialogContent className="flex flex-col">
 				<Autocomplete
 					options={assetsList}
-					getOptionLabel={option => `${option.asset_number} - ${option.name} - ${option.serial_number}`}
+					getOptionLabel={option =>
+						`${option.asset_number} - ${option.get_status.str_val} - ${option.name} - ${option.serial_number}`
+					}
 					value={formItem.id_asset ? asset : null}
 					onChange={(event, value) => {
 						handleChangeItem(getHandleChange('id_asset', value.id));
@@ -77,6 +80,7 @@ function CertificateAssetForm(props) {
 					renderInput={params => <TextField {...params} label="Activo fijo" />}
 					noOptionsText="No hay resultados"
 					className="mb-16"
+					disabled={disabledForm}
 				/>
 
 				<FormControl className="mb-16 w-full" required>
@@ -86,6 +90,7 @@ function CertificateAssetForm(props) {
 						name="id_physical_status"
 						value={formItem.id_physical_status}
 						onChange={handleChangeItem}
+						disabled={disabledForm}
 						required
 					>
 						{data.physical_status?.map(status => (
@@ -102,6 +107,7 @@ function CertificateAssetForm(props) {
 					onExternalChange={files => {
 						handleChangeItem(getHandleChange('files', files));
 					}}
+					disabled={disabledForm}
 				/>
 
 				<TextField
@@ -113,6 +119,7 @@ function CertificateAssetForm(props) {
 					multiline
 					rows={4}
 					rowsMax={4}
+					disabled={disabledForm}
 				/>
 			</DialogContent>
 
@@ -126,7 +133,7 @@ function CertificateAssetForm(props) {
 					Cancelar
 				</Button>
 
-				<Button variant="contained" color="primary" onClick={onAddItem} disabled={disabled}>
+				<Button variant="contained" color="primary" onClick={onAddItem} disabled={disabled || disabledForm}>
 					{edit ? 'Actualizar' : 'Seleccionar'}
 				</Button>
 			</DialogActions>
