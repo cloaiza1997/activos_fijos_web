@@ -127,8 +127,6 @@ export const logoutUser = () => async (dispatch, getState) => {
 		method: 'POST'
 	});
 
-	// history.push(`/${URL_LOGIN}`);
-
 	// switch (user.from) {
 	// 	case 'firebase': {
 	// 		firebaseService.signOut();
@@ -147,6 +145,8 @@ export const logoutUser = () => async (dispatch, getState) => {
 
 	localStorage.removeItem(LS_TOKEN);
 	localStorage.removeItem(LS_USER);
+
+	history.push(`/`);
 
 	return dispatch(userLoggedOut());
 };
