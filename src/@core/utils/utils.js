@@ -67,3 +67,14 @@ export function redirect(url = '/', state = {}, search = '') {
 export function redirectGoBack() {
 	history.goBack();
 }
+
+export function isNumberPositive(text = '') {
+	let validate = false;
+	const number = text?.trim() || '';
+
+	if (!Number.isNaN(number) && parseFloat(number) > 0) {
+		validate = true;
+	}
+
+	return validate;
+}

@@ -44,7 +44,7 @@ function Button(props) {
 
 export default Button;
 
-function DialogConfirm({ title, message, open, onClose, onConfirm }) {
+function DialogConfirm({ title, message, open, onClose, onConfirm = () => undefined }) {
 	return (
 		<Dialog open={open}>
 			<DialogTitle>{title}</DialogTitle>

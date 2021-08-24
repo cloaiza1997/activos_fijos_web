@@ -22,7 +22,7 @@ import Button from '@core/components/Button';
 import Print from '@core/components/Print';
 import React, { useEffect, useState } from 'react';
 // Components
-import { ASSET_URL_UPDATE } from '../AssetConst';
+import { ASSET_DECOMMISSIONED, ASSET_URL_UPDATE } from '../AssetConst';
 import { PURCHASE_PAGE_VIEW } from '../../purchase/PurchaseConst';
 import AssetModel from '../model/AssetModel';
 
@@ -35,7 +35,7 @@ function AssetEdit(props) {
 
 	const { form, handleChange } = useForm(new AssetModel(data.asset));
 
-	const canEdit = data.user_is_admin;
+	const canEdit = data.user_is_admin && data?.get_status?.parameter_key !== ASSET_DECOMMISSIONED;
 
 	const onUpdateAsset = () => {
 		setLoading(true);
