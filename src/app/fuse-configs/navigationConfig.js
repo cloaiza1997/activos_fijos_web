@@ -6,6 +6,7 @@ import {
 	CERTIFICATE_PAGE_LIST_APPROVE,
 	CERTIFICATE_PAGE_LIST_OWN
 } from 'app/main/apps/certificate/CertificateConst';
+import { DEPRECATION_PAGE_LIST } from 'app/main/apps/depreciation/DeprecationConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -68,6 +69,7 @@ const navigationConfig = [
 				url: ASSET_PAGE_LIST
 			},
 			{
+				auth: authRoles.user,
 				id: 'mis-activos',
 				title: 'Mis activos',
 				type: 'item',
@@ -129,11 +131,12 @@ const navigationConfig = [
 				url: REVALUATION_PAGE_LIST
 			},
 			{
+				auth: authRoles.admin,
 				id: 'depreciaciones',
 				title: 'Depreciaciones',
 				type: 'item',
 				icon: 'trending_down',
-				url: ''
+				url: DEPRECATION_PAGE_LIST
 			},
 			{
 				id: 'bajas',

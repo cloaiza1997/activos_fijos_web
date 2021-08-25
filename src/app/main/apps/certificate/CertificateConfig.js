@@ -29,7 +29,7 @@ const CertificateConfig = {
 			component: React.lazy(() => import('./page/CertificateList'))
 		},
 		{
-			// auth: authRoles.approver,
+			auth: authRoles.approver,
 			path: CERTIFICATE_PAGE_LIST_APPROVE,
 			component: React.lazy(() => import('./page/CertificateListApprove'))
 		},

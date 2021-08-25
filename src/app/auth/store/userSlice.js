@@ -8,7 +8,6 @@ import { showMessage } from 'app/store/fuse/messageSlice';
 import auth0Service from 'app/services/auth0Service';
 import firebase from 'firebase/app';
 import firebaseService from 'app/services/firebaseService';
-import history from '@history';
 import jwtService from 'app/services/jwtService';
 import { LS_TOKEN, LS_USER, URL_LOGOUT } from '../AuthConsts';
 

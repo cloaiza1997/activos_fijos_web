@@ -22,16 +22,6 @@ const RevaluationConfig = {
 			path: `${REVALUATION_PAGE_VIEW}/:id`,
 			component: React.lazy(() => import('./page/RevaluationEdit'))
 		}
-		// {
-		// 	auth: authRoles.admin,
-		// 	path: PURCHASE_PAGE_LIST,
-		// 	component: React.lazy(() => import('./page/PurchaseList'))
-		// },
-		// {
-		// 	auth: authRoles.approver,
-		// 	path: PURCHASE_PAGE_LIST_APPROVE,
-		// 	component: React.lazy(() => import('./page/PurchaseListApprove'))
-		// }
 	]
 };
 
