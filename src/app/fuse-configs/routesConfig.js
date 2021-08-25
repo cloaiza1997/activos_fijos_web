@@ -13,19 +13,11 @@ const routes = [
 	// ...FuseUtils.generateRoutesFromConfigs(routeConfigs, ['admin','staff','user']),
 	// The individual route configs which has auth option won't be overridden.
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs, null),
-	// {
-	// 	path: '/apps/dashboards/project',
-	// 	exact: true,
-	// 	component: () => <Redirect to={LOGIN_INDEX} />
-	// },
 	{
 		path: '/',
 		exact: true,
-		component: () => <Redirect to={localStorage.getItem(LS_USER) ? '/home' : LOGIN_INDEX} />
+		component: () => <Redirect to={localStorage.getItem(LS_USER) ? '/' : LOGIN_INDEX} />
 	}
-	// {
-	// 	component: () => <Redirect to="/pages/errors/error-404" />
-	// }
 ];
 
 export default routes;

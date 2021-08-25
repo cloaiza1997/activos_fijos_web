@@ -77,10 +77,10 @@ export const setUserData = user => async (dispatch, getState) => {
         You can redirect the logged-in user to a specific route depending on his role
          */
 
-	history.location.state = {
-		// redirectUrl: user.redirectUrl // for example 'apps/academy'
-		redirectUrl: '/apps/dashboards/project' // for example 'apps/academy'
-	};
+	// history.location.state = {
+	// 	// redirectUrl: user.redirectUrl // for example 'apps/academy'
+	// 	redirectUrl: '/apps/dashboards/project' // for example 'apps/academy'
+	// };
 
 	/*
     Set User Settings
@@ -146,7 +146,7 @@ export const logoutUser = () => async (dispatch, getState) => {
 	localStorage.removeItem(LS_TOKEN);
 	localStorage.removeItem(LS_USER);
 
-	history.push(`/`);
+	// history.push(`/`);
 
 	return dispatch(userLoggedOut());
 };
