@@ -1,13 +1,25 @@
 import { axios } from '@core/services/Api';
-import { getHandleChange, getPathByParams } from '@core/utils/utils';
+import { DATE_FORMATS, formatDate, getHandleChange, getPathByParams } from '@core/utils/utils';
 import { Icon, IconButton, TextField, Typography } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { ASSET_PAGE_VIEW, ASSET_UPDATE_COST_IN_PROCESS } from '../../asset/AssetConst';
-import { REVALUATION_URL_EDIT, REVALUATION_URL_UPDATE } from '../RevaluationConst';
+import {
+	ASSET_PAGE_VIEW,
+	ASSET_UPDATE_COST_EXECUTED,
+	ASSET_UPDATE_COST_IN_PROCESS,
+	ASSET_UPDATE_COST_REVERSED
+} from '../../asset/AssetConst';
+import {
+	REVALUATION_PAGE_VIEW,
+	REVALUATION_URL_EDIT,
+	REVALUATION_URL_STATUS_CANCEL,
+	REVALUATION_URL_STATUS_EXECUTE,
+	REVALUATION_URL_STATUS_REVERSE,
+	REVALUATION_URL_UPDATE
+} from '../RevaluationConst';
 import RevaluationAssetForm from '../components/RevaluationAssetForm';
 import RevaluationModel from '../model/RevaluationModel';
 import RevaluationDetailModel from '../model/RevaluationDetailModel';
@@ -31,7 +43,23 @@ export default function RevaluationEdit(props) {
 	const { form, handleChange, setForm } = useForm(new RevaluationModel());
 
 	const _revaluation = data?.revaluation || {};
-	const canEdit = _revaluation?.get_status?.parameter_key === ASSET_UPDATE_COST_IN_PROCESS;
+	const status = _revaluation?.get_status?.parameter_key;
+
+	const canEdit = status === ASSET_UPDATE_COST_IN_PROCESS;
+	const canReverse =
+		(status === ASSET_UPDATE_COST_EXECUTED || status === ASSET_UPDATE_COST_REVERSED) &&
+		data.revaluation.can_reverse;
+
+	const onSuccess = ({ revaluation }) => {
+		setData({ ...data, revaluation });
+		setForm(
+			new RevaluationModel({
+				...revaluation,
+				details: revaluation.get_details?.map(detail => new RevaluationDetailModel(detail)) || []
+			})
+		);
+		setLoading(false);
+	};
 
 	const onUpdateRevaluation = () => {
 		setLoading(true);
@@ -40,16 +68,18 @@ export default function RevaluationEdit(props) {
 			url: getPathByParams(REVALUATION_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
-			success: ({ revaluation }) => {
-				setData({ ...data, revaluation });
-				setForm(
-					new RevaluationModel({
-						...revaluation,
-						details: revaluation.get_details?.map(detail => new RevaluationDetailModel(detail)) || []
-					})
-				);
-				setLoading(false);
-			},
+			success: onSuccess,
+			error: () => setLoading(false)
+		});
+	};
+
+	const onUpdateStatus = url => {
+		setLoading(true);
+
+		axios({
+			url: getPathByParams(url, { id }),
+			method: 'POST',
+			success: onSuccess,
 			error: () => setLoading(false)
 		});
 	};
@@ -83,8 +113,29 @@ export default function RevaluationEdit(props) {
 	) : (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Revaluación Nº {form.id}
+				Revaluación Nº {form.id} - Estado: {data.revaluation.get_status.str_val}
+				{form.id_parent && ` - Reversa`}
 			</Typography>
+
+			<div className="flex flex-col text-11 leading-none p-10 border-1 rounded-8 mb-16 w-full">
+				<span>
+					Creada por: <span className="font-bold">{data.revaluation.get_user.display_name}</span> -{' '}
+					{formatDate(data.revaluation.created_at, DATE_FORMATS.YYYY_MM_DD_hh_mm_ss)}
+				</span>
+			</div>
+
+			{data.revaluation?.get_children?.id && (
+				<p className="mb-16">
+					<a
+						href={`${REVALUATION_PAGE_VIEW}/${data.revaluation?.get_children?.id}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="font-bold"
+					>
+						Ir a la revaluación reversada Nº {data.revaluation?.get_children?.id}
+					</a>
+				</p>
+			)}
 
 			<TextField
 				label="Observaciones"
@@ -94,13 +145,14 @@ export default function RevaluationEdit(props) {
 				className="w-full"
 				required
 				multiline
+				disabled={!canEdit}
 				rows={4}
 				rowsMax={4}
 			/>
 
 			<div className="mb-10 border-b-1">
 				<Typography component="h1" color="primary" className="text-xl font-bold my-16">
-					Activos del acta de movimiento
+					Activos del proceso de revaluacións
 				</Typography>
 
 				{canEdit && (
@@ -203,64 +255,68 @@ export default function RevaluationEdit(props) {
 			</div>
 
 			<div className="text-center m-20">
-				<Button
-					variant="contained"
-					color="primary"
-					loading={loading}
-					confirm={{
-						title: 'Reversar',
-						message: '¿Confirma reversar la revaluación?'
-					}}
-					// onClick={onUpdateRevaluation}
-					className="mx-4 bg-red-400 hover:bg-red-600"
-				>
-					Reversar
-				</Button>
-
-				<Button
-					variant="contained"
-					color="primary"
-					loading={loading}
-					confirm={{
-						title: 'Cancelar',
-						message: '¿Confirma cancelar el proceso de revaluación?'
-					}}
-					// onClick={onUpdateRevaluation}
-					className="mx-4 bg-red-400 hover:bg-red-600"
-				>
-					Cancelar
-				</Button>
-
-				<Button
-					variant="contained"
-					color="primary"
-					disabled={disabled}
-					loading={loading}
-					confirm={{
-						title: 'Completar',
-						message: '¿Confirma finalizar el proceso de revaluación?'
-					}}
-					// onClick={onUpdateRevaluation}
-					className="mx-4 bg-green-400 hover:bg-green-600"
-				>
-					Completar
-				</Button>
-
-				{canEdit && (
+				{canReverse && (
 					<Button
 						variant="contained"
 						color="primary"
-						disabled={disabled}
 						loading={loading}
 						confirm={{
-							title: 'Actualizar',
-							message: '¿Confirma actualizar la revaluación?'
+							title: 'Reversar',
+							message: '¿Confirma reversar la revaluación?'
 						}}
-						onClick={onUpdateRevaluation}
-						className="mx-4"
+						onClick={() => onUpdateStatus(REVALUATION_URL_STATUS_REVERSE)}
+						className="mx-4 bg-red-400 hover:bg-red-600"
 					>
-						Actualizar
+						Reversar
 					</Button>
+				)}
+
+				{canEdit && (
+					<>
+						<Button
+							variant="contained"
+							color="primary"
+							loading={loading}
+							confirm={{
+								title: 'Cancelar',
+								message: '¿Confirma cancelar el proceso de revaluación?'
+							}}
+							onClick={() => onUpdateStatus(REVALUATION_URL_STATUS_CANCEL)}
+							className="mx-4 bg-red-400 hover:bg-red-600"
+						>
+							Cancelar
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							disabled={disabled}
+							loading={loading}
+							confirm={{
+								title: 'Ejecutar',
+								message: '¿Confirma ejecutar el proceso de revaluación y actualizar los costos?'
+							}}
+							onClick={() => onUpdateStatus(REVALUATION_URL_STATUS_EXECUTE)}
+							className="mx-4 bg-green-400 hover:bg-green-600"
+						>
+							Ejecutar
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							disabled={disabled}
+							loading={loading}
+							confirm={{
+								title: 'Actualizar',
+								message: '¿Confirma actualizar la revaluación?'
+							}}
+							onClick={onUpdateRevaluation}
+							className="mx-4"
+						>
+							Actualizar
+						</Button>
+					</>
 				)}
 			</div>
 		</div>
