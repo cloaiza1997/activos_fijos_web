@@ -26,8 +26,8 @@ export default function DeprecationCreate() {
 			url: DEPRECATION_URL_STORE,
 			method: 'POST',
 			data: form,
-			success: ({ revaluation }) => {
-				redirect(`${DEPRECATION_PAGE_VIEW}/${revaluation.id}`);
+			success: ({ deprecation }) => {
+				redirect(`${DEPRECATION_PAGE_VIEW}/${deprecation.id}`);
 			},
 			error: () => setLoading(false)
 		});

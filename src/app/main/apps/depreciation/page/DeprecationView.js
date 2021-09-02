@@ -54,7 +54,8 @@ export default function DeprecationCreate(props) {
 	) : (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Revaluación Nº {deprecation.id} - {deprecation.id_parent && ` - Reversa`}
+				Depreciación Nº {deprecation.id} - Estado: {deprecation.get_status.str_val}{' '}
+				{deprecation.id_parent && ` - Reversa`}
 			</Typography>
 
 			<div className="flex flex-col text-11 leading-none p-10 border-1 rounded-8 mb-16 w-full">
@@ -79,9 +80,8 @@ export default function DeprecationCreate(props) {
 
 			<TextField
 				label="Observaciones"
-				name="observations"
+				value={deprecation.observations}
 				className="w-full"
-				required
 				multiline
 				disabled
 				rows={4}
@@ -92,7 +92,7 @@ export default function DeprecationCreate(props) {
 					Detalles de la depreciación
 				</Typography>
 
-				{deprecation.details.length > 0 && (
+				{deprecation.get_details.length > 0 && (
 					<table className="print mb-16 w-full">
 						<thead>
 							<tr>
@@ -106,23 +106,23 @@ export default function DeprecationCreate(props) {
 						</thead>
 
 						<tbody>
-							{deprecation.details.map((item, index) => {
+							{deprecation.get_details.map((item, index) => {
 								return (
 									<tr key={index}>
-										{/* <td className="text-center">
+										<td className="text-center">
 											<a
-												href={`${ASSET_PAGE_VIEW}/${asset.id}`}
+												href={`${ASSET_PAGE_VIEW}/${item.id_asset}`}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
-												{asset.asset_number}
+												{item.asset.asset_number}
 											</a>
 										</td>
-										<td>{asset.name}</td>
-										<td className="text-center">{asset.get_brand.str_val}</td>
-										<td className="text-center">{asset.serial_number}</td>
+										<td>{item.asset.name}</td>
+										<td className="text-center">{item.asset.get_brand.str_val}</td>
+										<td className="text-center">{item.asset.serial_number}</td>
 										<td className="text-right">$ {item.old_value}</td>
-										<td className="text-right">$ {item.new_value}</td> */}
+										<td className="text-right">$ {item.new_value}</td>
 									</tr>
 								);
 							})}
@@ -139,7 +139,7 @@ export default function DeprecationCreate(props) {
 						loading={loading}
 						confirm={{
 							title: 'Reversar',
-							message: '¿Confirma reversar la revaluación?'
+							message: '¿Confirma reversar la depreciación?'
 						}}
 						onClick={() => onUpdateStatus(DEPRECATION_URL_STATUS_REVERSE)}
 						className="mx-4 bg-red-400 hover:bg-red-600"

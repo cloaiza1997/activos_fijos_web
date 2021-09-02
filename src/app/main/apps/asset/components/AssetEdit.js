@@ -209,8 +209,7 @@ function AssetEdit(props) {
 						value={form.use_life}
 						onChange={handleChange}
 						className="mr-2 w-1/2"
-						disabled={!canEdit}
-						required
+						disabled
 					/>
 
 					<TextField

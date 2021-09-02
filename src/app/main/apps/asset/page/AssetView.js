@@ -8,7 +8,7 @@ import { ASSET_PAGE_LIST, ASSET_URL_EDIT } from '../AssetConst';
 import AssetAttachments from '../components/AssetAttachments';
 import AssetCertificates from '../components/AssetCertificates';
 import AssetEdit from '../components/AssetEdit';
-import AssetRevaluations from '../components/AssetRevaluations';
+import AssetDepreReval from '../components/AssetDepreReval';
 
 function AssetView(props) {
 	const { id } = props?.match?.params;
@@ -21,7 +21,7 @@ function AssetView(props) {
 		{ label: 'Información', component: <AssetEdit data={data} setData={setData} /> },
 		{ label: 'Adjuntos', component: <AssetAttachments data={data} setData={setData} /> },
 		{ label: 'Actas', component: <AssetCertificates certificates={data?.asset?.certificates} /> },
-		{ label: 'Revaluaciones', component: <AssetRevaluations asset={data?.asset} /> },
+		{ label: 'Depreciaciones y Revaluaciones', component: <AssetDepreReval asset={data?.asset} /> },
 		{ label: 'Depreciaciones', component: null },
 		{ label: 'Mantenimientos', component: null },
 		{ label: 'Inventarios', component: null },

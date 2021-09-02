@@ -152,7 +152,7 @@ export default function RevaluationEdit(props) {
 
 			<div className="mb-10 border-b-1">
 				<Typography component="h1" color="primary" className="text-xl font-bold my-16">
-					Activos del proceso de revaluacións
+					Activos del proceso de revaluación
 				</Typography>
 
 				{canEdit && (

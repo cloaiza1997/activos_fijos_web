@@ -20,7 +20,7 @@ function DeprecationList() {
 
 	useEffect(() => {
 		const success = data => {
-			setDeprecations(data.deprecations);
+			setDeprecations(data.deprecations?.reverse());
 			setSkeleton(false);
 		};
 

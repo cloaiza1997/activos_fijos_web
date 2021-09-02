@@ -1,5 +1,5 @@
 import { formatDate } from '@core/utils/utils';
-import { Icon, IconButton } from '@material-ui/core';
+import { Icon, IconButton, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import Table from '@core/components/Table';
@@ -11,7 +11,28 @@ function AssetRevaluations(props) {
 
 	const columns = [
 		{
-			name: 'Fecha de revaluación',
+			name: 'Nº',
+			accesor: 'id_depre_reval',
+			selector: row => row.id_depre_reval,
+			sortable: true,
+			center: true
+		},
+		{
+			name: 'Acción',
+			accesor: 'depre_reval.get_action_type.str_val',
+			selector: row => row.depre_reval.get_action_type.str_val,
+			sortable: true,
+			center: true
+		},
+		{
+			name: 'Estado',
+			accesor: 'depre_reval.get_status.str_val',
+			selector: row => row.depre_reval.get_status.str_val,
+			sortable: true,
+			center: true
+		},
+		{
+			name: 'Fecha de ejecución',
 			accesor: 'created_at',
 			selector: row => formatDate(row.created_at),
 			sortable: true,
@@ -52,9 +73,23 @@ function AssetRevaluations(props) {
 
 	return (
 		<Table
-			title={`Revaluaciones - Costo actual $ ${asset.current_value}`}
+			title={
+				<div className="mb-10">
+					<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
+						Depreciaciones y Revaluaciones
+					</Typography>
+
+					<div className="flex flex-col text-sm">
+						<span>• Costo actual: $ {asset.current_value}</span>
+
+						<span>• Costo inicial: $ {asset.init_value}</span>
+
+						<span>• Valor residual: $ {asset.residual_value}</span>
+					</div>
+				</div>
+			}
 			columns={columns}
-			data={asset.get_revaluations}
+			data={asset.get_depre_reval.reverse()}
 		/>
 	);
 }
