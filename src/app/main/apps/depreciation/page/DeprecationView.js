@@ -32,7 +32,10 @@ export default function DeprecationCreate(props) {
 		axios({
 			url: getPathByParams(url, { id }),
 			method: 'POST',
-			success: () => {},
+			success: data => {
+				setDeprecation(data.deprecation);
+				setLoading(false);
+			},
 			error: () => setLoading(false)
 		});
 	};
