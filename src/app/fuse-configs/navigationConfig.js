@@ -7,6 +7,7 @@ import {
 	CERTIFICATE_PAGE_LIST_OWN
 } from 'app/main/apps/certificate/CertificateConst';
 import { DEPRECATION_PAGE_LIST } from 'app/main/apps/depreciation/DeprecationConst';
+import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -153,11 +154,12 @@ const navigationConfig = [
 				url: ''
 			},
 			{
+				auth: authRoles.admin,
 				id: 'inventarios',
 				title: 'Inventarios',
 				type: 'item',
 				icon: 'widgets',
-				url: ''
+				url: INVENTORY_PAGE_LIST
 			}
 		]
 	},

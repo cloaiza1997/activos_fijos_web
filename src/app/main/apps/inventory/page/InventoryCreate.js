@@ -5,15 +5,15 @@ import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
 import React, { useEffect, useState } from 'react';
 // Components
-import { DEPRECATION_PAGE_VIEW, DEPRECATION_URL_STORE } from '../DeprecationConst';
+import { INVENTORY_PAGE_VIEW, INVENTORY_URL_STORE } from '../InventoryConst';
 
 /**
- * @function DeprecationCreate
- * @brief Formulario de creación de una depreciación
+ * @function InventoryCreate
+ * @brief Formulario de creación de un inventario
  * @date 01/06/2021
  * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
  */
-export default function DeprecationCreate() {
+export default function InventoryCreate() {
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
 
@@ -23,11 +23,11 @@ export default function DeprecationCreate() {
 		setLoading(true);
 
 		axios({
-			url: DEPRECATION_URL_STORE,
+			url: INVENTORY_URL_STORE,
 			method: 'POST',
 			data: form,
-			success: ({ deprecation }) => {
-				redirect(`${DEPRECATION_PAGE_VIEW}/${deprecation.id}`);
+			success: ({ inventory }) => {
+				redirect(`${INVENTORY_PAGE_VIEW}/${inventory.id}`);
 			},
 			error: () => setLoading(false)
 		});
@@ -42,7 +42,7 @@ export default function DeprecationCreate() {
 	return (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-10">
-				Iniciar proceso de depreciación
+				Iniciar proceso de inventario
 			</Typography>
 
 			<TextField
