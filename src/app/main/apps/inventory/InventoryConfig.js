@@ -1,6 +1,6 @@
 import { authRoles } from 'app/auth';
 import React from 'react';
-import { INVENTORY_PAGE_CREATE, INVENTORY_PAGE_LIST } from './InventoryConst';
+import { INVENTORY_PAGE_CREATE, INVENTORY_PAGE_LIST, INVENTORY_PAGE_VIEW } from './InventoryConst';
 
 const InventoryConfig = {
 	settings: {
@@ -16,12 +16,12 @@ const InventoryConfig = {
 			auth: authRoles.admin,
 			path: INVENTORY_PAGE_LIST,
 			component: React.lazy(() => import('./page/InventoryList'))
+		},
+		{
+			auth: authRoles.user,
+			path: `${INVENTORY_PAGE_VIEW}/:id`,
+			component: React.lazy(() => import('./page/InventoryView'))
 		}
-		// {
-		// 	auth: authRoles.user,
-		// 	path: `${REVALUATION_PAGE_VIEW}/:id`,
-		// 	component: React.lazy(() => import('./page/RevaluationEdit'))
-		// }
 	]
 };
 

@@ -9,12 +9,12 @@ import { ASSET_PAGE_VIEW, ASSET_UPDATE_COST_EXECUTED, ASSET_UPDATE_COST_REVERSED
 import { DEPRECATION_PAGE_VIEW, DEPRECATION_URL_EDIT, DEPRECATION_URL_STATUS_REVERSE } from '../DeprecationConst';
 
 /**
- * @function DeprecationCreate
+ * @function DeprecationView
  * @brief Formulario de visualización del resultado de una depreciación
  * @date 01/06/2021
  * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
  */
-export default function DeprecationCreate(props) {
+export default function DeprecationView(props) {
 	const { id } = props?.match?.params;
 
 	const [deprecation, setDeprecation] = useState({});
