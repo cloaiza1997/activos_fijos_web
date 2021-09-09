@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable camelcase */
 import { axios } from '@core/services/Api';
 import { DATE_FORMATS, formatDate, getHandleChange, getPathByParams } from '@core/utils/utils';
@@ -22,6 +23,7 @@ import {
 	DERECOGNITION_URL_UPDATE
 } from '../DerecognitionConst';
 import DerecognitionAssetForm from '../components/DerecognitionAssetForm';
+import DerecognitionPrint from '../components/DerecognitionPrint';
 
 const { IN_PROCESS, APPROVED, CHECKING, EXECUTED } = DERECOGNITION_STATUS;
 
@@ -39,23 +41,36 @@ function DerecognitionView(props) {
 
 	const { form, handleChange, setForm } = useForm({});
 
+	const getCost = () => {
+		let cost = 0;
+
+		form?.get_details?.forEach(item => {
+			const asset = data.all_assets?.find(_asset => _asset.id === item.id_asset);
+
+			cost += parseFloat(asset.current_value);
+		});
+
+		return cost;
+	};
+
 	const status = data.derecognition?.get_status?.parameter_key;
 
 	const canApprove = user.is_approver && status === CHECKING;
 	const canChecking = user.is_admin && status === IN_PROCESS;
 	const canEdit = user.is_admin && (status === IN_PROCESS || status === APPROVED);
-	const canExecute = user.is_approver && status === APPROVED;
+	const canExecute = user.is_admin && status === APPROVED;
 	const canReverse = user.is_admin && status === EXECUTED;
 	const canView = status === EXECUTED;
 
-	const onUpdateCertificate = () => {
+	const onUpdate = () => {
 		setLoading(true);
 
 		axios({
 			url: getPathByParams(DERECOGNITION_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
-			success: async () => {
+			success: async ({ derecognition }) => {
+				setData({ ...data, derecognition: { ...data.derecognition, ...derecognition } });
 				setLoading(false);
 			},
 			error: () => setLoading(false)
@@ -69,6 +84,7 @@ function DerecognitionView(props) {
 			url: getPathByParams(url, { id }),
 			method: 'POST',
 			success: ({ derecognition }) => {
+				setData({ ...data, derecognition: { ...data.derecognition, ...derecognition } });
 				setLoading(false);
 			},
 			error: () => setLoading(false)
@@ -131,7 +147,7 @@ function DerecognitionView(props) {
 
 			<div>
 				<Typography component="h1" color="primary" className="text-xl font-bold my-16">
-					Activos para la baja
+					Activos para la baja - Costo de la baja: $ {getCost()}
 				</Typography>
 
 				{canEdit && (
@@ -160,13 +176,13 @@ function DerecognitionView(props) {
 								<th>Costo actual</th>
 								<th>Motivo</th>
 								<th>Observaciones</th>
-								<th>Acciones</th>
+								{canEdit && <th>Acciones</th>}
 							</tr>
 						</thead>
 
 						<tbody>
 							{form.get_details.map((item, index) => {
-								const asset = data.assets?.find(_asset => _asset.id === item.id_asset);
+								const asset = data.all_assets?.find(_asset => _asset.id === item.id_asset) || {};
 
 								return (
 									<tr key={index}>
@@ -191,21 +207,21 @@ function DerecognitionView(props) {
 											}
 										</td>
 										<td>{item.observations}</td>
-										<td className="text-center">
-											<IconButton
-												size="small"
-												onClick={() => {
-													setCurrentAsset({ ...item, index });
-													setOpen(true);
-												}}
-												className="mx-4"
-											>
-												<Icon fontSize="small" color="primary">
-													edit
-												</Icon>
-											</IconButton>
+										{canEdit && (
+											<td className="text-center">
+												<IconButton
+													size="small"
+													onClick={() => {
+														setCurrentAsset({ ...item, index });
+														setOpen(true);
+													}}
+													className="mx-4"
+												>
+													<Icon fontSize="small" color="primary">
+														edit
+													</Icon>
+												</IconButton>
 
-											{canEdit && (
 												<IconButton
 													size="small"
 													onClick={() => {
@@ -220,8 +236,8 @@ function DerecognitionView(props) {
 														delete
 													</Icon>
 												</IconButton>
-											)}
-										</td>
+											</td>
+										)}
 									</tr>
 								);
 							})}
@@ -254,24 +270,23 @@ function DerecognitionView(props) {
 						}}
 						onClick={() => updateStatus(DERECOGNITION_URL_STATUS_CHECKING)}
 						className="mx-4 bg-green-400 hover:bg-green-600"
+						disabled={!form?.get_details?.length}
 					>
 						Enviar a revisión
 					</Button>
 				)}
 
 				{canView && (
-					<>
-						<Print
-							trigger={
-								<Button variant="contained" color="secondary" loading={loading} className="mx-4">
-									Visualizar
-								</Button>
-							}
-							title={`Baja_de_Activos_${`${data.derecognition.id}`.padStart(6, '0')}`}
-							// Component={CertificatePrint}
-							// componentProps={{ derecognition: data.derecognition, companyInfo: data.company_info }}
-						/>
-					</>
+					<Print
+						trigger={
+							<Button variant="contained" color="secondary" loading={loading} className="mx-4">
+								Visualizar
+							</Button>
+						}
+						title={`Baja_de_Activos_${`${data.derecognition.id}`.padStart(6, '0')}`}
+						Component={DerecognitionPrint}
+						componentProps={{ derecognition: data.derecognition, companyInfo: data.company_info }}
+					/>
 				)}
 
 				{canExecute && (
@@ -332,7 +347,7 @@ function DerecognitionView(props) {
 								message: '¿Confirma actualizar el proceso de bajas?'
 							}}
 							className="mx-4"
-							onClick={onUpdateCertificate}
+							onClick={onUpdate}
 						>
 							Actualizar
 						</Button>

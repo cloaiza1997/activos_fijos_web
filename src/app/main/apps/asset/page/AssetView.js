@@ -7,8 +7,9 @@ import React, { useEffect, useState } from 'react';
 import { ASSET_PAGE_LIST, ASSET_URL_EDIT } from '../AssetConst';
 import AssetAttachments from '../components/AssetAttachments';
 import AssetCertificates from '../components/AssetCertificates';
-import AssetEdit from '../components/AssetEdit';
 import AssetDepreReval from '../components/AssetDepreReval';
+import AssetDerecognitions from '../components/AssetDerecognitions';
+import AssetEdit from '../components/AssetEdit';
 import AssetInventories from '../components/AssetInventories';
 
 function AssetView(props) {
@@ -25,7 +26,7 @@ function AssetView(props) {
 		{ label: 'Depreciaciones y Revaluaciones', component: <AssetDepreReval asset={data?.asset} /> },
 		{ label: 'Mantenimientos', component: null },
 		{ label: 'Inventarios', component: <AssetInventories inventories={data?.asset?.get_inventories} /> },
-		{ label: 'Bajas', component: null }
+		{ label: 'Bajas', component: <AssetDerecognitions derecognitions={data?.asset?.get_derecognitions} /> }
 	];
 
 	useEffect(() => {

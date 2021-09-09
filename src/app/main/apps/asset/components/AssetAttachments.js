@@ -12,7 +12,7 @@ function AssetAttachments(props) {
 				files={data.asset.files}
 				appKey={ASSET_APP_KEY}
 				registerId={data.asset.id}
-				disabled={!data.user_is_admin && data?.get_status?.parameter_key !== ASSET_DECOMMISSIONED}
+				disabled={!data.user_is_admin || data?.asset?.get_status?.parameter_key === ASSET_DECOMMISSIONED}
 				onSuccess={files => setData({ ...data, asset: { ...data.asset, files } })}
 			/>
 		</div>

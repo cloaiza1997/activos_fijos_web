@@ -1,6 +1,11 @@
 import { authRoles } from 'app/auth';
 import React from 'react';
-import { DERECOGNITION_PAGE_CREATE, DERECOGNITION_PAGE_LIST, DERECOGNITION_PAGE_VIEW } from './DerecognitionConst';
+import {
+	DERECOGNITION_PAGE_CREATE,
+	DERECOGNITION_PAGE_LIST,
+	DERECOGNITION_PAGE_LIST_APPROVE,
+	DERECOGNITION_PAGE_VIEW
+} from './DerecognitionConst';
 
 const DerecognitionConfig = {
 	settings: {
@@ -21,6 +26,11 @@ const DerecognitionConfig = {
 			auth: authRoles.user,
 			path: `${DERECOGNITION_PAGE_VIEW}/:id`,
 			component: React.lazy(() => import('./page/DerecognitionView'))
+		},
+		{
+			auth: authRoles.approver,
+			path: DERECOGNITION_PAGE_LIST_APPROVE,
+			component: React.lazy(() => import('./page/DerecognitionListApprover'))
 		}
 	]
 };

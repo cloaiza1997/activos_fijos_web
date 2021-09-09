@@ -7,7 +7,10 @@ import {
 	CERTIFICATE_PAGE_LIST_OWN
 } from 'app/main/apps/certificate/CertificateConst';
 import { DEPRECATION_PAGE_LIST } from 'app/main/apps/depreciation/DeprecationConst';
-import { DERECOGNITION_PAGE_LIST } from 'app/main/apps/derecognition/DerecognitionConst';
+import {
+	DERECOGNITION_PAGE_LIST,
+	DERECOGNITION_PAGE_LIST_APPROVE
+} from 'app/main/apps/derecognition/DerecognitionConst';
 import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
 import {
 	PURCHASE_PAGE_CREATE,
@@ -147,6 +150,14 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'remove_circle_outline',
 				url: DERECOGNITION_PAGE_LIST
+			},
+			{
+				auth: authRoles.approver,
+				id: 'bajas_approvacion',
+				title: 'Bajas (Aprobaciones)',
+				type: 'item',
+				icon: 'remove_circle_outline',
+				url: DERECOGNITION_PAGE_LIST_APPROVE
 			},
 			{
 				id: 'mantenimientos',

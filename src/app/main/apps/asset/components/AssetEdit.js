@@ -35,7 +35,7 @@ function AssetEdit(props) {
 
 	const { form, handleChange } = useForm(new AssetModel(data.asset));
 
-	const canEdit = data.user_is_admin && data?.get_status?.parameter_key !== ASSET_DECOMMISSIONED;
+	const canEdit = data.user_is_admin && data?.asset?.get_status?.parameter_key !== ASSET_DECOMMISSIONED;
 
 	const onUpdateAsset = () => {
 		setLoading(true);
