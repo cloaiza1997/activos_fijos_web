@@ -7,6 +7,7 @@ import {
 	CERTIFICATE_PAGE_LIST_OWN
 } from 'app/main/apps/certificate/CertificateConst';
 import { DEPRECATION_PAGE_LIST } from 'app/main/apps/depreciation/DeprecationConst';
+import { DERECOGNITION_PAGE_LIST } from 'app/main/apps/derecognition/DerecognitionConst';
 import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
 import {
 	PURCHASE_PAGE_CREATE,
@@ -140,11 +141,12 @@ const navigationConfig = [
 				url: DEPRECATION_PAGE_LIST
 			},
 			{
+				auth: authRoles.admin,
 				id: 'bajas',
 				title: 'Bajas',
 				type: 'item',
 				icon: 'remove_circle_outline',
-				url: ''
+				url: DERECOGNITION_PAGE_LIST
 			},
 			{
 				id: 'mantenimientos',
