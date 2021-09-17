@@ -65,7 +65,7 @@ function DerecognitionView(props) {
 	const onUpdate = () => {
 		setLoading(true);
 
-		axios({
+		return axios({
 			url: getPathByParams(DERECOGNITION_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
@@ -104,7 +104,7 @@ function DerecognitionView(props) {
 	}, []);
 
 	useEffect(() => {
-		const _disabled = !form.observations?.trim();
+		const _disabled = !form.observations?.trim() || !form.get_details?.length;
 
 		setDisabled(_disabled);
 	}, [form]);
@@ -268,9 +268,9 @@ function DerecognitionView(props) {
 							title: 'Enviar a revisión',
 							message: '¿Confirma enviar a revisión?'
 						}}
-						onClick={() => updateStatus(DERECOGNITION_URL_STATUS_CHECKING)}
+						onClick={() => onUpdate().then(() => updateStatus(DERECOGNITION_URL_STATUS_CHECKING))}
 						className="mx-4 bg-green-400 hover:bg-green-600"
-						disabled={!form?.get_details?.length}
+						disabled={disabled}
 					>
 						Enviar a revisión
 					</Button>
@@ -294,11 +294,12 @@ function DerecognitionView(props) {
 						variant="contained"
 						color="primary"
 						loading={loading}
+						disabled={disabled}
 						confirm={{
 							title: 'Ejecutar',
 							message: '¿Confirma ejecutar el proceso de bajas?'
 						}}
-						onClick={() => updateStatus(DERECOGNITION_URL_STATUS_EXECUTED)}
+						onClick={() => onUpdate().then(() => updateStatus(DERECOGNITION_URL_STATUS_EXECUTED))}
 						className="mx-4 bg-green-400 hover:bg-green-600"
 					>
 						Ejecutar

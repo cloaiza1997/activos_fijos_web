@@ -64,7 +64,7 @@ export default function RevaluationEdit(props) {
 	const onUpdateRevaluation = () => {
 		setLoading(true);
 
-		axios({
+		return axios({
 			url: getPathByParams(REVALUATION_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
@@ -296,7 +296,9 @@ export default function RevaluationEdit(props) {
 								title: 'Ejecutar',
 								message: '¿Confirma ejecutar el proceso de revaluación y actualizar los costos?'
 							}}
-							onClick={() => onUpdateStatus(REVALUATION_URL_STATUS_EXECUTE)}
+							onClick={() => {
+								onUpdateRevaluation().then(() => onUpdateStatus(REVALUATION_URL_STATUS_EXECUTE));
+							}}
 							className="mx-4 bg-green-400 hover:bg-green-600"
 						>
 							Ejecutar

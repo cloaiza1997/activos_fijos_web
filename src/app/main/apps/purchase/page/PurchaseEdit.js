@@ -139,7 +139,7 @@ export default function PurchaseEdit(props) {
 	const onUpdatePurchase = () => {
 		setLoading(true);
 
-		axios({
+		return axios({
 			url: getPathByParams(PURCHASE_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: {
@@ -648,7 +648,7 @@ export default function PurchaseEdit(props) {
 				message="¿Confirma enviar a revisión la orden de compra?"
 				open={openChecking}
 				onClose={() => setOpenChekcing(false)}
-				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_CHECKING)}
+				onConfirm={() => onUpdatePurchase().then(() => onUpdateStatus(PURCHASE_STATUS_CHECKING))}
 			/>
 
 			<DialogConfirmUpdateStatus
@@ -688,7 +688,7 @@ export default function PurchaseEdit(props) {
 				message="¿Confirma finalizar la orden de compra?"
 				open={openFinish}
 				onClose={() => setOpenFinish(false)}
-				onConfirm={() => onUpdateStatus(PURCHASE_STATUS_FINISHED)}
+				onConfirm={() => onUpdatePurchase().then(() => onUpdateStatus(PURCHASE_STATUS_FINISHED))}
 			/>
 		</div>
 	);

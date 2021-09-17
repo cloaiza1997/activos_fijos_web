@@ -57,7 +57,7 @@ function CertificateView(props) {
 	const onUpdateCertificate = () => {
 		setLoading(true);
 
-		axios({
+		return axios({
 			url: getPathByParams(CERTIFICATE_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
@@ -370,7 +370,7 @@ function CertificateView(props) {
 							title: 'Enviar a revisión',
 							message: '¿Confirma enviar a revisión?'
 						}}
-						onClick={() => updateStatus(CERTIFICATE_URL_STATUS_CHECKING)}
+						onClick={() => onUpdateCertificate().then(() => updateStatus(CERTIFICATE_URL_STATUS_CHECKING))}
 						className="mx-4 bg-green-400 hover:bg-green-600"
 					>
 						Enviar a revisión
@@ -386,7 +386,7 @@ function CertificateView(props) {
 							title: 'Enviar a firmar',
 							message: '¿Confirma enviar a firmar el acta?'
 						}}
-						onClick={() => updateStatus(CERTIFICATE_URL_STATUS_SEND_SIGN)}
+						onClick={() => onUpdateCertificate().then(() => updateStatus(CERTIFICATE_URL_STATUS_SEND_SIGN))}
 						className="mx-4 bg-green-400 hover:bg-green-600"
 					>
 						Enviar a firmar

@@ -109,34 +109,36 @@ export default function InventoryView(props) {
 					Activos del inventario
 				</Typography>
 
-				<div className="flex items-center mb-16">
-					<Autocomplete
-						options={data.assets.filter(
-							asset => !data.inventory.get_details.some(detail => detail.id_asset === asset.id)
-						)}
-						getOptionLabel={option =>
-							`${option.asset_number} - ${option.get_status.str_val} - ${option.name} - ${option.serial_number}`
-						}
-						value={selectedAsset}
-						onChange={(event, value) => {
-							setSelectedAsset(value);
-						}}
-						renderInput={params => <TextField {...params} label="Activo fijo" />}
-						noOptionsText="No hay resultados"
-						className="w-2/3"
-					/>
+				{canEdit && (
+					<div className="flex items-center mb-16">
+						<Autocomplete
+							options={data.assets.filter(
+								asset => !data.inventory.get_details.some(detail => detail.id_asset === asset.id)
+							)}
+							getOptionLabel={option =>
+								`${option.asset_number} - ${option.get_status.str_val} - ${option.name} - ${option.serial_number}`
+							}
+							value={selectedAsset}
+							onChange={(event, value) => {
+								setSelectedAsset(value);
+							}}
+							renderInput={params => <TextField {...params} label="Activo fijo" />}
+							noOptionsText="No hay resultados"
+							className="w-2/3"
+						/>
 
-					<div className="mx-10">
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={() => setOpen(true)}
-							disabled={!selectedAsset}
-						>
-							Agregar
-						</Button>
+						<div className="mx-10">
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={() => setOpen(true)}
+								disabled={!selectedAsset}
+							>
+								Agregar
+							</Button>
+						</div>
 					</div>
-				</div>
+				)}
 
 				{data.inventory.get_details.length > 0 && (
 					<table className="print mb-16 w-full">
