@@ -236,11 +236,17 @@ export default function MaintenanceCreate() {
 						<InputLabel>Activo</InputLabel>
 
 						<Select name="id_asset" value={formAsset.id_asset} onChange={handleChangeAsset}>
-							{data.assets.map(asset => (
-								<MenuItem key={asset.id} value={asset.id}>
-									{asset.asset_number} - {asset.name} - {asset.maintenance_date}
-								</MenuItem>
-							))}
+							{data.assets
+								?.filter(
+									asset =>
+										asset.id === formAsset.id_asset ||
+										!form.get_details.some(detail => detail.id_asset === asset.id)
+								)
+								?.map(asset => (
+									<MenuItem key={asset.id} value={asset.id}>
+										{asset.asset_number} - {asset.name} - {asset.maintenance_date}
+									</MenuItem>
+								))}
 						</Select>
 					</FormControl>
 

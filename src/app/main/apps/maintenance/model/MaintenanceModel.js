@@ -7,6 +7,7 @@ export default function MaintenanceModel(data) {
 		observations: item.observations || '',
 		id_status: item.id_status,
 		get_responsibles: item.get_responsibles || [],
-		get_details: item.get_details || []
+		get_details: item.get_details || [],
+		files: item.files || []
 	};
 }
