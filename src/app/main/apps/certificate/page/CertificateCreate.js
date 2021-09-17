@@ -13,9 +13,9 @@ import {
 	CERTIFICATE_URL_STORE,
 	CERTIFICATE_URL_STORE_ITEM
 } from '../CertificateConst';
-import CertificateModel from '../model/CertificateModel';
-import CertificateAssetForm from '../components/CertificateAssetForm';
 import { ASSET_PAGE_VIEW } from '../../asset/AssetConst';
+import CertificateAssetForm from '../components/CertificateAssetForm';
+import CertificateModel from '../model/CertificateModel';
 
 function CertificateCreate() {
 	const [currentAsset, setCurrentAsset] = useState({});

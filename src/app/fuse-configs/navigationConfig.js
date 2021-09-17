@@ -12,6 +12,7 @@ import {
 	DERECOGNITION_PAGE_LIST_APPROVE
 } from 'app/main/apps/derecognition/DerecognitionConst';
 import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
+import { MAINTENANCE_PAGE_LIST } from 'app/main/apps/maintenance/MaintenanceConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -160,11 +161,12 @@ const navigationConfig = [
 				url: DERECOGNITION_PAGE_LIST_APPROVE
 			},
 			{
+				auth: authRoles.admin,
 				id: 'mantenimientos',
 				title: 'Mantenimientos',
 				type: 'item',
 				icon: 'build',
-				url: ''
+				url: MAINTENANCE_PAGE_LIST
 			},
 			{
 				auth: authRoles.admin,
