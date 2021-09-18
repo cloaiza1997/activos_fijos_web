@@ -11,7 +11,14 @@ import AssetDepreReval from '../components/AssetDepreReval';
 import AssetDerecognitions from '../components/AssetDerecognitions';
 import AssetEdit from '../components/AssetEdit';
 import AssetInventories from '../components/AssetInventories';
+import AssetMaintenances from '../components/AssetMaintenances';
 
+/**
+ * @function AssetView
+ * @brief Vista del activo
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetView(props) {
 	const { id } = props?.match?.params;
 
@@ -24,7 +31,7 @@ function AssetView(props) {
 		{ label: 'Adjuntos', component: <AssetAttachments data={data} setData={setData} /> },
 		{ label: 'Actas', component: <AssetCertificates certificates={data?.asset?.certificates} /> },
 		{ label: 'Depreciaciones y Revaluaciones', component: <AssetDepreReval asset={data?.asset} /> },
-		{ label: 'Mantenimientos', component: null },
+		{ label: 'Mantenimientos', component: <AssetMaintenances maintenances={data?.asset?.get_maintenances} /> },
 		{ label: 'Inventarios', component: <AssetInventories inventories={data?.asset?.get_inventories} /> },
 		{ label: 'Bajas', component: <AssetDerecognitions derecognitions={data?.asset?.get_derecognitions} /> }
 	];

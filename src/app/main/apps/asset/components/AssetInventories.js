@@ -6,6 +6,12 @@ import Table from '@core/components/Table';
 // Components
 import { INVENTORY_PAGE_VIEW } from '../../inventory/InventoryConst';
 
+/**
+ * @function AssetInventories
+ * @brief Listado de inventarios
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetInventories(props) {
 	const { inventories = [] } = props;
 
@@ -42,7 +48,7 @@ function AssetInventories(props) {
 		}
 	];
 
-	return <Table title="Inventarios" columns={columns} data={inventories} />;
+	return <Table title="Inventarios" columns={columns} data={inventories.reverse()} />;
 }
 
 export default AssetInventories;

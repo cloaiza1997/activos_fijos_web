@@ -3,6 +3,7 @@ import { axios } from '@core/services/Api';
 import { DATE_FORMATS, formatDate, getPathByParams } from '@core/utils/utils';
 import { Icon, IconButton, TextField, Typography } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
+import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
@@ -33,14 +34,16 @@ export default function InventoryView(props) {
 
 	const { form, handleChange, setForm } = useForm({ observations: '' });
 
+	const { user } = useSelector(({ auth }) => auth);
+
 	const status = data?.inventory?.get_status?.parameter_key;
 
-	const canEdit = status === INVENTORY_STATUS.INVENTORY_STATUS_IN_PROCESS;
+	const canEdit = user.is_admin && status === INVENTORY_STATUS.INVENTORY_STATUS_IN_PROCESS;
 
 	const onUpdateInventory = () => {
 		setLoading(true);
 
-		axios({
+		return axios({
 			url: getPathByParams(INVENTORY_URL_UPDATE, { id }),
 			method: 'PUT',
 			data: form,
@@ -52,16 +55,17 @@ export default function InventoryView(props) {
 	};
 
 	const onUpdateStatusFinished = () => {
-		setLoading(true);
-
-		axios({
-			url: getPathByParams(INVENTORY_URL_STATUS_FINISHED, { id }),
-			method: 'POST',
-			success: ({ inventory }) => {
-				setData({ ...data, inventory: { ...data?.inventory, ...inventory } });
-				setLoading(false);
-			},
-			error: () => setLoading(false)
+		onUpdateInventory().then(() => {
+			setLoading(true);
+			axios({
+				url: getPathByParams(INVENTORY_URL_STATUS_FINISHED, { id }),
+				method: 'POST',
+				success: ({ inventory }) => {
+					setData({ ...data, inventory: { ...data?.inventory, ...inventory } });
+					setLoading(false);
+				},
+				error: () => setLoading(false)
+			});
 		});
 	};
 

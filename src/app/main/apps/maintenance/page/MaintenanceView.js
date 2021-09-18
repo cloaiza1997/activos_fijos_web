@@ -4,16 +4,30 @@ import { FormControl, Icon, IconButton, InputLabel, MenuItem, Select, TextField,
 import { getHandleChange, formatDate, getPathByParams } from '@core/utils/utils';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { useForm } from '@fuse/hooks';
+import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import FileUpload from '@core/components/FileUpload';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
+import {
+	MAINTENANCE_APP_KEY,
+	MAINTENANCE_STATUS,
+	MAINTENANCE_URL_EDIT,
+	MAINTENANCE_URL_STATUS_CANCEL,
+	MAINTENANCE_URL_STATUS_FINISHED,
+	MAINTENANCE_URL_UPDATE
+} from '../MaintenanceConst';
 import { ASSET_PAGE_VIEW } from '../../asset/AssetConst';
-import { MAINTENANCE_APP_KEY, MAINTENANCE_URL_EDIT, MAINTENANCE_URL_UPDATE } from '../MaintenanceConst';
 import MaintenanceDetailModel from '../model/MaintenanceDetailModel';
 import MaintenanceModel from '../model/MaintenanceModel';
 
+/**
+ * @function MaintenanceView
+ * @brief Detalle de un mantenimiento
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 export default function MaintenanceView(props) {
 	const { id } = props?.match?.params;
 
@@ -31,6 +45,12 @@ export default function MaintenanceView(props) {
 		handleChange: handleChangeAsset,
 		setForm: setFormAsset
 	} = useForm(new MaintenanceDetailModel());
+
+	const { user } = useSelector(({ auth }) => auth);
+
+	const status = data?.maintenance?.get_status?.parameter_key;
+
+	const canEdit = user.is_admin && status === MAINTENANCE_STATUS.MAINTENANCE_IN_PROCESS;
 
 	const onAddAsset = () => {
 		const details = [...(form.get_details || [])];
@@ -65,7 +85,25 @@ export default function MaintenanceView(props) {
 
 		const error = () => setLoading(false);
 
-		axios({ url: getPathByParams(MAINTENANCE_URL_UPDATE, { id }), method: 'PUT', data: form, success, error });
+		return axios({
+			url: getPathByParams(MAINTENANCE_URL_UPDATE, { id }),
+			method: 'PUT',
+			data: form,
+			success,
+			error
+		});
+	};
+
+	const onUpdateStatus = url => {
+		setLoading(true);
+
+		const success = response => {
+			setData(response);
+			setForm(new MaintenanceModel(response.maintenance));
+			setLoading(false);
+		};
+
+		axios({ url: getPathByParams(url, { id }), method: 'POST', success });
 	};
 
 	useEffect(() => {
@@ -103,7 +141,7 @@ export default function MaintenanceView(props) {
 				<FormControl className="mb-10 w-1/3" required>
 					<InputLabel>Tipo de mantenimiento</InputLabel>
 
-					<Select name="id_type" value={form.id_type} onChange={handleChange} required>
+					<Select name="id_type" value={form.id_type} onChange={handleChange} disabled={!canEdit} required>
 						{data.maintenance_types?.map(type => (
 							<MenuItem key={type.id} value={type.id}>
 								{type.str_val}
@@ -118,6 +156,7 @@ export default function MaintenanceView(props) {
 					value={form.observations}
 					onChange={handleChange}
 					className="mb-16 w-full"
+					disabled={!canEdit}
 					multiline
 					rows={4}
 					rowsMax={4}
@@ -129,63 +168,65 @@ export default function MaintenanceView(props) {
 					Responsables del mantenimiento
 				</Typography>
 
-				<div className="flex items-center">
-					<FormControl className="mb-10 w-1/3" required>
-						<InputLabel>Proveedor</InputLabel>
+				{canEdit && (
+					<div className="flex items-center">
+						<FormControl className="mb-10 w-1/3" required>
+							<InputLabel>Proveedor</InputLabel>
 
-						<Select value={idProvider} onChange={e => setIdProvider(e.target.value)}>
-							{data.providers
-								?.filter(
-									provider => !form.get_responsibles.some(_res => _res.id_provider === provider.id)
-								)
-								.map(provider => (
-									<MenuItem key={provider.id} value={provider.id}>
-										{provider.name}
-									</MenuItem>
-								))}
-						</Select>
-					</FormControl>
+							<Select value={idProvider} onChange={e => setIdProvider(e.target.value)}>
+								{data.providers
+									?.filter(
+										provider =>
+											!form.get_responsibles.some(_res => _res.id_provider === provider.id)
+									)
+									.map(provider => (
+										<MenuItem key={provider.id} value={provider.id}>
+											{provider.name}
+										</MenuItem>
+									))}
+							</Select>
+						</FormControl>
 
-					<Button
-						variant="contained"
-						color="primary"
-						className="mx-10"
-						onClick={() => {
-							onAddResponsible({ id_provider: idProvider });
-							setIdProvider('');
-						}}
-						disabled={!idProvider}
-					>
-						Agregar
-					</Button>
+						<Button
+							variant="contained"
+							color="primary"
+							className="mx-10"
+							onClick={() => {
+								onAddResponsible({ id_provider: idProvider });
+								setIdProvider('');
+							}}
+						>
+							Agregar
+						</Button>
 
-					<FormControl className="mb-10 w-1/3" required>
-						<InputLabel>Usuario interno</InputLabel>
+						<FormControl className="mb-10 w-1/3" required>
+							<InputLabel>Usuario interno</InputLabel>
 
-						<Select value={idUser} onChange={e => setIdUser(e.target.value)}>
-							{data.users
-								?.filter(user => !form.get_responsibles.some(_res => _res.id_user === user.id))
-								.map(user => (
-									<MenuItem key={user.id} value={user.id}>
-										{user.display_name}
-									</MenuItem>
-								))}
-						</Select>
-					</FormControl>
+							<Select value={idUser} onChange={e => setIdUser(e.target.value)}>
+								{data.users
+									?.filter(_user => !form.get_responsibles.some(_res => _res.id_user === _user.id))
+									.map(_user => (
+										<MenuItem key={_user.id} value={_user.id}>
+											{_user.display_name}
+										</MenuItem>
+									))}
+							</Select>
+						</FormControl>
 
-					<Button
-						variant="contained"
-						color="primary"
-						className="mx-10"
-						onClick={() => {
-							onAddResponsible({ id_user: idUser });
-							setIdUser('');
-						}}
-						disabled={!idUser}
-					>
-						Agregar
-					</Button>
-				</div>
+						<Button
+							variant="contained"
+							color="primary"
+							className="mx-10"
+							onClick={() => {
+								onAddResponsible({ id_user: idUser });
+								setIdUser('');
+							}}
+							disabled={!idUser}
+						>
+							Agregar
+						</Button>
+					</div>
+				)}
 
 				{form.get_responsibles?.length > 0 && (
 					<table className="print w-full">
@@ -193,36 +234,40 @@ export default function MaintenanceView(props) {
 							<tr>
 								<th>Responsable</th>
 								<th>Nombre</th>
-								<th className="w-0">Acciones</th>
+								{canEdit && <th className="w-0">Acciones</th>}
 							</tr>
 						</thead>
 
 						<tbody>
 							{form.get_responsibles.map((responsible, index) => {
 								const _data = responsible.id_user
-									? data.users.find(user => user.id === responsible.id_user)
+									? data.users.find(_user => _user.id === responsible.id_user)
 									: data.providers.find(provider => provider.id === responsible.id_provider);
 
 								return (
 									<tr key={index}>
 										<td>{responsible.id_user ? 'Usuario' : 'Proveedor'}</td>
 										<td>{responsible.id_user ? _data.display_name : _data.name}</td>
-										<td className="text-center">
-											<IconButton
-												size="small"
-												onClick={() => {
-													const { get_responsibles } = form;
+										{canEdit && (
+											<td className="text-center">
+												<IconButton
+													size="small"
+													onClick={() => {
+														const { get_responsibles } = form;
 
-													get_responsibles.splice(index, 1);
-													handleChange(getHandleChange('get_responsibles', get_responsibles));
-												}}
-												className="mx-4"
-											>
-												<Icon fontSize="small" className="text-red">
-													delete
-												</Icon>
-											</IconButton>
-										</td>
+														get_responsibles.splice(index, 1);
+														handleChange(
+															getHandleChange('get_responsibles', get_responsibles)
+														);
+													}}
+													className="mx-4"
+												>
+													<Icon fontSize="small" className="text-red">
+														delete
+													</Icon>
+												</IconButton>
+											</td>
+										)}
 									</tr>
 								);
 							})}
@@ -236,57 +281,59 @@ export default function MaintenanceView(props) {
 					Listado de activos para el mantenimiento
 				</Typography>
 
-				<div>
-					<FormControl className="mb-10 mx-4 w-1/3" required>
-						<InputLabel>Activo</InputLabel>
+				{canEdit && (
+					<div>
+						<FormControl className="mb-10 mx-4 w-1/3" required>
+							<InputLabel>Activo</InputLabel>
 
-						<Select name="id_asset" value={formAsset.id_asset} onChange={handleChangeAsset}>
-							{data.assets
-								?.filter(
-									asset =>
-										asset.id === formAsset.id_asset ||
-										!form.get_details.some(detail => detail.id_asset === asset.id)
-								)
-								?.map(asset => (
-									<MenuItem key={asset.id} value={asset.id}>
-										{asset.asset_number} - {asset.name} - {asset.maintenance_date}
-									</MenuItem>
-								))}
-						</Select>
-					</FormControl>
+							<Select name="id_asset" value={formAsset.id_asset} onChange={handleChangeAsset}>
+								{data.assets
+									?.filter(
+										asset =>
+											asset.id === formAsset.id_asset ||
+											!form.get_details.some(detail => detail.id_asset === asset.id)
+									)
+									?.map(asset => (
+										<MenuItem key={asset.id} value={asset.id}>
+											{asset.asset_number} - {asset.name} - {asset.maintenance_date}
+										</MenuItem>
+									))}
+							</Select>
+						</FormControl>
 
-					<KeyboardDatePicker
-						disableToolbar
-						variant="inline"
-						format="yyyy-MM-DD"
-						label="Fecha de mantenimiento"
-						value={formAsset.executed_at || null}
-						onChange={date => handleChangeAsset(getHandleChange('executed_at', date))}
-						className="mx-4 w-1/3"
-						required
-					/>
+						<KeyboardDatePicker
+							disableToolbar
+							variant="inline"
+							format="yyyy-MM-DD"
+							label="Fecha de mantenimiento"
+							value={formAsset.executed_at || null}
+							onChange={date => handleChangeAsset(getHandleChange('executed_at', date))}
+							className="mx-4 w-1/3"
+							required
+						/>
 
-					<Button
-						variant="contained"
-						color="primary"
-						className="mx-10"
-						onClick={onAddAsset}
-						disabled={disabledFormAsset}
-					>
-						{formAsset.index >= 0 ? 'Actualizar' : 'Agregar'}
-					</Button>
+						<Button
+							variant="contained"
+							color="primary"
+							className="mx-10"
+							onClick={onAddAsset}
+							disabled={disabledFormAsset}
+						>
+							{formAsset.index >= 0 ? 'Actualizar' : 'Agregar'}
+						</Button>
 
-					<TextField
-						label="Observaciones"
-						name="observations"
-						value={formAsset.observations}
-						onChange={handleChangeAsset}
-						className="mb-16 w-full"
-						multiline
-						rows={2}
-						rowsMax={2}
-					/>
-				</div>
+						<TextField
+							label="Observaciones"
+							name="observations"
+							value={formAsset.observations}
+							onChange={handleChangeAsset}
+							className="mb-16 w-full"
+							multiline
+							rows={2}
+							rowsMax={2}
+						/>
+					</div>
+				)}
 
 				{form.get_details?.length > 0 && (
 					<table className="print mb-16 w-full">
@@ -297,9 +344,8 @@ export default function MaintenanceView(props) {
 								<th>Último mantenimiento</th>
 								<th>Frecuencia del mantenimiento</th>
 								<th>Fecha de mantenimiento</th>
-								<th>Aprobado por</th>
 								<th>Observaciones</th>
-								<th>Acciones</th>
+								{canEdit && <th>Acciones</th>}
 							</tr>
 						</thead>
 
@@ -322,36 +368,37 @@ export default function MaintenanceView(props) {
 										<td className="text-center">{_data.maintenance_date}</td>
 										<td className="text-center">{_data.get_maintenance_frequence?.num_val * 1}</td>
 										<td className="text-center">{detail.executed_at}</td>
-										<td>{detail.get_validate_user?.display_name}</td>
 										<td className="text-center">{detail.observations}</td>
-										<td className="text-center">
-											<IconButton
-												size="small"
-												onClick={() => {
-													setFormAsset(new MaintenanceDetailModel({ ...detail, index }));
-												}}
-												className="mx-4"
-											>
-												<Icon fontSize="small" color="primary">
-													edit
-												</Icon>
-											</IconButton>
+										{canEdit && (
+											<td className="text-center">
+												<IconButton
+													size="small"
+													onClick={() => {
+														setFormAsset(new MaintenanceDetailModel({ ...detail, index }));
+													}}
+													className="mx-4"
+												>
+													<Icon fontSize="small" color="primary">
+														edit
+													</Icon>
+												</IconButton>
 
-											<IconButton
-												size="small"
-												onClick={() => {
-													const { get_details } = form;
+												<IconButton
+													size="small"
+													onClick={() => {
+														const { get_details } = form;
 
-													get_details.splice(index, 1);
-													handleChange(getHandleChange('get_details', get_details));
-												}}
-												className="mx-4"
-											>
-												<Icon fontSize="small" className="text-red">
-													delete
-												</Icon>
-											</IconButton>
-										</td>
+														get_details.splice(index, 1);
+														handleChange(getHandleChange('get_details', get_details));
+													}}
+													className="mx-4"
+												>
+													<Icon fontSize="small" className="text-red">
+														delete
+													</Icon>
+												</IconButton>
+											</td>
+										)}
 									</tr>
 								);
 							})}
@@ -360,18 +407,53 @@ export default function MaintenanceView(props) {
 				)}
 			</div>
 
-			<FileUpload files={form.files} appKey={MAINTENANCE_APP_KEY} registerId={form.id} disabled={false} />
+			<FileUpload files={form.files} appKey={MAINTENANCE_APP_KEY} registerId={form.id} disabled={!canEdit} />
 
 			<div className="flex items-center justify-center p-20">
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={onUpdateMaintenance}
-					loading={loading}
-					disabled={disabled}
-				>
-					Actualizar
-				</Button>
+				{canEdit && (
+					<>
+						<Button
+							variant="contained"
+							color="primary"
+							loading={loading}
+							confirm={{
+								title: 'Finalizar',
+								message: '¿Confirma finalizar el proceso de mantenimiento?'
+							}}
+							onClick={() =>
+								onUpdateMaintenance().then(() => onUpdateStatus(MAINTENANCE_URL_STATUS_FINISHED))
+							}
+							className="bg-green-400 hover:bg-green-600 mx-4"
+						>
+							Finalizar
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							loading={loading}
+							confirm={{
+								title: 'Anular',
+								message: '¿Confirma anular el proceso de mantenimiento?'
+							}}
+							onClick={() => onUpdateStatus(MAINTENANCE_URL_STATUS_CANCEL)}
+							className="bg-red-400 hover:bg-red-600 mx-4"
+						>
+							Anular
+						</Button>
+
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={onUpdateMaintenance}
+							className="mx-4"
+							loading={loading}
+							disabled={disabled}
+						>
+							Actualizar
+						</Button>
+					</>
+				)}
 			</div>
 		</div>
 	);

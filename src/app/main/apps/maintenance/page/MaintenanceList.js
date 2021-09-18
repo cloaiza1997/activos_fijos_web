@@ -20,7 +20,7 @@ function MaintenanceList() {
 
 	useEffect(() => {
 		const success = data => {
-			setMaintenances(data.maintenances);
+			setMaintenances(data.maintenances.reverse());
 			setSkeleton(false);
 		};
 

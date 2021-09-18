@@ -6,6 +6,12 @@ import Table from '@core/components/Table';
 // Components
 import { DERECOGNITION_PAGE_VIEW } from '../../derecognition/DerecognitionConst';
 
+/**
+ * @function AssetDerecognitions
+ * @brief Listado de bajas
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetDerecognitions(props) {
 	const { derecognitions = [] } = props;
 
@@ -48,7 +54,7 @@ function AssetDerecognitions(props) {
 		}
 	];
 
-	return <Table title="Bajas" columns={columns} data={derecognitions} />;
+	return <Table title="Bajas" columns={columns} data={derecognitions.reverse()} />;
 }
 
 export default AssetDerecognitions;
