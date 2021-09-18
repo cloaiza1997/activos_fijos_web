@@ -6,6 +6,7 @@ import InventoryConfig from './inventory/InventoryConfig';
 import MaintenanceConfig from './maintenance/MaintenanceConfig';
 import PurchaseConfig from './purchase/PurchaseConfig';
 import RevaluationConfig from './revaluation/RevaluationConfig';
+import UserConfig from './users/UsersConfig';
 
 const appsConfigs = [
 	AssetConfig,
@@ -15,7 +16,8 @@ const appsConfigs = [
 	InventoryConfig,
 	MaintenanceConfig,
 	PurchaseConfig,
-	RevaluationConfig
+	RevaluationConfig,
+	UserConfig
 ];
 
 export default appsConfigs;

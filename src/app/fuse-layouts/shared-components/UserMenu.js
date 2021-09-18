@@ -83,8 +83,6 @@ function UserMenu(props) {
 					<ListItemIcon className="min-w-40">
 						<Icon>account_circle</Icon>
 					</ListItemIcon>
-
-					<ListItemText primary="Mi perfil" />
 				</MenuItem>
 
 				<MenuItem

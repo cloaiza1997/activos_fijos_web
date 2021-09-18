@@ -19,6 +19,7 @@ import {
 	PURCHASE_PAGE_LIST_APPROVE
 } from 'app/main/apps/purchase/PurchaseConst';
 import { REVALUATION_PAGE_LIST } from 'app/main/apps/revaluation/RevaluationConst';
+import { USER_PAGE_LIST } from 'app/main/apps/users/UsersConst';
 
 const navigationConfig = [
 	{
@@ -179,6 +180,7 @@ const navigationConfig = [
 		]
 	},
 	{
+		auth: authRoles.admin,
 		id: 'reportes',
 		title: 'REPORTES',
 		type: 'collapse',
@@ -193,16 +195,18 @@ const navigationConfig = [
 		]
 	},
 	{
+		auth: authRoles.admin,
 		id: 'sistema',
 		title: 'SISTEMA',
 		type: 'collapse',
 		children: [
 			{
+				auth: authRoles.admin,
 				id: 'usuarios',
 				title: 'Usuarios',
 				type: 'item',
 				icon: 'people',
-				url: ''
+				url: USER_PAGE_LIST
 			},
 			{
 				id: 'proveedores',
