@@ -10,6 +10,7 @@ export const USER_URL_EDIT = 'user/:id/edit';
 export const USER_URL_LIST = 'user';
 export const USER_URL_STORE = 'user';
 export const USER_URL_UPDATE = 'user/:id';
+export const USER_URL_UPDATE_PASSWORD = 'user/admin_update_password/:id';
 
 export const USER_STATUS = {
 	USER_STATUS_ACTIVE: 'USER_STATUS_ACTIVE',

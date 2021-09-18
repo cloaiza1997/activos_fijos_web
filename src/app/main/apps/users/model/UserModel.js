@@ -12,6 +12,7 @@ export default function UserModel(data) {
 		id_role: item.id_role || '',
 		id_area: item.id_area || '',
 		id_position: item.id_position || '',
-		id_status: item.id_status || ''
+		id_status: item.id_status || '',
+		signature: item.signature || []
 	};
 }

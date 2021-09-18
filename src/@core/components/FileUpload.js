@@ -21,9 +21,11 @@ export default function FileUpload(props) {
 		className,
 		disabled,
 		files: initialFiles = [],
-		registerId,
+		multiple = true,
 		onExternalChange,
-		onSuccess = () => undefined
+		onSuccess = () => undefined,
+		registerId,
+		title
 	} = props;
 
 	const [files, setFiles] = useState(initialFiles);
@@ -83,7 +85,7 @@ export default function FileUpload(props) {
 	return (
 		<div className={clsx('border-1 rounded-8 px-20 py-10', className)}>
 			<Typography color="primary" className="font-bold mb-10">
-				Carga de archivos
+				{title || 'Carga de archivos'}
 			</Typography>
 
 			{!disabled && (
@@ -92,7 +94,7 @@ export default function FileUpload(props) {
 					onChange={onChange}
 					onError={onError}
 					accepts={accepts.split(',')}
-					multiple
+					multiple={multiple}
 					maxFileSize={10000000}
 					minFileSize={0}
 					clickable
