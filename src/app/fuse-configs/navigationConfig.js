@@ -14,6 +14,7 @@ import {
 import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
 import { LOG_PAGE_LIST } from 'app/main/apps/log/LogConst';
 import { MAINTENANCE_PAGE_LIST } from 'app/main/apps/maintenance/MaintenanceConst';
+import { PROVIDER_PAGE_LIST } from 'app/main/apps/provider/ProviderConst';
 import {
 	PURCHASE_PAGE_CREATE,
 	PURCHASE_PAGE_LIST,
@@ -210,11 +211,12 @@ const navigationConfig = [
 				url: USER_PAGE_LIST
 			},
 			{
+				auth: authRoles.admin,
 				id: 'proveedores',
 				title: 'Proveedores',
 				type: 'item',
 				icon: 'engineering',
-				url: ''
+				url: PROVIDER_PAGE_LIST
 			},
 			{
 				id: 'parametros',

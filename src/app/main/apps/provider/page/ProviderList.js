@@ -5,25 +5,25 @@ import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 import Table from '@core/components/Table';
 // Components
-import { USER_PAGE_CREATE, USER_PAGE_VIEW, USER_URL_LIST } from '../UsersConst';
+import { PROVIDER_PAGE_CREATE, PROVIDER_PAGE_VIEW, PROVIDER_URL_LIST } from '../ProviderConst';
 
 /**
- * @function UserList
- * @brief Listado de usuarios
+ * @function ProviderList
+ * @brief Listado de proveedores
  * @date 01/06/2021
  * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
  */
-function UserList() {
+function ProviderList() {
 	const [skeleton, setSkeleton] = useState(true);
-	const [users, setUsers] = useState([]);
+	const [providers, setProviders] = useState([]);
 
 	useEffect(() => {
 		const success = data => {
-			setUsers(data.users.reverse());
+			setProviders(data.providers.reverse());
 			setSkeleton(false);
 		};
 
-		axios({ url: USER_URL_LIST, method: 'GET', success });
+		axios({ url: PROVIDER_URL_LIST, method: 'GET', success });
 	}, []);
 
 	const columns = [
@@ -47,9 +47,9 @@ function UserList() {
 			sortable: true
 		},
 		{
-			name: 'Apellidos',
-			accesor: 'last_name',
-			selector: row => row.last_name,
+			name: 'Dirección',
+			accesor: 'address',
+			selector: row => row.address,
 			sortable: true
 		},
 		{
@@ -59,15 +59,15 @@ function UserList() {
 			sortable: true
 		},
 		{
-			name: 'Rol',
-			accesor: 'get_role.str_val',
-			selector: row => row.get_role.str_val,
+			name: 'Teléfono',
+			accesor: 'phone_number',
+			selector: row => row.phone_number,
 			sortable: true
 		},
 		{
 			name: 'Estado',
-			accesor: 'get_status.str_val',
-			selector: row => row.get_status.str_val,
+			accesor: 'is_active',
+			selector: row => (row.is_active ? 'Activo' : 'Inactivo'),
 			sortable: true,
 			center: true
 		},
@@ -76,7 +76,7 @@ function UserList() {
 			sortable: true,
 			center: true,
 			cell: row => (
-				<Link to={`${USER_PAGE_VIEW}/${row.id}`} role="button">
+				<Link to={`${PROVIDER_PAGE_VIEW}/${row.id}`} role="button">
 					<IconButton size="small">
 						<Icon color="primary">launch</Icon>
 					</IconButton>
@@ -89,12 +89,12 @@ function UserList() {
 		<Loading />
 	) : (
 		<Table
-			title="Usuarios"
+			title="Proveedores"
 			columns={columns}
-			data={users}
-			button={{ text: 'Crear usuario', href: USER_PAGE_CREATE }}
+			data={providers}
+			button={{ text: 'Crear proveedor', href: PROVIDER_PAGE_CREATE }}
 		/>
 	);
 }
 
-export default UserList;
+export default ProviderList;
