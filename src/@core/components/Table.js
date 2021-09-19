@@ -1,8 +1,8 @@
 import { Icon, IconButton, makeStyles, TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
-import React, { useMemo, useRef, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import React, { useMemo, useRef, useState } from 'react';
 import Button from './Button';
 
 const useStyles = makeStyles(() => ({
@@ -44,7 +44,7 @@ const useStyles = makeStyles(() => ({
 function Table(props) {
 	const classes = useStyles();
 
-	const { title, columns = [], data = [], button, keyField } = props;
+	const { title, columns = [], data = [], button, keyField, exportReport } = props;
 
 	const [filterText, setFilterText] = useState('');
 	const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
@@ -73,6 +73,53 @@ function Table(props) {
 		return filtered;
 	});
 
+	function convertArrayOfObjectsToCSV() {
+		let result;
+
+		const columnDelimiter = ',';
+		const lineDelimiter = '\n';
+		const keys = columns.map(column => column.name);
+
+		result = '';
+		result += keys.join(columnDelimiter);
+		result += lineDelimiter;
+
+		data.forEach(item => {
+			let ctr = 0;
+
+			columns.forEach(column => {
+				if (column.selector) {
+					if (ctr > 0) result += columnDelimiter;
+
+					result += column.selector(item) || '';
+
+					ctr += 1;
+				}
+			});
+
+			result += lineDelimiter;
+		});
+
+		return result;
+	}
+
+	function downloadCSV() {
+		let csv = convertArrayOfObjectsToCSV();
+
+		if (csv == null) return;
+
+		const filename = `${title}.csv`;
+
+		if (!csv.match(/^data:text\/csv/i)) {
+			csv = `data:text/csv;charset=utf-8,${csv}`;
+		}
+
+		const link = document.createElement('a');
+		link.setAttribute('href', encodeURI(csv));
+		link.setAttribute('download', filename);
+		link.click();
+	}
+
 	const subHeaderComponentMemo = useMemo(() => {
 		const handleClear = () => {
 			if (filterText) {
@@ -89,24 +136,33 @@ function Table(props) {
 					filterText={filterText}
 				/>
 
-				{button && (
-					<Link to={button?.href} role="button">
-						<Button
-							variant="contained"
-							color="secondary"
-							className="no-link mx-20"
-							onClick={button?.onClick}
-						>
-							{button?.text}
+				<div className="flex items-center justify-center">
+					{exportReport && (
+						<Button variant="contained" color="primary" onClick={downloadCSV}>
+							Exportar .csv
 						</Button>
-					</Link>
-				)}
+					)}
+
+					{button && (
+						<Link to={button?.href} role="button">
+							<Button
+								variant="contained"
+								color="secondary"
+								className="no-link mx-20"
+								onClick={button?.onClick}
+							>
+								{button?.text}
+							</Button>
+						</Link>
+					)}
+				</div>
 			</div>
 		);
+		// eslint-disable-next-line
 	}, [filterText, resetPaginationToggle, button]);
 
 	return (
-		<div className={clsx('bg-white', classes.table)}>
+		<div className={clsx('main bg-white', classes.table)}>
 			<DataTable
 				keyField={keyField}
 				title={title}

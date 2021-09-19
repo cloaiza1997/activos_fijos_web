@@ -38,6 +38,7 @@ export function getPathByParams(url, params) {
 
 export const DATE_FORMATS = {
 	DD_MM_YYYY: 'DD-MM-YYYY',
+	hh_mm_ss: 'hh:mm:ss',
 	YYYY_MM_DD_hh_mm_ss: 'YYYY-MM-DD hh:mm:ss',
 	YYYY_MM_DD: 'YYYY-MM-DD'
 };

@@ -12,6 +12,7 @@ import {
 	DERECOGNITION_PAGE_LIST_APPROVE
 } from 'app/main/apps/derecognition/DerecognitionConst';
 import { INVENTORY_PAGE_LIST } from 'app/main/apps/inventory/InventoryConst';
+import { LOG_PAGE_LIST } from 'app/main/apps/log/LogConst';
 import { MAINTENANCE_PAGE_LIST } from 'app/main/apps/maintenance/MaintenanceConst';
 import {
 	PURCHASE_PAGE_CREATE,
@@ -223,11 +224,12 @@ const navigationConfig = [
 				url: ''
 			},
 			{
+				auth: authRoles.admin,
 				id: 'logs',
 				title: 'Logs',
 				type: 'item',
 				icon: 'subject',
-				url: ''
+				url: LOG_PAGE_LIST
 			}
 		]
 	}
