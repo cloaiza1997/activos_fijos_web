@@ -1,6 +1,11 @@
 import { authRoles } from 'app/auth';
 import React from 'react';
-import { PARAMETER_PAGE_CREATE, PARAMETER_PAGE_LIST, PARAMETER_PAGE_VIEW } from './ParameterConst';
+import {
+	PARAMETER_PAGE_CREATE,
+	PARAMETER_PAGE_LIST,
+	PARAMETER_PAGE_LIST_DETAIL,
+	PARAMETER_PAGE_VIEW
+} from './ParameterConst';
 
 const ParameterConfig = {
 	settings: {
@@ -9,12 +14,12 @@ const ParameterConfig = {
 	routes: [
 		{
 			auth: authRoles.admin,
-			path: PARAMETER_PAGE_CREATE,
+			path: `${PARAMETER_PAGE_CREATE}/:id`,
 			component: React.lazy(() => import('./page/ParameterCreate'))
 		},
 		{
 			auth: authRoles.admin,
-			path: PARAMETER_PAGE_LIST,
+			path: [`${PARAMETER_PAGE_LIST_DETAIL}/:id`, PARAMETER_PAGE_LIST],
 			component: React.lazy(() => import('./page/ParameterList'))
 		},
 		{

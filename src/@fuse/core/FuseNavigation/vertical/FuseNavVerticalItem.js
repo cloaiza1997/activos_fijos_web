@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 		'&.active': {
 			backgroundColor: `${theme.palette.secondary.main}!important`,
 			color: `${theme.palette.secondary.contrastText}!important`,
-			pointerEvents: 'none',
+			// pointerEvents: 'none',
 			transition: 'border-radius .15s cubic-bezier(0.4,0.0,0.2,1)',
 			'& .list-item-text-primary': {
 				color: 'inherit'

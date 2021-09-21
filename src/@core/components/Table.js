@@ -129,7 +129,7 @@ function Table(props) {
 		};
 
 		return (
-			<div className="flex justify-between w-full">
+			<div className="flex justify-between w-full max-w-full">
 				<FilterComponent
 					onFilter={e => setFilterText(e.target.value)}
 					onClear={handleClear}

@@ -1,13 +1,12 @@
 import { axios } from '@core/services/Api';
-import { FormControl, InputLabel, ListSubheader, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { redirect } from '@core/utils/utils';
+import { TextField, Typography } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
 import Button from '@core/components/Button';
-import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
 // Components
-import { PARAMETER_PAGE_VIEW, PARAMETER_URL_STORE, PARAMETER_URL_CREATE } from '../ParameterConst';
-import ProviderModel from '../model/ProviderModel';
+import { PARAMETER_PAGE_LIST_DETAIL, PARAMETER_URL_STORE } from '../ParameterConst';
+import ParameterModel from '../model/ParameterModel';
 
 /**
  * @function ParameterCreate
@@ -15,143 +14,63 @@ import ProviderModel from '../model/ProviderModel';
  * @date 01/06/2021
  * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
  */
-export default function ParameterCreate() {
-	const [data, setData] = useState({});
+export default function ParameterCreate(props) {
+	const { id } = props?.match?.params;
+
 	const [disabled, setDisabled] = useState(true);
 	const [loading, setLoading] = useState(false);
-	const [skeleton, setSkeleton] = useState(true);
 
-	const { form, handleChange } = useForm(new ProviderModel());
+	const { form, handleChange } = useForm(new ParameterModel({ id_parent: id }));
 
-	const onStoreProvider = () => {
+	const onStoreParameter = () => {
 		setLoading(true);
 
-		const success = ({ provider }) => {
-			redirect(`${PARAMETER_PAGE_VIEW}/${provider.id}`);
-		};
-
+		const success = () => redirect(`${PARAMETER_PAGE_LIST_DETAIL}/${id}`);
 		const error = () => setLoading(false);
 
 		axios({ url: PARAMETER_URL_STORE, method: 'POST', data: form, success, error });
 	};
 
 	useEffect(() => {
-		const success = response => {
-			setData(response);
-			setSkeleton(false);
-		};
-
-		axios({ url: PARAMETER_URL_CREATE, method: 'GET', success });
-	}, []);
-
-	useEffect(() => {
-		const _disabled =
-			!form.id_document_type ||
-			!form.document_number.trim() ||
-			!form.name.trim() ||
-			!form.address.trim() ||
-			!form.id_city ||
-			!form.email.trim() ||
-			!form.phone_number.trim();
+		const _disabled = !(form.num_val || form.str_val);
 
 		setDisabled(_disabled);
 	}, [form]);
 
-	return skeleton ? (
-		<Loading />
-	) : (
+	return (
 		<div className="p-20">
 			<Typography component="h1" color="primary" className="text-xl font-bold mb-16">
-				Crear proveedor
+				Crear parámetro
 			</Typography>
 
 			<div>
-				<FormControl className="p-4 w-1/4" required>
-					<InputLabel>Tipo de documento</InputLabel>
-
-					<Select name="id_document_type" value={form.id_document_type} onChange={handleChange} required>
-						{data.document_types?.map(type => (
-							<MenuItem key={type.id} value={type.id}>
-								{type.str_val}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-
 				<TextField
-					type="number"
-					label="Número de documento"
-					name="document_number"
-					value={form.document_number}
-					onChange={handleChange}
-					className="p-4 w-1/4"
-					required
-				/>
-
-				<TextField
-					label="Razón social"
+					label="Nombre"
 					name="name"
-					value={form.name}
+					value={form.name || ''}
 					onChange={handleChange}
-					className="p-4 w-1/4"
-					required
-				/>
-
-				<TextField
-					label="Correo"
-					name="email"
-					value={form.email}
-					onChange={handleChange}
-					className="p-4 w-1/4"
-					required
+					className="pb-16 w-full"
 				/>
 
 				<TextField
 					type="number"
-					label="Celular"
-					name="phone_number"
-					value={form.phone_number}
+					label="Valor numérico"
+					name="num_val"
+					value={form.num_val || ''}
 					onChange={handleChange}
-					className="p-4 w-1/4"
-					required
-				/>
-
-				<FormControl className="p-4 w-1/4" required>
-					<InputLabel>Ciudad</InputLabel>
-
-					<Select name="id_city" value={form.id_city} onChange={handleChange}>
-						{data.cities?.map(city =>
-							city.is_department ? (
-								<ListSubheader key={city.id} className="font-bold" value="">
-									{city.name}
-								</ListSubheader>
-							) : (
-								<MenuItem key={city.id} value={city.id}>
-									{city.name}
-								</MenuItem>
-							)
-						)}
-					</Select>
-				</FormControl>
-
-				<TextField
-					label="Dirección"
-					name="address"
-					value={form.address}
-					onChange={handleChange}
-					className="p-4 w-1/4"
+					className="pb-16 w-full"
 					required
 				/>
 
 				<TextField
-					label="Observaciones"
-					name="observations"
-					value={form.observations}
+					label="Valor en texto"
+					name="str_val"
+					value={form.str_val || ''}
 					onChange={handleChange}
-					className="w-full"
+					className="pb-16 w-full"
+					required
 					multiline
-					rows={4}
-					rowsMax={4}
+					rowsMax={10}
 				/>
 			</div>
 
@@ -159,7 +78,7 @@ export default function ParameterCreate() {
 				<Button
 					variant="contained"
 					color="primary"
-					onClick={onStoreProvider}
+					onClick={onStoreParameter}
 					loading={loading}
 					disabled={disabled}
 				>
