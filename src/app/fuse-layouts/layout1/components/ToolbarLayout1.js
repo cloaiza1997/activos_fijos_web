@@ -4,7 +4,7 @@
 // import FuseShortcuts from '@fuse/core/FuseShortcuts';
 // import LanguageSwitcher from '../../shared-components/LanguageSwitcher';
 // import QuickPanelToggleButton from 'app/fuse-layouts/shared-components/quickPanel/QuickPanelToggleButton';
-import { Icon, IconButton } from '@material-ui/core';
+// import { Icon, IconButton } from '@material-ui/core';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { selectToolbarTheme } from 'app/store/fuse/settingsSlice';
 import { useSelector } from 'react-redux';
@@ -59,9 +59,9 @@ function ToolbarLayout1(props) {
 						</Hidden> */}
 
 						{/* <QuickPanelToggleButton /> */}
-						<IconButton className="w-40 h-40" onClick={() => undefined}>
+						{/* <IconButton className="w-40 h-40" onClick={() => undefined}>
 							<Icon>notifications_none</Icon>
-						</IconButton>
+						</IconButton> */}
 
 						<UserMenu />
 					</div>

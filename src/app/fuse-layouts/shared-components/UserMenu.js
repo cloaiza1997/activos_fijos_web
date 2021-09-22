@@ -1,5 +1,4 @@
 import { axios } from '@core/services/Api';
-import { Link } from 'react-router-dom';
 import { logoutUser, setUser } from 'app/auth/store/userSlice';
 import { TextField } from '@material-ui/core';
 import { LS_USER, URL_UPDATE_PASSWORD } from 'app/auth/AuthConsts';
@@ -77,12 +76,6 @@ function UserMenu(props) {
 					</ListItemIcon>
 
 					<ListItemText primary="Actualizar contraseña" />
-				</MenuItem>
-
-				<MenuItem component={Link} to="/pages/profile" onClick={userMenuClose} role="button">
-					<ListItemIcon className="min-w-40">
-						<Icon>account_circle</Icon>
-					</ListItemIcon>
 				</MenuItem>
 
 				<MenuItem
