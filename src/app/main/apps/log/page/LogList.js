@@ -29,7 +29,7 @@ function LogList() {
 		{
 			name: 'Usuario',
 			accesor: 'get_user.display_name',
-			selector: row => row.get_user.display_name,
+			selector: row => row.get_user?.display_name,
 			sortable: true,
 			center: true
 		},
