@@ -8,6 +8,7 @@ import MaintenanceConfig from './maintenance/MaintenanceConfig';
 import ParameterConfig from './parameter/ParameterConfig';
 import ProviderConfig from './provider/ProviderConfig';
 import PurchaseConfig from './purchase/PurchaseConfig';
+import ReportConfig from './report/ReportConfig';
 import RevaluationConfig from './revaluation/RevaluationConfig';
 import UserConfig from './users/UsersConfig';
 
@@ -22,6 +23,7 @@ const appsConfigs = [
 	ParameterConfig,
 	ProviderConfig,
 	PurchaseConfig,
+	ReportConfig,
 	RevaluationConfig,
 	UserConfig
 ];

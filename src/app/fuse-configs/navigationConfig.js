@@ -21,6 +21,7 @@ import {
 	PURCHASE_PAGE_LIST,
 	PURCHASE_PAGE_LIST_APPROVE
 } from 'app/main/apps/purchase/PurchaseConst';
+import { REPORT_PAGE } from 'app/main/apps/report/ReportConst';
 import { REVALUATION_PAGE_LIST } from 'app/main/apps/revaluation/RevaluationConst';
 import { USER_PAGE_LIST } from 'app/main/apps/users/UsersConst';
 
@@ -128,6 +129,7 @@ const navigationConfig = [
 		]
 	},
 	{
+		auth: authRoles.staff,
 		id: 'procesos_masivos',
 		title: 'PROCESOS MASIVOS',
 		type: 'collapse',
@@ -193,7 +195,7 @@ const navigationConfig = [
 				title: 'Generar reportes',
 				type: 'item',
 				icon: 'grading',
-				url: ''
+				url: REPORT_PAGE
 			}
 		]
 	},

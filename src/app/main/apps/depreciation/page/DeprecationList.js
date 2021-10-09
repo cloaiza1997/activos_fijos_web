@@ -36,7 +36,7 @@ function DeprecationList() {
 			center: true
 		},
 		{
-			name: 'Fecha de revaluación',
+			name: 'Fecha de depreciación',
 			accesor: 'created_at',
 			selector: row => formatDate(row.created_at, DATE_FORMATS.YYYY_MM_DD_hh_mm_ss),
 			sortable: true,

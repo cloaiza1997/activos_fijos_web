@@ -73,7 +73,7 @@ function Table(props) {
 		return filtered;
 	});
 
-	function convertArrayOfObjectsToCSV() {
+	const convertArrayOfObjectsToCSV = () => {
 		let result;
 
 		const columnDelimiter = ',';
@@ -101,9 +101,9 @@ function Table(props) {
 		});
 
 		return result;
-	}
+	};
 
-	function downloadCSV() {
+	const downloadCSV = () => {
 		let csv = convertArrayOfObjectsToCSV();
 
 		if (csv == null) return;
@@ -118,7 +118,7 @@ function Table(props) {
 		link.setAttribute('href', encodeURI(csv));
 		link.setAttribute('download', filename);
 		link.click();
-	}
+	};
 
 	const subHeaderComponentMemo = useMemo(() => {
 		const handleClear = () => {
@@ -159,7 +159,7 @@ function Table(props) {
 			</div>
 		);
 		// eslint-disable-next-line
-	}, [filterText, resetPaginationToggle, button]);
+	}, [filterText, resetPaginationToggle, button, title, columns, data]);
 
 	return (
 		<div className={clsx('main bg-white', classes.table)}>
