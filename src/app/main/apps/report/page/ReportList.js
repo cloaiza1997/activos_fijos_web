@@ -24,6 +24,8 @@ function ReportList() {
 
 	const onGenerateReport = () => {
 		setLoading(true);
+		setColumns([]);
+		setResults([]);
 
 		const success = data => {
 			const { label = '', report = [] } = data || {};

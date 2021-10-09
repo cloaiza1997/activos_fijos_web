@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import DataTable from 'react-data-table-component';
 import React, { useMemo, useRef, useState } from 'react';
+import ReactExport from 'react-export-excel';
 import Button from './Button';
+
+const { ExcelFile } = ReactExport;
+const { ExcelSheet, ExcelColumn } = ExcelFile;
 
 const useStyles = makeStyles(() => ({
 	table: {
@@ -39,6 +43,7 @@ const useStyles = makeStyles(() => ({
  * @details
  * @date 01/06/2021
  * @see https://www.npmjs.com/package/react-data-table-component#columns
+ * @see https://www.npmjs.com/package/react-export-excel
  * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
  */
 function Table(props) {
@@ -73,53 +78,6 @@ function Table(props) {
 		return filtered;
 	});
 
-	const convertArrayOfObjectsToCSV = () => {
-		let result;
-
-		const columnDelimiter = ',';
-		const lineDelimiter = '\n';
-		const keys = columns.map(column => column.name);
-
-		result = '';
-		result += keys.join(columnDelimiter);
-		result += lineDelimiter;
-
-		data.forEach(item => {
-			let ctr = 0;
-
-			columns.forEach(column => {
-				if (column.selector) {
-					if (ctr > 0) result += columnDelimiter;
-
-					result += column.selector(item) || '';
-
-					ctr += 1;
-				}
-			});
-
-			result += lineDelimiter;
-		});
-
-		return result;
-	};
-
-	const downloadCSV = () => {
-		let csv = convertArrayOfObjectsToCSV();
-
-		if (csv == null) return;
-
-		const filename = `${title}.csv`;
-
-		if (!csv.match(/^data:text\/csv/i)) {
-			csv = `data:text/csv;charset=utf-8,${csv}`;
-		}
-
-		const link = document.createElement('a');
-		link.setAttribute('href', encodeURI(csv));
-		link.setAttribute('download', filename);
-		link.click();
-	};
-
 	const subHeaderComponentMemo = useMemo(() => {
 		const handleClear = () => {
 			if (filterText) {
@@ -137,11 +95,38 @@ function Table(props) {
 				/>
 
 				<div className="flex items-center justify-center">
-					{exportReport && (
-						<Button variant="contained" color="primary" onClick={downloadCSV}>
-							Exportar .csv
-						</Button>
-					)}
+					{exportReport &&
+						data.length > 0 &&
+						(() => {
+							const _data = data.map(item => {
+								const row = {};
+
+								columns.forEach(column => {
+									if (column.selector) {
+										row[column.name] = column.selector(item) || '';
+									}
+								});
+
+								return row;
+							});
+
+							return (
+								<ExcelFile
+									filename={title}
+									element={
+										<Button variant="contained" color="primary">
+											Exportar
+										</Button>
+									}
+								>
+									<ExcelSheet data={_data} name={title}>
+										{columns.map((col, index) => (
+											<ExcelColumn key={index} label={col.name} value={col.name} />
+										))}
+									</ExcelSheet>
+								</ExcelFile>
+							);
+						})()}
 
 					{button && (
 						<Link to={button?.href} role="button">
