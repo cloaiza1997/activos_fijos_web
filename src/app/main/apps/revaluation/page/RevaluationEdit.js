@@ -2,6 +2,7 @@ import { axios } from '@core/services/Api';
 import { DATE_FORMATS, formatDate, getHandleChange, getPathByParams } from '@core/utils/utils';
 import { Icon, IconButton, TextField, Typography } from '@material-ui/core';
 import { useForm } from '@fuse/hooks';
+import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
@@ -40,6 +41,8 @@ export default function RevaluationEdit(props) {
 	const [open, setOpen] = useState(false);
 	const [skeleton, setSkeleton] = useState(true);
 
+	const { user } = useSelector(({ auth }) => auth);
+
 	const { form, handleChange, setForm } = useForm(new RevaluationModel());
 
 	const _revaluation = data?.revaluation || {};
@@ -47,6 +50,7 @@ export default function RevaluationEdit(props) {
 
 	const canEdit = status === ASSET_UPDATE_COST_IN_PROCESS;
 	const canReverse =
+		user.is_admin &&
 		(status === ASSET_UPDATE_COST_EXECUTED || status === ASSET_UPDATE_COST_REVERSED) &&
 		data.revaluation.can_reverse;
 

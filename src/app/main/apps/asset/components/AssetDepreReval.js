@@ -5,7 +5,19 @@ import React from 'react';
 import Table from '@core/components/Table';
 // Components
 import { REVALUATION_PAGE_VIEW } from '../../revaluation/RevaluationConst';
+import { DEPRECATION_PAGE_VIEW } from '../../depreciation/DeprecationConst';
 
+const ACTION_TYPE = {
+	ASSET_DEPRECIATION: 'ASSET_DEPRECIATION',
+	ASSET_REVALUATION: 'ASSET_REVALUATION'
+};
+
+/**
+ * @function AssetRevaluations
+ * @brief Listado de procesos de revaluación y depreciación
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetRevaluations(props) {
 	const { asset = {} } = props;
 
@@ -62,7 +74,15 @@ function AssetRevaluations(props) {
 			name: '',
 			center: true,
 			cell: row => (
-				<Link to={`${REVALUATION_PAGE_VIEW}/${row.id_depre_reval}`} target="_blank" role="button">
+				<Link
+					to={`${
+						ACTION_TYPE.ASSET_DEPRECIATION === row.depre_reval.get_action_type.parameter_key
+							? DEPRECATION_PAGE_VIEW
+							: REVALUATION_PAGE_VIEW
+					}/${row.id_depre_reval}`}
+					target="_blank"
+					role="button"
+				>
 					<IconButton size="small">
 						<Icon color="primary">launch</Icon>
 					</IconButton>

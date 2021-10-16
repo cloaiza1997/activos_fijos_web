@@ -1,6 +1,7 @@
 import { axios } from '@core/services/Api';
 import { DATE_FORMATS, formatDate, getPathByParams } from '@core/utils/utils';
 import { TextField, Typography } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 import Button from '@core/components/Button';
 import Loading from '@core/components/Loading';
 import React, { useEffect, useState } from 'react';
@@ -21,10 +22,14 @@ export default function DeprecationView(props) {
 	const [loading, setLoading] = useState(false);
 	const [skeleton, setSkeleton] = useState(true);
 
+	const { user } = useSelector(({ auth }) => auth);
+
 	const status = deprecation?.get_status?.parameter_key;
 
 	const canReverse =
-		(status === ASSET_UPDATE_COST_EXECUTED || status === ASSET_UPDATE_COST_REVERSED) && deprecation.can_reverse;
+		user.is_admin &&
+		(status === ASSET_UPDATE_COST_EXECUTED || status === ASSET_UPDATE_COST_REVERSED) &&
+		deprecation.can_reverse;
 
 	const onUpdateStatus = url => {
 		setLoading(true);
