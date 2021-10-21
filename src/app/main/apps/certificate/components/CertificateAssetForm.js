@@ -64,7 +64,7 @@ function CertificateAssetForm(props) {
 
 	return (
 		<Dialog open={open} classes={{ paper: 'w-lg max-w-lg' }}>
-			<DialogTitle>Ingerso de activo - Buscar orden de compra</DialogTitle>
+			<DialogTitle>Ingerso de activo</DialogTitle>
 
 			<DialogContent className="flex flex-col">
 				<Autocomplete

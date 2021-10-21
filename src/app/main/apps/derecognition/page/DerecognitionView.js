@@ -330,7 +330,7 @@ function DerecognitionView(props) {
 							loading={loading}
 							confirm={{
 								title: 'Anular',
-								message: '¿Confirma anular el acta?'
+								message: '¿Confirma anular el proceso de bajas?'
 							}}
 							onClick={() => updateStatus(DERECOGNITION_URL_STATUS_CANCEL)}
 							className="mx-4 bg-red-400 hover:bg-red-600"

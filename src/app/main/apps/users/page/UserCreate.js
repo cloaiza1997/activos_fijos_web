@@ -32,6 +32,8 @@ export default function UserCreate() {
 
 		const error = () => setLoading(false);
 
+		delete form.signature;
+
 		axios({ url: USER_URL_STORE, method: 'POST', data: form, success, error });
 	};
 

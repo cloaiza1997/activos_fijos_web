@@ -195,6 +195,7 @@ export default function MaintenanceView(props) {
 								onAddResponsible({ id_provider: idProvider });
 								setIdProvider('');
 							}}
+							disabled={!idProvider}
 						>
 							Agregar
 						</Button>
