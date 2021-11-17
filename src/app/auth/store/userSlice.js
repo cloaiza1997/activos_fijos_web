@@ -124,6 +124,15 @@ export const logoutUser = () => async (dispatch, getState) => {
 	axios({
 		url: URL_LOGOUT,
 		method: 'POST'
+	}).then(() => {
+		dispatch(setInitialSettings());
+
+		localStorage.removeItem(LS_TOKEN);
+		localStorage.removeItem(LS_USER);
+
+		dispatch(userLoggedOut());
+
+		window.location.href = '/login';
 	});
 
 	// switch (user.from) {
@@ -140,14 +149,7 @@ export const logoutUser = () => async (dispatch, getState) => {
 	// 	}
 	// }
 
-	dispatch(setInitialSettings());
-
-	localStorage.removeItem(LS_TOKEN);
-	localStorage.removeItem(LS_USER);
-
-	// history.push(`/`);
-
-	return dispatch(userLoggedOut());
+	return true;
 };
 
 export const updateUserData = user => async (dispatch, getState) => {
