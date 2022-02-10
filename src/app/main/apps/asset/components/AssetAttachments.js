@@ -3,6 +3,12 @@ import React from 'react';
 // Components
 import { ASSET_APP_KEY, ASSET_DECOMMISSIONED } from '../AssetConst';
 
+/**
+ * @function AssetAttachments
+ * @brief Formulario de carga de archivos de un activo
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetAttachments(props) {
 	const { data, setData } = props;
 

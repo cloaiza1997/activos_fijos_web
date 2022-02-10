@@ -7,6 +7,12 @@ import Table from '@core/components/Table';
 // Components
 import { PURCHASE_URL_LIST_APPROVE, PURCHASE_PAGE_VIEW } from '../PurchaseConst';
 
+/**
+ * @function PurchaseListApprove
+ * @brief Página de listado de aprobaciones de compras
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function PurchaseListApprove() {
 	const [skeleton, setSkeleton] = useState(true);
 	const [purchases, setPurchases] = useState([]);

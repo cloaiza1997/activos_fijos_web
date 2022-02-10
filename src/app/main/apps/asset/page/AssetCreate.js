@@ -25,6 +25,12 @@ import { ASSET_PAGE_VIEW, ASSET_URL_CREATE, ASSET_URL_PURCHASE_ITEMS, ASSET_URL_
 import { PURCHASE_PAGE_VIEW, PURCHASE_STATUS } from '../../purchase/PurchaseConst';
 import AssetModel from '../model/AssetModel';
 
+/**
+ * @function AssetCreate
+ * @brief Página de creación de un activo
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetCreate() {
 	const [data, setData] = useState({});
 	const [disabled, setDisabled] = useState(true);

@@ -17,6 +17,12 @@ import { ASSET_PAGE_VIEW } from '../../asset/AssetConst';
 import CertificateAssetForm from '../components/CertificateAssetForm';
 import CertificateModel from '../model/CertificateModel';
 
+/**
+ * @function CertificateCreate
+ * @brief Página de creación de actas
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function CertificateCreate() {
 	const [currentAsset, setCurrentAsset] = useState({});
 	const [data, setData] = useState({});

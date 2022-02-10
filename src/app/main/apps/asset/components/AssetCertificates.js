@@ -5,6 +5,12 @@ import Table from '@core/components/Table';
 // Components
 import { CERTIFICATE_PAGE_VIEW } from '../../certificate/CertificateConst';
 
+/**
+ * @function AssetCertificates
+ * @brief Listado de actas de movimientos de un activo
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetCertificates(props) {
 	const { certificates = [] } = props;
 

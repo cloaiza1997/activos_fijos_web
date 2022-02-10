@@ -23,6 +23,12 @@ import { INVENTORY_URL_DETAIL } from '../InventoryConst';
 import { PURCHASE_PAGE_VIEW } from '../../purchase/PurchaseConst';
 import AssetModel from '../../asset/model/AssetModel';
 
+/**
+ * @function InventoryAsset
+ * @brief Formulario de activos de un inventario
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function InventoryAsset(props) {
 	const { open, setOpen, assetId, inventoryId, setData: setDataInventory } = props;
 

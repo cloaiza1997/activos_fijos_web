@@ -30,6 +30,12 @@ import CertificatePrint from '../components/CertificatePrint';
 
 const { IN_PROCESS, APPROVED, ACTIVE, CHECKING, SIGNATURE_PROCESS } = CERTIFICATE_STATUS;
 
+/**
+ * @function CertificateView
+ * @brief Página de visualización de actas
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function CertificateView(props) {
 	const { id } = props?.match?.params;
 

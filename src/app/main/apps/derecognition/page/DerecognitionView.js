@@ -27,6 +27,12 @@ import DerecognitionPrint from '../components/DerecognitionPrint';
 
 const { IN_PROCESS, APPROVED, CHECKING, EXECUTED } = DERECOGNITION_STATUS;
 
+/**
+ * @function DerecognitionView
+ * @brief Página de vista de una baja
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function DerecognitionView(props) {
 	const { id } = props?.match?.params;
 

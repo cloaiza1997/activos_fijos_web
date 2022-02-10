@@ -13,6 +13,12 @@ import { MAINTENANCE_PAGE_VIEW, MAINTENANCE_URL_CREATE, MAINTENANCE_URL_STORE } 
 import MaintenanceDetailModel from '../model/MaintenanceDetailModel';
 import MaintenanceModel from '../model/MaintenanceModel';
 
+/**
+ * @function MaintenanceCreate
+ * @brief Formulario de creación de un mantenimiento
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 export default function MaintenanceCreate() {
 	const [data, setData] = useState({});
 	const [disabled, setDisabled] = useState(true);

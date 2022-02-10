@@ -7,6 +7,12 @@ import Table from '@core/components/Table';
 // Components
 import { ASSET_PAGE_VIEW, ASSET_URL_LIST_OWN } from '../AssetConst';
 
+/**
+ * @function AssetListOwn
+ * @brief Página de listado de activos asignados
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetListOwn() {
 	const [skeleton, setSkeleton] = useState(true);
 	const [assets, setAssets] = useState([]);

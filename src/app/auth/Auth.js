@@ -1,15 +1,14 @@
-import FuseSplashScreen from '@fuse/core/FuseSplashScreen';
+import { bindActionCreators } from '@reduxjs/toolkit';
+import { connect } from 'react-redux';
+import { hideMessage, showMessage } from 'app/store/fuse/messageSlice';
 import auth0Service from 'app/services/auth0Service';
 import firebaseService from 'app/services/firebaseService';
+import FuseSplashScreen from '@fuse/core/FuseSplashScreen';
+import history from '@history';
 import jwtService from 'app/services/jwtService';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from '@reduxjs/toolkit';
-import history from '@history';
-import { hideMessage, showMessage } from 'app/store/fuse/messageSlice';
-
-import { setUserDataFirebase, setUserDataAuth0, setUserData, logoutUser } from './store/userSlice';
 import { LS_USER } from './AuthConsts';
+import { setUserDataFirebase, setUserDataAuth0, setUserData, logoutUser } from './store/userSlice';
 
 class Auth extends Component {
 	state = {

@@ -16,6 +16,12 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@core/components/Button';
 import React, { useState, useEffect } from 'react';
 
+/**
+ * @function DerecognitionAssetForm
+ * @brief Formulario de baja de activos
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function DerecognitionAssetForm(props) {
 	const { open, setOpen, form, handleChange, data, currentAsset, setCurrentAsset } = props;
 

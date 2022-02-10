@@ -26,6 +26,12 @@ import { ASSET_DECOMMISSIONED, ASSET_URL_UPDATE } from '../AssetConst';
 import { PURCHASE_PAGE_VIEW } from '../../purchase/PurchaseConst';
 import AssetModel from '../model/AssetModel';
 
+/**
+ * @function AssetEdit
+ * @brief Formulario de edición de un activo
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function AssetEdit(props) {
 	const { data, setData } = props;
 

@@ -18,6 +18,12 @@ import React, { useState, useEffect } from 'react';
 // Components
 import CertificateItemModel from '../model/CertificateItemModel';
 
+/**
+ * @function CertificateAssetForm
+ * @brief Formulario de activos de un acta
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function CertificateAssetForm(props) {
 	const { open, setOpen, form, handleChange, data, currentAsset, setCurrentAsset, disabledForm } = props;
 

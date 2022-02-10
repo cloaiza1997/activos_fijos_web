@@ -7,6 +7,12 @@ import Table from '@core/components/Table';
 // Components
 import { CERTIFICATE_PAGE_CREATE, CERTIFICATE_PAGE_VIEW, CERTIFICATE_URL_LIST } from '../CertificateConst';
 
+/**
+ * @function CertificateList
+ * @brief Página de listado de actas
+ * @date 01/06/2021
+ * @author Cristian Loaiza <cristianaloaiza@estudiante.uniajc.edu.co>
+ */
 function CertificateList() {
 	const [skeleton, setSkeleton] = useState(true);
 	const [certificates, setCertificates] = useState([]);
