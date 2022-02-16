@@ -48,7 +48,10 @@ function CertificateAssetForm(props) {
 			brand: asset.get_brand.str_val,
 			model: asset.model,
 			status: asset.get_status.str_val,
-			serial_number: asset.serial_number
+			serial_number: asset.serial_number,
+			get_physical_status: {
+				str_val: data?.physical_status?.find(status => status.id === formItem.id_physical_status)?.name
+			}
 		};
 
 		if (edit) {

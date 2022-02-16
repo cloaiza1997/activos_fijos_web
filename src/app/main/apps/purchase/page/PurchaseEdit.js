@@ -441,7 +441,7 @@ export default function PurchaseEdit(props) {
 								value={formItem.quantity}
 								onChange={handleChangeItem}
 								className="ml-2 w-2/5"
-								disabled={formDisabled || formItem.unit_value > data.asset_amount}
+								disabled={formDisabled || formItem.unit_value >= data.asset_amount}
 								required
 							/>
 						</div>

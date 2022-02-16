@@ -317,7 +317,7 @@ export default function PurchaseCreate() {
 							value={formItem.quantity}
 							onChange={handleChangeItem}
 							className="ml-2 w-2/5"
-							disabled={formItem.unit_value > data.asset_amount}
+							disabled={formItem.unit_value >= data.asset_amount}
 							required
 						/>
 					</div>
