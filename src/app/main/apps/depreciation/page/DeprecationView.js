@@ -93,6 +93,7 @@ export default function DeprecationView(props) {
 				multiline
 				disabled
 				rows={4}
+				autoFocus
 			/>
 
 			<div className="mb-10 border-b-1">

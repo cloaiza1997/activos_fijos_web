@@ -71,13 +71,6 @@ function DerecognitionList() {
 			center: true
 		},
 		{
-			name: 'Nº reversado',
-			accesor: 'id_parent',
-			selector: row => row.id_parent,
-			sortable: true,
-			center: true
-		},
-		{
 			name: '',
 			sortable: true,
 			center: true,

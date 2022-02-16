@@ -152,6 +152,7 @@ export default function RevaluationEdit(props) {
 				disabled={!canEdit}
 				rows={4}
 				rowsMax={4}
+				autoFocus
 			/>
 
 			<div className="mb-10 border-b-1">

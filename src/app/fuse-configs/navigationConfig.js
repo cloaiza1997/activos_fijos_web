@@ -152,6 +152,22 @@ const navigationConfig = [
 			},
 			{
 				auth: authRoles.admin,
+				id: 'inventarios',
+				title: 'Inventarios',
+				type: 'item',
+				icon: 'widgets',
+				url: INVENTORY_PAGE_LIST
+			},
+			{
+				auth: authRoles.admin,
+				id: 'mantenimientos',
+				title: 'Mantenimientos',
+				type: 'item',
+				icon: 'build',
+				url: MAINTENANCE_PAGE_LIST
+			},
+			{
+				auth: authRoles.admin,
 				id: 'bajas',
 				title: 'Bajas',
 				type: 'item',
@@ -165,22 +181,6 @@ const navigationConfig = [
 				type: 'item',
 				icon: 'remove_circle_outline',
 				url: DERECOGNITION_PAGE_LIST_APPROVE
-			},
-			{
-				auth: authRoles.admin,
-				id: 'mantenimientos',
-				title: 'Mantenimientos',
-				type: 'item',
-				icon: 'build',
-				url: MAINTENANCE_PAGE_LIST
-			},
-			{
-				auth: authRoles.admin,
-				id: 'inventarios',
-				title: 'Inventarios',
-				type: 'item',
-				icon: 'widgets',
-				url: INVENTORY_PAGE_LIST
 			}
 		]
 	},

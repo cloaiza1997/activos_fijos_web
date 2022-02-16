@@ -112,11 +112,10 @@ export const logoutUser = () => async (dispatch, getState) => {
 		method: 'POST'
 	}).then(() => {
 		dispatch(setInitialSettings());
+		dispatch(userLoggedOut());
 
 		localStorage.removeItem(LS_TOKEN);
 		localStorage.removeItem(LS_USER);
-
-		dispatch(userLoggedOut());
 
 		window.location.href = '/login';
 	});

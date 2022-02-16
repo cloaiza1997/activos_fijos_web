@@ -55,6 +55,7 @@ export default function InventoryCreate() {
 				multiline
 				rows={4}
 				rowsMax={4}
+				autoFocus
 			/>
 
 			<div className="text-center m-20">

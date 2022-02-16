@@ -106,6 +106,7 @@ export default function InventoryView(props) {
 				multiline
 				rows={4}
 				disabled={!canEdit}
+				autoFocus
 			/>
 
 			<div className="mb-16 border-b-1">

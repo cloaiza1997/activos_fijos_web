@@ -301,7 +301,7 @@ export default function PurchaseCreate() {
 							onChange={e => {
 								handleChangeItem(e);
 
-								if (e.target.value > data.asset_amount) {
+								if (e.target.value >= data.asset_amount) {
 									handleChangeItem(getHandleChange('quantity', 1));
 								}
 							}}

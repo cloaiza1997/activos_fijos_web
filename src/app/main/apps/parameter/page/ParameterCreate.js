@@ -50,6 +50,7 @@ export default function ParameterCreate(props) {
 					value={form.name || ''}
 					onChange={handleChange}
 					className="pb-16 w-full"
+					autoFocus
 				/>
 
 				<TextField

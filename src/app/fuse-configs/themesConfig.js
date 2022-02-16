@@ -19,7 +19,7 @@ const themesConfig = {
 			},
 			background: {
 				paper: '#FFFFFF',
-				default: '#f6f7f9'
+				default: '#FFFFFF'
 			},
 			error: red
 		},

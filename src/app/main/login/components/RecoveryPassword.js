@@ -78,7 +78,9 @@ function RecoveryPassword() {
 										src="assets/images/logos/logo_small_text.png"
 										alt="logo"
 									/>
+
 									<div className="border-l-1 mr-4 w-1 h-40" />
+
 									<div>
 										<Typography className="text-24 font-800 logo-text" color="inherit">
 											Recuperación de contraseña
@@ -111,6 +113,7 @@ function RecoveryPassword() {
 									}}
 									variant="outlined"
 									required
+									autoFocus
 								/>
 
 								<Button

@@ -55,6 +55,7 @@ export default function DeprecationCreate() {
 				multiline
 				rows={4}
 				rowsMax={4}
+				autoFocus
 			/>
 
 			<div className="text-center m-20">
@@ -63,6 +64,10 @@ export default function DeprecationCreate() {
 					color="primary"
 					disabled={disabled}
 					loading={loading}
+					confirm={{
+						title: 'Depreciación',
+						message: '¿Confirma ejecutar la depreciación masiva?'
+					}}
 					onClick={onStoreDeprecation}
 				>
 					Iniciar

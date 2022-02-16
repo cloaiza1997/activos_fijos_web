@@ -71,7 +71,8 @@ export function redirectGoBack() {
 
 export function isNumberPositive(text = '') {
 	let validate = false;
-	const number = text?.trim() || '';
+
+	const number = text ? (text?.trim ? text?.trim() : text) : '';
 
 	if (!Number.isNaN(number) && parseFloat(number) > 0) {
 		validate = true;

@@ -149,6 +149,7 @@ function DerecognitionView(props) {
 				multiline
 				rows={4}
 				rowsMax={4}
+				autoFocus
 			/>
 
 			<div>

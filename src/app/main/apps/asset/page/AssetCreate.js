@@ -132,6 +132,7 @@ function AssetCreate() {
 					onChange={handleChange}
 					className="w-1/3"
 					required
+					autoFocus
 				/>
 
 				<FormControl className="mx-4 w-1/3" required>

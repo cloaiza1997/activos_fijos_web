@@ -226,6 +226,7 @@ export default function PurchaseEdit(props) {
 				Orden de compra <span className="underline">{`${form.id}`.padStart(8, '0')}</span> (
 				{data.purchase.get_status.str_val})
 			</Typography>
+
 			<div className="flex flex-col text-11 leading-none p-10 border-1 rounded-8 mb-10 w-full">
 				<span className="mb-6">
 					Creada por: <span className="font-bold">{data.purchase.get_creator_user.display_name}</span> -{' '}
@@ -244,6 +245,7 @@ export default function PurchaseEdit(props) {
 					</span>
 				)}
 			</div>
+
 			<div className="flex mb-10 w-full">
 				<div className="w-3/5">
 					<div className="flex mb-10">
@@ -422,7 +424,7 @@ export default function PurchaseEdit(props) {
 								onChange={e => {
 									handleChangeItem(e);
 
-									if (e.target.value > data.asset_amount) {
+									if (e.target.value >= data.asset_amount) {
 										handleChangeItem(getHandleChange('quantity', 1));
 									}
 								}}

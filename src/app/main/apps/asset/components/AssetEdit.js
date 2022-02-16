@@ -103,6 +103,7 @@ function AssetEdit(props) {
 					className="w-1/3"
 					disabled={!canEdit}
 					required
+					autoFocus
 				/>
 
 				<FormControl className="mx-4 w-1/3" required>

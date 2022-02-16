@@ -296,7 +296,9 @@ export default function MaintenanceView(props) {
 									)
 									?.map(asset => (
 										<MenuItem key={asset.id} value={asset.id}>
-											{asset.asset_number} - {asset.name} - {asset.maintenance_date}
+											{asset.asset_number} - {asset.name}
+											{' - '}
+											{asset.maintenance_date || 'Sin MTTO Registado'}
 										</MenuItem>
 									))}
 							</Select>
